@@ -1,9 +1,8 @@
 --[[ 
-
 CrabHub
 Created by Suricato006#8711
 
-if you are someone that wants some script for a game you want to exploit ask in the discord server (https://discord.gg/5NYqSVwH9Q), i will make one for sure.
+if you are someone that wants some script for a game you want to exploit ask in the discord server (https://discord.gg/JSjpgSPs4v), i will make one for sure.
 
 The script is open source so you can learn from it, not steal it. If you want to use my script you are free to do it, just credit me.
 Much love and thanks for using my script <3
@@ -12,14 +11,6 @@ Much love and thanks for using my script <3
 (hope to make someone learn from my scripts)]]
 
 if not game:IsLoaded() then game.Loaded:Wait() end
-
-if _G.CrabHub then
-    for i, v in pairs(game:GetService("CoreGui"):GetChildren()) do
-        if v.Name == "RobloxCrashHandler" then
-            v:Destroy()
-        end
-    end
-end
 
 _G.CrabHub = true
 
@@ -39,7 +30,7 @@ end
 _G.VariablesTable = {}
 LoadSettings()
 
-local Library = loadstring(game:HttpGet("https://sypse.xyz/other/nothing.lua.php", true))()
+local Library = loadstring(game:HttpGet("https://pastebin.com/raw/GX28T0pH", true))()
 local Main = Library:CreateWindow("CrabHub")
 
 Main:AddBox({text = "Tween To Player", value = "", callback = function(typed)
@@ -161,21 +152,328 @@ Main:AddButton({text = "Delete Configuration", callback = function()
     end
 end})
 
-Main:AddButton({text = "Destroy Gui", callback = function()
+Main:AddBind({text = "Toggle Gui", key = Enum.KeyCode.RightControl, hold = false, callback = function()
     Library:Close()
 end})
 
+local FinalStandIds = {536102540, 569994010, 882399924, 2046990924, 478132461, 3552157537, 2651456105, 3565304751, 882375367}
+
+if table.find(FinalStandIds, game.PlaceId) then
+    local Window = Library:CreateWindow("Final Stand")
+
+    local function NoSlowFS(bool)
+        _G.VariablesTable.NoSlowFS = bool
+        SaveSettings()
+        local Names = {"Slow", "Using", "hyper", "Action", "Attacking", "heavy"}
+        while _G.VariablesTable.NoSlowFS do FastWait()
+            if PlayerCheck() then
+                for i, v in pairs(Names) do
+                    local a = Player.Character:FindFirstChild(v)
+                    if a then
+                        a:Destroy()
+                    end
+                end
+            end
+        end
+    end
+
+    Window:AddToggle({text = "No Slow", state = _G.VariablesTable.NoSlowFS, callback = NoSlowFS})
+
+    local function GodModeFS(bool)
+        if game.PlaceId == 536102540 then
+            _G.VariablesTable.GodModeFS = bool
+            SaveSettings()
+            while _G.VariablesTable.GodModeFS do FastWait()
+                if PlayerCheck() and checkcaller then
+                    firetouchinterest(Player.Character.HumanoidRootPart, game:GetService("Workspace").Touchy.Part, 0)
+                    Player.PlayerGui:WaitForChild("Popup").Enabled = false
+                    while PlayerCheck() and _G.ActiveCommands.GodModeFS.Active do FastWait()
+                        if not Player.Character:FindFirstChild("i") then
+                            firetouchinterest(Player.Character.HumanoidRootPart, game:GetService("Workspace").Touchy.Part, 1)
+                            break
+                        end
+                    end
+                end
+            end
+        end
+    end
+
+    Window:AddToggle({text = "God Mode (Buggy)", state = _G.VariablesTable.GodModeFS, callback = GodModeFS})
+
+    local function ChatWait()
+        while true do wait(0.5)
+            if Player.PlayerGui:FindFirstChild("HUD") then
+                if Player.PlayerGui.HUD:FindFirstChild("Bottom") then
+                    if Player.PlayerGui.HUD.Bottom:FindFirstChild("ChatGui") then
+                        if Player.PlayerGui.HUD.Bottom.ChatGui.Visible then 
+                            break 
+                        end
+                    end
+                end
+            else
+                break
+            end
+        end
+    end
+
+    local Slots = {"1", "2", "3"}
+    Window:AddList({text = "Change Slot", values = Slots, value = Slots[1], callback = function(chosen)
+        local CharacterSlotChanger = game:GetService("Workspace").FriendlyNPCs:FindFirstChild("Character Slot Changer")
+        CharacterSlotChanger:FindFirstChild("ClickDetector").MaxActivationDistance = 9999999999999999
+        game:GetService("Players").LocalPlayer.Backpack.ServerTraits.ChatStart:FireServer(CharacterSlotChanger)
+        ChatWait()
+        game:GetService("Players").LocalPlayer.Backpack.ServerTraits.ChatAdvance:FireServer({"Yes"})
+        ChatWait()
+        game:GetService("Players").LocalPlayer.Backpack.ServerTraits.ChatAdvance:FireServer({"k"})
+        ChatWait()
+        game:GetService("Players").LocalPlayer.Backpack.ServerTraits.ChatAdvance:FireServer({"Slot"..chosen})
+        ChatWait()
+        game:GetService("Players").LocalPlayer.Backpack.ServerTraits.ChatAdvance:FireServer({"k"})
+    end})
+
+    Window:AddBind({text = "Hard Reset", key = Enum.KeyCode.L, hold = false, callback = function()
+        local si, no = pcall(function()
+            local HairStylist = game:GetService("Workspace").FriendlyNPCs:FindFirstChild("Hair Stylist")
+            HairStylist:FindFirstChild("ClickDetector").MaxActivationDistance = 9999999999999999
+            game:GetService("Players").LocalPlayer.Backpack.ServerTraits.ChatStart:FireServer(HairStylist)
+            ChatWait()
+            game:GetService("Players").LocalPlayer.Backpack.ServerTraits.ChatAdvance:FireServer({"Yes"})
+            ChatWait()
+            game:GetService("Players").LocalPlayer.Backpack.HairScript.RemoteEvent:FireServer("woah")
+        end)
+        if no then
+            Player.Character:BreakJoints()
+        end
+    end})
+
+    local function NoAuraFS(bool)
+        _G.VariablesTable.NoAuraFS = bool
+        SaveSettings()
+        while _G.VariablesTable.NoAuraFS do FastWait()
+            local HRP = PlayerCheck()
+            if HRP then
+                for i, v in pairs(HRP:GetChildren()) do
+                    if v:IsA("ParticleEmitter") then
+                        v.Enabled = false
+                    end
+                end
+            end
+        end
+    end
+
+    Window:AddToggle({text = "No Aura", state = _G.VariablesTable.NoAuraFS, callback = NoAuraFS})
+
+    local function HideLevelFS(bool)
+        _G.VariablesTable.HideLevelFS = bool
+        SaveSettings()
+        while _G.VariablesTable.HideLevelFS do FastWait()
+            if PlayerCheck() then
+                for i, v in pairs(Player.Character:GetChildren()) do
+                    if v:IsA("Model") then
+                        v:Destroy()
+                    end
+                end
+            end
+        end
+    end
+
+    Window:AddToggle({text = "Hide Level", state = _G.VariablesTable.HideLevelFS, callback = HideLevelFS})
+
+    local function ThrowStuckFS(bool)
+        _G.VariablesTable.ThrowStuckFS = bool
+        SaveSettings()
+        while _G.VariablesTable.ThrowStuckFS do FastWait()
+            if PlayerCheck() then
+                local a = Player.Character:FindFirstChild("Dragon Crush") or Player.Character:FindFirstChild("Dragon Throw")
+                if a then
+                    local b = a:FindFirstChild("Activator")
+                    if b then
+                        local c = b:FindFirstChild("Flip")
+                        if c then
+                            c:Destroy()
+                        end
+                    end
+                end
+            end
+        end
+    end
+
+    Window:AddToggle({text = "Throw Stuck", state = _G.VariablesTable.ThrowStuckFS, callback = ThrowStuckFS})
+
+    local NpcNameBox = Window:AddBox({text = "Npc To Farm", value = "", callback = function(typed)
+        _G.VariablesTable.NpcNameFS = typed
+    end})
+
+    local function AutoFarmFS(bool)
+        _G.VariablesTable.AutoFarmFS = bool
+        SaveSettings()
+        local function Pugno()
+            local args = {
+                [1] = {
+                    [1] = "m2"
+                },
+                [2] = Player.Character.HumanoidRootPart.CFrame,
+            }
+        
+            game:GetService("Players").LocalPlayer.Backpack.ServerTraits.Input:FireServer(unpack(args))
+        end
+        while _G.VariablesTable.AutoFarmFS do
+            while _G.VariablesTable.AutoFarmFS do FastWait()
+                local Yes, No = pcall(function()
+                    for i, v in pairs(game:GetService("Workspace").Live:GetChildren()) do
+                        if NameFind(v.Name, _G.VariablesTable.NpcNameFS) then
+                            while _G.VariablesTable.AutoFarmFS and PlayerCheck() and v.Humanoid.Health > 0 do FastWait()
+                                if (Player.Character.HumanoidRootPart.CFrame.Position - v.HumanoidRootPart.CFrame.Position).magnitude > 50 then
+                                    LerpCFrame(v.HumanoidRootPart.CFrame)
+                                else
+                                    Player.Character.HumanoidRootPart.CFrame = CFrame.new(v.HumanoidRootPart.CFrame.Position - v.HumanoidRootPart.CFrame.LookVector, v.HumanoidRootPart.CFrame.Position)
+                                end
+                                Pugno()
+                            end
+                        end
+                    end
+                end)
+                if No then
+                    break
+                end
+            end
+            wait(1)
+        end
+    end
+
+    Window:AddToggle({text = "AutoFarm", state = _G.VariablesTable.AutoFarmFS, callback = AutoFarmFS})
+
+    Window:AddButton({text = "Suggested Farm", callback = function()
+        NpcNameBox:SetValue("Evil Saiyan")
+    end})
+
+    local function AutoHTCFS(state)
+        _G.VariablesTable.AutoHTCFS = state 
+        SaveSettings()
+        
 
 
+if not (game.PlaceId == 882375367) and  _G.VariablesTable.AutoHTCFS then
+    Notify("Teleporting to HTC")
+    game:GetService("TeleportService"):Teleport(882375367, LocalPlayer)
+end
 
+local function Pugno()
+ 
+    local args = {
+        [1] = {
+            [1] = "m2"
+        },
+        [2] = Player.Character.HumanoidRootPart.CFrame,
+    }
+ 
+    Player.Backpack.ServerTraits.Input:FireServer(unpack(args))
+end
 
+local function Rejoin()
+    local Players = game.Players
+    if #Players:GetPlayers() <= 1 then
+        Players.LocalPlayer:Kick("\nRejoining...")
+        wait()
+        game:GetService('TeleportService'):Teleport(game.PlaceId, Players.LocalPlayer)
+    else
+        game:GetService('TeleportService'):TeleportToPlaceInstance(game.PlaceId, game.JobId, Players.LocalPlayer)
+    end
+end
 
+spawn(function()
+    while  _G.VariablesTable.AutoHTCFS do FastWait()
+        if PlayerCheck() then
+            local a = Player.Character:FindFirstChild("Dragon Crush") or Player.Character:FindFirstChild("Dragon Throw")
+            if a then
+                local b = a:FindFirstChild("Activator")
+                if b then
+                    local c = b:FindFirstChild("Flip")
+                    if c then
+                        c:Destroy()
+                    end
+                end
+            end
+        end
+    end
+end)
 
+spawn(function()
+    local Names = {"Slow", "Using", "hyper", "Action", "Attacking", "heavy"}
+    while  _G.VariablesTable.AutoHTCFS do FastWait()
+        if PlayerCheck() then
+            for i, v in pairs(Names) do
+                local a = Player.Character:FindFirstChild(v)
+                if a then
+                    a:Destroy()
+                end
+            end
+        end
+    end
+end)
 
+local LevelLabel = Player.PlayerGui:WaitForChild("HUD"):WaitForChild("Bottom"):WaitForChild("Stats"):WaitForChild("LVL"):WaitForChild("Val")
 
+local function MoveSpam()
+    local Moves = {"TS Molotov", "Wolf Fang Fist", "Mach Kick", "Flash Skewer", "Vital Strike", "Meteor Crash", "Neo Wolf Fang Fist","GOD Hakai","GOD Wrath","Trash","Strong Kick", "Combo Barrage", "Aerial Breaker"}
+    while  _G.VariablesTable.AutoHTCFS do FastWait()
+        if PlayerCheck() then
+            Player.Character.HumanoidRootPart.Anchored = true
+            local KiPercentage = Player.Character.Ki.Value/Player.Character.Stats["Ki-Max"].Value * 100
+            print(KiPercentage)
+            if KiPercentage > 10 then
+                for i, v in pairs(Player.Backpack:GetChildren()) do
+                    for _, Move in pairs(Moves) do
+                        if v.Name == Move and PlayerCheck() then
+                            v.Parent = Player.Character 
+                            FastWait()
+                            v:Activate()
+                            FastWait()
+                            v:Deactivate()
+                            v.Parent = Player.Backpack
+                        end
+                    end
+                end
+            else
+                Player.Backpack.ServerTraits.EatSenzu:FireServer(true)
+                Pugno()
+            end
+            Player.Character.HumanoidRootPart.CFrame = CFrame.new(-40, 244, 3)
+        end
+        if tonumber(LevelLabel.Text) == 101 or tonumber(LevelLabel.Text) == 181 or tonumber(LevelLabel.Text) == 251 or tonumber(LevelLabel.Text) == 321 then
+            Notify("Rejoining...", "Wait a sec")
+            local Players = game.Players
+            if #Players:GetPlayers() <= 1 then
+                Players.LocalPlayer:Kick("\nRejoining...")
+                wait()
+                game:GetService('TeleportService'):Teleport(game.PlaceId, Players.LocalPlayer)
+            else
+                game:GetService('TeleportService'):TeleportToPlaceInstance(game.PlaceId, game.JobId, Players.LocalPlayer)
+            end
+        end
+    end
+end
 
+if game.PlaceId == 882375367 and  _G.VariablesTable.AutoHTCFS then
+    while not PlayerCheck() do wait() end
+    local Goku = game:GetService("Workspace").Live:GetChildren()[1]
+    Player.Character.HumanoidRootPart.CFrame = CFrame.new(Goku.HumanoidRootPart.CFrame.Position - Goku.HumanoidRootPart.CFrame.LookVector/2, Goku.HumanoidRootPart.CFrame.Position)
+    local v = Player.Backpack:FindFirstChild("Dragon Throw")
+    if v then
+        v.Parent = Player.Character 
+        FastWait()
+        v:Activate()
+        wait(0.5)
+        v:Deactivate()
+        v.Parent = Player.Backpack
+    end
+    wait(0.5)
+    MoveSpam()
+end
+end
+    Window:AddToggle({text = "AutoHTC", state = _G.VariablesTable.AutoHTCFS, callback = AutoHTCFS})
 
-
+end
 
 
 local Credits = Library:CreateWindow("Credits")
@@ -186,7 +484,7 @@ Credits:AddButton({text = "Suricato006#8711", callback = function()
     Notify("Suricato006", "Tha Scripter")
 end})
 
-Credits:AddButton({text = "Sypse", callback = function()
+Credits:AddButton({text = "Wally", callback = function()
     Notify("The creator of the Ui library", "And its the best out there")
 end})
 
@@ -196,12 +494,7 @@ end})
 
 Credits:AddButton({text = "Join Discord Server", callback = function()
     local http = game:GetService('HttpService') 
-	if toClipboard then
-		toClipboard('https://discord.com/invite/dYHag43eeU')
-		Notify('Discord Invite', 'Copied to clipboard!\nhttps://discord.gg/JSjpgSPs4v')
-	else
-		Notify('Discord Invite', 'https://discord.gg/JSjpgSPs4v')
-	end
+	Notify('Discord Invite', 'https://discord.gg/5NYqSVwH9Q')
 	local req = syn and syn.request or http and http.request or http_request or fluxus and fluxus.request or getgenv().request or request
 	if req then
 		req({
@@ -214,7 +507,7 @@ Credits:AddButton({text = "Join Discord Server", callback = function()
 			Body = http:JSONEncode({
 				cmd = 'INVITE_BROWSER',
 				nonce = http:GenerateGUID(false),
-				args = {code = 'JSjpgSPs4v'}
+				args = {code = '5NYqSVwH9Q'}
 			})
 		})
 	end
