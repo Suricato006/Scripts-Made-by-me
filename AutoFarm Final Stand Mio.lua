@@ -1,4 +1,5 @@
 loadstring(game:HttpGet(('https://pastebin.com/raw/5ksZRmMp'),true))()
+--test
 
 Notify("Thanks for using my script", "Luv u <3", 4)
 _G.AutoFarm = true
