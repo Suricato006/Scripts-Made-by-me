@@ -18,7 +18,7 @@ function Notify(Titolo, Testo, Durata, Richiamo, Bottone1, Bottone2)
         end
 
         game:GetService("StarterGui"):SetCore("SendNotification", {
-            Icon = "https://cdn.discordapp.com/attachments/690529991519109130/928344641718329404/crab.jpg"
+            Icon = "https://cdn.discordapp.com/attachments/690529991519109130/928344641718329404/crab.jpg";
             Title = Titolo;
             Text = Testo;
             Duration = Durata;
@@ -28,7 +28,7 @@ function Notify(Titolo, Testo, Durata, Richiamo, Bottone1, Bottone2)
         })
     else
         game:GetService("StarterGui"):SetCore("SendNotification", {
-            Icon = "https://cdn.discordapp.com/attachments/690529991519109130/928344641718329404/crab.jpg"
+            Icon = "https://cdn.discordapp.com/attachments/690529991519109130/928344641718329404/crab.jpg";
             Title = Titolo;
             Text = Testo or " ";
             Duration = Durata or 2
@@ -60,8 +60,11 @@ end
 
 function TweenCreate(CFrame, Speed, part)
     local ActualPart = part or Player.Character.HumanoidRootPart
-    local Magnitudo = (ActualPart.CFrame.Position - CFrame).magnitude / (Speed or 10)
-    local tween = game:GetService("TweenService"):Create(part or Player.Character.HumanoidRootPart, TweenInfo.new(Magnitudo), {CFrame = CFrame})
+    local DefaultSpeed = 10
+    local Magnitudo = (ActualPart.CFrame.Position - CFrame.Position).magnitude / (Speed or DefaultSpeed)
+    local tween = game:GetService("TweenService"):Create(ActualPart, TweenInfo.new(Magnitudo), {CFrame = CFrame})
+    tween:Play()
+    tween.Completed:wait()
 end
 
 function NameFind(String, Typed)

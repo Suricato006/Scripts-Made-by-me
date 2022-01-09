@@ -13,7 +13,7 @@ local function FastWait()
 end
 
 _G.NoSlow = true
-local Names = {"Slow", "Using", "hyper", "Action", "Attacking", "heavy"}
+local Names = {"Action", "Attacking", "Using", "hyper", "Hyper", "heavy", "KiBlasted", "Tele", "tele", "Killed", "Slow"}
 
 while _G.NoSlow do FastWait()
     if PlayerCheck() then
