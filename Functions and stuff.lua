@@ -18,7 +18,7 @@ function Notify(Titolo, Testo, Durata, Richiamo, Bottone1, Bottone2)
         end
 
         game:GetService("StarterGui"):SetCore("SendNotification", {
-            Icon = "https://cdn.discordapp.com/attachments/690529991519109130/928344641718329404/crab.jpg";
+            Icon = "rbxassetid://8496586222";
             Title = Titolo;
             Text = Testo;
             Duration = Durata;
@@ -28,7 +28,7 @@ function Notify(Titolo, Testo, Durata, Richiamo, Bottone1, Bottone2)
         })
     else
         game:GetService("StarterGui"):SetCore("SendNotification", {
-            Icon = "https://cdn.discordapp.com/attachments/690529991519109130/928344641718329404/crab.jpg";
+            Icon = "rbxassetid://8496586222";
             Title = Titolo;
             Text = Testo or " ";
             Duration = Durata or 2
