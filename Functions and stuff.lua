@@ -58,7 +58,7 @@ function LerpCFrame(CFrame)
     end
 end
 
-function TweenCreate(CFrame, Speed, part)
+function TweenCFrame(CFrame, Speed, part)
     local ActualPart = part or Player.Character.HumanoidRootPart
     local DefaultSpeed = 10
     local Magnitudo = (ActualPart.CFrame.Position - CFrame.Position).magnitude / (Speed or DefaultSpeed)
