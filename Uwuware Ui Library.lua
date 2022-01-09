@@ -1614,7 +1614,7 @@ function library:Init()
 	elseif get_hidden_gui then
 		get_hidden_gui(self.base)
 	else
-		game:GetService"Players".LocalPlayer:Kick("Error: protect_gui function not found")
+		warn("Error: protect_gui function not found, you are exposed, you can still use the GUI but at your own risk")
 		return
 	end
 	self.base.Parent = game:GetService"CoreGui"

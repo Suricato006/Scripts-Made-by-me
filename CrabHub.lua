@@ -14,7 +14,7 @@ if not game:IsLoaded() then game.Loaded:Wait() end
 
 _G.CrabHub = true
 
-loadstring(game:HttpGet(('https://pastebin.com/raw/5ksZRmMp'),true))()
+loadstring(game:HttpGet(('https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Functions%20and%20stuff.lua'),true))()
 
 local FileName = "CrabHub.JSON"
 local function SaveSettings()
@@ -30,8 +30,9 @@ end
 _G.VariablesTable = {}
 LoadSettings()
 
-local Library = loadstring(game:HttpGet("https://pastebin.com/raw/GX28T0pH", true))()
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Uwuware%20Ui%20Library.lua", true))()
 local Main = Library:CreateWindow("CrabHub")
+Main.canInit = false
 
 Main:AddBox({text = "Tween To Player", value = "", callback = function(typed)
     if PlayerCheck() then
@@ -160,6 +161,7 @@ local FinalStandIds = {536102540, 569994010, 882399924, 2046990924, 478132461, 3
 
 if table.find(FinalStandIds, game.PlaceId) then
     local Window = Library:CreateWindow("Final Stand")
+    Window.canInit = false
 
     local function NoSlowFS(bool)
         _G.VariablesTable.NoSlowFS = bool
@@ -477,6 +479,7 @@ end
 
 
 local Credits = Library:CreateWindow("Credits")
+Credits.canInit = false
 
 Credits:AddLabel({text = "Who Created This Gui?"})
 
