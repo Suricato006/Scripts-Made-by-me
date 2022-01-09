@@ -30,9 +30,8 @@ end
 _G.VariablesTable = {}
 LoadSettings()
 
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Uwuware%20Ui%20Library.lua", true))()
+local Library = loadstring(game:HttpGet("https://pastebin.com/raw/GX28T0pH", true))()
 local Main = Library:CreateWindow("CrabHub")
-Main.canInit = false
 
 Main:AddBox({text = "Tween To Player", value = "", callback = function(typed)
     if PlayerCheck() then
@@ -45,6 +44,14 @@ Main:AddBox({text = "Tween To Player", value = "", callback = function(typed)
             end
         end
     end
+end})
+
+workspace.CurrentCamera.FieldOfView = _G.VariablesTable.FieldOfView or workspace.CurrentCamera.FieldOfView
+
+Main:AddSlider({text = "FOV", min = 1, max = 120, dual = false, value = _G.VariablesTable.FieldOfView or 70, callback = function(number)
+    _G.VariablesTable.FieldOfView = number
+    workspace.CurrentCamera.FieldOfView = number
+    SaveSettings()
 end})
 
 local bb=game:service'VirtualUser'
@@ -161,7 +168,6 @@ local FinalStandIds = {536102540, 569994010, 882399924, 2046990924, 478132461, 3
 
 if table.find(FinalStandIds, game.PlaceId) then
     local Window = Library:CreateWindow("Final Stand")
-    Window.canInit = false
 
     local function NoSlowFS(bool)
         _G.VariablesTable.NoSlowFS = bool
@@ -479,7 +485,6 @@ end
 
 
 local Credits = Library:CreateWindow("Credits")
-Credits.canInit = false
 
 Credits:AddLabel({text = "Who Created This Gui?"})
 
