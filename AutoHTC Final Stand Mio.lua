@@ -10,29 +10,6 @@ if not game.PlaceId == 882375367 and _G.AutoHTC then
     game:GetService("TeleportService"):Teleport(882375367, LocalPlayer)
 end
 
-local function Pugno()
- 
-    local args = {
-        [1] = {
-            [1] = "m2"
-        },
-        [2] = Player.Character.HumanoidRootPart.CFrame,
-    }
- 
-    Player.Backpack.ServerTraits.Input:FireServer(unpack(args))
-end
-
-local function Rejoin()
-    local Players = game.Players
-    if #Players:GetPlayers() <= 1 then
-        Players.LocalPlayer:Kick("\nRejoining...")
-        wait()
-        game:GetService('TeleportService'):Teleport(game.PlaceId, Players.LocalPlayer)
-    else
-        game:GetService('TeleportService'):TeleportToPlaceInstance(game.PlaceId, game.JobId, Players.LocalPlayer)
-    end
-end
-
 spawn(function()
     while _G.AutoHTC do FastWait()
         if PlayerCheck() then
@@ -64,15 +41,40 @@ spawn(function()
     end
 end)
 
+local function Pugno()
+
+    local args = {
+        [1] = {
+            [1] = "m2"
+        },
+        [2] = Player.Character.HumanoidRootPart.CFrame,
+    }
+
+    Player.Backpack.ServerTraits.Input:FireServer(unpack(args))
+end
+
+local function Rejoin()
+    local Players = game.Players
+    if #Players:GetPlayers() <= 1 then
+        Players.LocalPlayer:Kick("\nRejoining...")
+        wait()
+        game:GetService('TeleportService'):Teleport(game.PlaceId, Players.LocalPlayer)
+    else
+        game:GetService('TeleportService'):TeleportToPlaceInstance(game.PlaceId, game.JobId, Players.LocalPlayer)
+    end
+end
+
 local LevelLabel = Player.PlayerGui:WaitForChild("HUD"):WaitForChild("Bottom"):WaitForChild("Stats"):WaitForChild("LVL"):WaitForChild("Val")
 
+local CurrentLevel = 0
+
 local function MoveSpam()
-    local Moves = {"TS Molotov", "Wolf Fang Fist", "Mach Kick", "Flash Skewer", "Vital Strike", "Meteor Crash", "Neo Wolf Fang Fist", "Combo Barrage", "Aerial Breaker"}
-    while _G.AutoHTC do FastWait()
+    local HasToRejoin = false
+    local Moves = {"TS Molotov", "Wolf Fang Fist", "Mach Kick", "Flash Skewer", "Vital Strike", "Meteor Crash", "Neo Wolf Fang Fist","GOD Hakai","GOD Wrath","Trash","Strong Kick", "Combo Barrage", "Aerial Breaker"}
+    while  _G.VariablesTable.AutoHTCFS do FastWait()
         if PlayerCheck() then
             Player.Character.HumanoidRootPart.Anchored = true
             local KiPercentage = Player.Character.Ki.Value/Player.Character.Stats["Ki-Max"].Value * 100
-            print(KiPercentage)
             if KiPercentage > 10 then
                 for i, v in pairs(Player.Backpack:GetChildren()) do
                     for _, Move in pairs(Moves) do
@@ -92,21 +94,19 @@ local function MoveSpam()
             end
             Player.Character.HumanoidRootPart.CFrame = CFrame.new(-40, 244, 3)
         end
-        if tonumber(LevelLabel.Text) == 101 or tonumber(LevelLabel.Text) == 181 or tonumber(LevelLabel.Text) == 251 or tonumber(LevelLabel.Text) == 321 then
-            Notify("Rejoining...", "Wait a sec")
-            local Players = game.Players
-            if #Players:GetPlayers() <= 1 then
-                Players.LocalPlayer:Kick("\nRejoining...")
-                wait()
-                game:GetService('TeleportService'):Teleport(game.PlaceId, Players.LocalPlayer)
-            else
-                game:GetService('TeleportService'):TeleportToPlaceInstance(game.PlaceId, game.JobId, Players.LocalPlayer)
-            end
+        if tonumber(LevelLabel.Text) == 101 or tonumber(LevelLabel.Text) == 181 or tonumber(LevelLabel.Text) == 251 or tonumber(LevelLabel.Text) == 321 and not HasToRejoin then
+            HasToRejoin = true
+            CurrentLevel = tonumber(LevelLabel.Text)
+            spawn(function()
+                while tonumber(LevelLabel.Text) == CurrentLevel do wait() end
+                Notify("Rejoining...", "Wait a sec")
+                Rejoin()
+            end)
         end
     end
 end
 
-if game.PlaceId == 882375367 and _G.AutoHTC then
+if game.PlaceId == 882375367 and  _G.VariablesTable.AutoHTCFS then
     while not PlayerCheck() do wait() end
     local Goku = game:GetService("Workspace").Live:GetChildren()[1]
     Player.Character.HumanoidRootPart.CFrame = CFrame.new(Goku.HumanoidRootPart.CFrame.Position - Goku.HumanoidRootPart.CFrame.LookVector/2, Goku.HumanoidRootPart.CFrame.Position)

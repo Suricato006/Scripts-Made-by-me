@@ -1,16 +1,5 @@
 --GodMode Final Stand (Hearth)
-local Player = game:GetService("Players").LocalPlayer
-local function PlayerCheck()
-    if Player.Character:FindFirstChild("HumanoidRootPart") then
-        return true
-    else
-        return nil
-    end
-end
-
-local function FastWait()
-    game:GetService("RunService").Heartbeat:wait()
-end
+loadstring(game:HttpGet(('https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Functions%20and%20stuff.lua'),true))()
 
 _G.GodMode = true
 
