@@ -1,4 +1,4 @@
-if not _G.Functions then
+if not CheckFunction then
     Player = game:GetService("Players").LocalPlayer
 
     function PlayerCheck()
@@ -81,4 +81,4 @@ if not _G.Functions then
         return false
     end
 end
-_G.Functions = true
+CheckFunction = true
