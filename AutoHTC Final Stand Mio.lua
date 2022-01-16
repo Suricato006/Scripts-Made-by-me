@@ -1,44 +1,21 @@
 if not game:IsLoaded() then game.Loaded:Wait() end
 
-loadstring(game:HttpGet(('https://pastebin.com/raw/5ksZRmMp'),true))()
+loadstring(game:HttpGet(('https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Functions%20and%20stuff.lua'),true))()
 
 _G.AutoHTC = true
 
 Notify("Thanks for using my script", "By Suricato006#8711")
-if not game.PlaceId == 882375367 and _G.AutoHTC then
+if not (game.PlaceId == 882375367) and _G.AutoHTC then
     Notify("Teleporting to HTC")
     game:GetService("TeleportService"):Teleport(882375367, LocalPlayer)
 end
 
 spawn(function()
-    while _G.AutoHTC do FastWait()
-        if PlayerCheck() then
-            local a = Player.Character:FindFirstChild("Dragon Crush") or Player.Character:FindFirstChild("Dragon Throw")
-            if a then
-                local b = a:FindFirstChild("Activator")
-                if b then
-                    local c = b:FindFirstChild("Flip")
-                    if c then
-                        c:Destroy()
-                    end
-                end
-            end
-        end
-    end
+    loadstring(game:HttpGet(('https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Dragon%20Crush%20Stuck%20Final%20Stand.lua'),true))()
 end)
 
 spawn(function()
-    local Names = {"Slow", "Using", "hyper", "Action", "Attacking", "heavy"}
-    while _G.AutoHTC do FastWait()
-        if PlayerCheck() then
-            for i, v in pairs(Names) do
-                local a = Player.Character:FindFirstChild(v)
-                if a then
-                    a:Destroy()
-                end
-            end
-        end
-    end
+    loadstring(game:HttpGet(('https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/No%20Slow%20Final%20Stand.lua'),true))()
 end)
 
 local function Pugno()
@@ -71,7 +48,7 @@ local CurrentLevel = 0
 local function MoveSpam()
     local HasToRejoin = false
     local Moves = {"TS Molotov", "Wolf Fang Fist", "Mach Kick", "Flash Skewer", "Vital Strike", "Meteor Crash", "Neo Wolf Fang Fist","GOD Hakai","GOD Wrath","Trash","Strong Kick", "Combo Barrage", "Aerial Breaker"}
-    while  _G.VariablesTable.AutoHTCFS do FastWait()
+    while  _G.AutoHTC do FastWait()
         if PlayerCheck() then
             Player.Character.HumanoidRootPart.Anchored = true
             local KiPercentage = Player.Character.Ki.Value/Player.Character.Stats["Ki-Max"].Value * 100
@@ -80,9 +57,9 @@ local function MoveSpam()
                     for _, Move in pairs(Moves) do
                         if v.Name == Move and PlayerCheck() then
                             v.Parent = Player.Character 
-                            FastWait()
+                            wait()
                             v:Activate()
-                            FastWait()
+                            wait()
                             v:Deactivate()
                             v.Parent = Player.Backpack
                         end
@@ -106,14 +83,14 @@ local function MoveSpam()
     end
 end
 
-if game.PlaceId == 882375367 and  _G.VariablesTable.AutoHTCFS then
+if (game.PlaceId == 882375367) and  _G.AutoHTC then
     while not PlayerCheck() do wait() end
     local Goku = game:GetService("Workspace").Live:GetChildren()[1]
     Player.Character.HumanoidRootPart.CFrame = CFrame.new(Goku.HumanoidRootPart.CFrame.Position - Goku.HumanoidRootPart.CFrame.LookVector/2, Goku.HumanoidRootPart.CFrame.Position)
     local v = Player.Backpack:FindFirstChild("Dragon Throw")
     if v then
         v.Parent = Player.Character 
-        FastWait()
+        wait()
         v:Activate()
         wait(0.5)
         v:Deactivate()

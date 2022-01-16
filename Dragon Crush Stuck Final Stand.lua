@@ -1,9 +1,7 @@
 --YEET
-loadstring(game:HttpGet(('https://pastebin.com/raw/5ksZRmMp'),true))()
+loadstring(game:HttpGet(('https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Functions%20and%20stuff.lua'),true))()
 
 _G.YEET = true
-local names = {"Flip"}
-
 
 while _G.YEET do FastWait()
     if PlayerCheck() then
