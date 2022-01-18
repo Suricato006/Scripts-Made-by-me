@@ -20,7 +20,7 @@ local function FastWait()
 end
 
 _G.MoveSpamCheck = true
-_G.MoveSpam = false
+_G.MoveSpam = true
 
 local function movespamfunction()
     while _G.MoveSpam do FastWait()
