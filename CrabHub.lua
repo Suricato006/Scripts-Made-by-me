@@ -5,6 +5,18 @@ Created by Suricato006#8711
 
 loadstring(game:HttpGet(('https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Functions%20and%20stuff.lua'),true))()
 
+local OldNameCall = nil
+OldNameCall = hookmetamethod(game, "__namecall", function(Self, ...)
+    local Args = {...}
+    local NamecallMethod = getnamecallmethod()
+
+    if not checkcaller() and Self == Player and NamecallMethod == "Kick" then
+        return nil
+    end
+
+    return OldNameCall(Self, ...)
+end)
+
 local FileName = "CrabHub.JSON"
 local function SaveSettings()
     writefile(FileName, game:GetService("HttpService"):JSONEncode(_G.CrabHub))
@@ -21,6 +33,32 @@ LoadSettings()
 
 local Library = loadstring(game:HttpGet("https://pastebin.com/raw/GX28T0pH", true))()
 local Main = Library:CreateWindow("CrabHub")
+
+local Flying = nil
+local SPI = 10
+local function Fly(bool)
+    if bool then
+        local ME = Player
+        local UIS = game:GetService('UserInputService')
+        local RunService = game:GetService('RunService')
+        local Keys, v3, cf = Enum.KeyCode, Vector3.new(), CFrame.new()
+        Flying = RunService.Heartbeat:Connect(function()
+            local Camera = workspace.CurrentCamera
+            local Human = ME.Character and ME.Character:FindFirstChildWhichIsA('Humanoid')
+            local HRP = Human and Human.RootPart or ME.Character.PrimaryPart
+            if not ME.Character or not Human or not HRP or not Camera then
+                return 
+            end
+            Human:ChangeState(11)
+            HRP.CFrame = CFrame.new(HRP.Position, HRP.Position + Camera.CFrame.LookVector) * (UIS:GetFocusedTextBox() and cf or CFrame.new((UIS:IsKeyDown(Keys.D) and SPI) or (UIS:IsKeyDown(Keys.A) and -SPI) or 0, (UIS:IsKeyDown(Keys.E) and SPI / 2) or (UIS:IsKeyDown(Keys.Q) and -SPI / 2) or 0, (UIS:IsKeyDown(Keys.S) and SPI) or (UIS:IsKeyDown(Keys.W) and -SPI) or 0))
+        end)
+    elseif not bool then
+        Flying:Disconnect()
+    end
+end
+
+Main:AddToggle({text = "Fly", state = false, callback = Fly})
+
 Main.open = false
 
 Main:AddBox({text = "Tween To Player", value = "", callback = function(typed)
