@@ -51,8 +51,8 @@ local function MoveSpam()
     while  _G.AutoHTC do FastWait()
         if PlayerCheck() then
             Player.Character.HumanoidRootPart.Anchored = true
-            local KiPercentage = Player.Character.Ki.Value/Player.Character.Stats["Ki-Max"].Value * 100
-            if KiPercentage > 10 then
+            local KiPercentage = Player.Character.Ki.Value
+            if KiPercentage > 32 then
                 for i, v in pairs(Player.Backpack:GetChildren()) do
                     for _, Move in pairs(Moves) do
                         if v.Name == Move and PlayerCheck() then
