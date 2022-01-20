@@ -39,7 +39,7 @@ Folder:AddButton({text = "Destroy Gui", callback = function()
 end})
 
 Folder:AddButton({text = "SetValue", callback = function()
-    Box:SetValue("Got Set")
+    Box:SetValue("Got Set") -- or SetState() for toggles
 end})
 
 Library:Init()
