@@ -1,6 +1,6 @@
 loadstring(game:HttpGet(('https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Functions%20and%20stuff.lua'),true))()
 
-local Names = {"ATTACKING", "COMBO", "EARLYATTACKING","STUN", "HeavyCD", "CancelAll", "Knocked", "BLOCKING", "USINGSKILL"}
+local Names = {"ATTACKING", "COMBO", "EARLYATTACKING","STUN", "HeavyCD", "CancelAll", "Knocked", "BLOCKING", "USINGSKILL", "PERFECTBLOCKED", "GAURDBREAK"}
 
 _G.NoSlow = true
 
