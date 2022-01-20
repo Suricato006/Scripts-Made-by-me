@@ -471,6 +471,50 @@ if table.find(FinalStandIds, game.PlaceId) then
 
     Window:AddToggle({text = "AutoHTC", state = _G.CrabHub.AutoHTCFS, callback = AutoHTCFS})
 
+elseif (game.PlaceId == 4734949248) then
+    local Main = Library:CreateWindow("Demon Slayer RPG 2")
+    Main.open = false
+
+    local function NoSlowDSRPG(bool)
+        local Names = {"ATTACKING", "COMBO", "EARLYATTACKING","STUN", "HeavyCD", "CancelAll", "Knocked", "BLOCKING", "USINGSKILL", "PERFECTBLOCKED", "GUARDBREAK"}
+        _G.NoSlowDSRPG = bool
+
+        while _G.NoSlowDSRPG do FastWait()
+            if PlayerCheck() then
+                for i, v in pairs(Names) do
+                    local a = Player.Character:FindFirstChild(v)
+                    if a then
+                        a:Destroy()
+                    end
+                end
+            end
+        end
+    end
+
+    Main:AddToggle({text = "No Slow", state = false, callback = NoSlowDSRPG})
+
+    local function PerfBlockDSRPG(bool)
+        _G.PerfBlockDSRPG = bool
+        while _G.PerfBlockDSRPG do FastWait()
+            game:GetService("ReplicatedStorage").All.Animations.CombatRemote.BLOCKING:FireServer("On")
+            FastWait()
+            game:GetService("ReplicatedStorage").All.Animations.CombatRemote.BLOCKING:FireServer("Off")
+        end
+    end
+
+    Main:AddToggle({text = "Perfect Block", state = false, callback = PerfBlockDSRPG})
+
+    local function InfiniteBreathDSRPG(bool)
+        _G.InfiniteBreathDSRPG = bool
+        while _G.InfiniteBreathDSRPG do FastWait()
+            local a = Player.Character:FindFirstChild("Oxygen")
+            if a then
+                a.Value = math.huge
+            end
+        end
+    end
+
+    Main:AddToggle({text = "Infinite Breath", state = false, callback = InfiniteBreathDSRPG})
 end
 
 
