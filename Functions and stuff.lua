@@ -1,4 +1,5 @@
 if not CheckFunction then
+    if not game:IsLoaded() then game.Loaded:Wait() end
     Player = game:GetService("Players").LocalPlayer
 
     function PlayerCheck()
