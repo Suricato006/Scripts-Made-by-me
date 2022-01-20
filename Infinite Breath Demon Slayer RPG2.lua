@@ -2,7 +2,8 @@ loadstring(game:HttpGet(('https://raw.githubusercontent.com/Suricato006/Scripts-
 
 _G.InfiniteBreath = true
 while _G.InfiniteBreath do FastWait()
-    if PlayerCheck() then
-        Player.Character.Oxygen.Value = math.huge
+    local a = Player.Character:FindFirstChild("Oxygen")
+    if a then
+        a.Value = math.huge
     end
 end
