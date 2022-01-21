@@ -1,5 +1,7 @@
 --[[ 
 CrabHub
+Open Source so you can learn from the script. If you want to use a part of it then credit me or my discord in description.
+Much love <3
 Created by Suricato006#8711
 ]]
 
