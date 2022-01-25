@@ -104,6 +104,11 @@ if (game.PlaceId == 536102540) then
 end
 
 if (game.PlaceId == 2050207304) then
+    for i, v in pairs(game.Players:GetChildren()) do
+        if not (v.Name == Player.Name) or not (v.Name == "Broly BR") then
+            ReturnToEarth()
+        end
+    end
     local Broly = game:GetService("Workspace").Live:GetChildren()[1]
     local HRP = PlayerCheck()
 
