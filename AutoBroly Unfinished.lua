@@ -4,7 +4,7 @@ _G.AutoBroly = true
 
 local Moves = {"TS Molotov", "Wolf Fang Fist", "Mach Kick", "Flash Skewer", "Vital Strike", "Meteor Crash", "Neo Wolf Fang Fist","GOD Hakai","GOD Wrath","Trash","Strong Kick", "Combo Barrage", "Aerial Breaker"}
 
-
+local RejoinTimer = 3600
 
 
 
@@ -68,7 +68,7 @@ spawn(function()
 end)
 
 spawn(function()
-    wait(360)
+    wait(RejoinTimer)
     ReturnToEarth()
 end)
 
@@ -105,7 +105,7 @@ end
 
 if (game.PlaceId == 2050207304) then
     for i, v in pairs(game.Players:GetChildren()) do
-        if not (v.Name == Player.Name) or not (v.Name == "Broly BR") then
+        if not (v.Name == Player.Name) and not (v.Name == "Broly BR") then
             ReturnToEarth()
         end
     end
@@ -125,7 +125,7 @@ if (game.PlaceId == 2050207304) then
 
     spawn(function()
         while not Broly:FindFirstChild("MoveStart") and PlayerCheck() and _G.AutoBroly do FastWait()
-            local Throw = Player.Backpack:FindFirstChild("Dragon Crush") or Player.Backpack:FindFirstChild("Dragon Throw")
+            local Throw = Player.Backpack:WaitForChild("Dragon Crush")
             if Throw then
                 Throw.Parent = Player.Character 
                 Throw:Activate()
@@ -140,7 +140,7 @@ if (game.PlaceId == 2050207304) then
 
     spawn(function()
         while _G.AutoBroly and PlayerCheck() do FastWait()
-            HRP.CFrame = CFrame.new(-20, -127, -15)
+            HRP.CFrame = CFrame.new(-24, -127, -12)
         end
     end)
 
@@ -182,6 +182,21 @@ if (game.PlaceId == 2050207304) then
         end
         local BrolyHealth = tostring(math.floor(tonumber(Broly.Humanoid.Health)))
         QuestLabel.Text = "BrolyHealth: "..BrolyHealth
+
+        --Broly goes bonkers prevention
+        if tonumber(BrolyHealth) == 0 then
+            spawn(function()
+                wait(2)
+                ReturnToEarth()
+            end)
+        end
+        local Prevention = {"CanDieFin", "True", "Opos", "MoveStart", "Action"}
+        for i, v in pairs(Broly:GetChildren()) do
+            if table.find(Prevention, v.Name) then
+                v:Destroy()
+            end
+        end
+
         Player.Backpack.ServerTraits.EatSenzu:FireServer(true)
     end
 end
