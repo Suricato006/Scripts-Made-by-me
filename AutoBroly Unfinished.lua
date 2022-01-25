@@ -2,7 +2,24 @@ loadstring(game:HttpGet(('https://raw.githubusercontent.com/Suricato006/Scripts-
 
 _G.AutoBroly = true
 
-if not game:IsLoaded() then game.Loaded:Wait() end
+local Moves = {"TS Molotov", "Wolf Fang Fist", "Mach Kick", "Flash Skewer", "Vital Strike", "Meteor Crash", "Neo Wolf Fang Fist","GOD Hakai","GOD Wrath","Trash","Strong Kick", "Combo Barrage", "Aerial Breaker"}
+
+
+
+
+
+
+local AutoExec = false
+if not game:IsLoaded() then
+    game.Loaded:Wait()
+    AutoExec = true
+end
+
+if not AutoExec then
+    Player.CharacterAdded:wait()
+else
+    while not PlayerCheck() do FastWait() end
+end
 
 local function ReturnToEarth()
     game:GetService("TeleportService"):Teleport(536102540, game.Players.LocalPlayer)
@@ -63,8 +80,6 @@ spawn(function()
     loadstring(game:HttpGet(('https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/No%20Slow%20Final%20Stand.lua'),true))()
 end)
 
-while not PlayerCheck() do FastWait() end
-
 local QuestLabel = WaitForMoreChilds({"PlayerGui", "HUD", "FullSize", "Quests", "TextLabel"}, Player)
 
 if (game.PlaceId == 536102540) then
@@ -87,8 +102,6 @@ if (game.PlaceId == 536102540) then
         end
     end
 end
-
-local Moves = {"TS Molotov", "Wolf Fang Fist", "Mach Kick", "Flash Skewer", "Vital Strike", "Meteor Crash", "Neo Wolf Fang Fist","GOD Hakai","GOD Wrath","Trash","Strong Kick", "Combo Barrage", "Aerial Breaker"}
 
 if (game.PlaceId == 2050207304) then
     local Broly = game:GetService("Workspace").Live:GetChildren()[1]
