@@ -5,6 +5,18 @@ _G.AutoBroly = true
 if not game:IsLoaded() then game.Loaded:Wait() end
 
 spawn(function()
+    if not PlayerCheck("True") then return
+    while true do FastWait()
+        local a = PlayerCheck("True")
+        if a then
+            a:Destroy()
+        else
+            return
+        end
+    end
+end)
+
+spawn(function()
     while true do wait(1)
         if game:GetService("CoreGui").RobloxPromptGui.promptOverlay:FindFirstChild("ErrorPrompt") then 
             game:GetService("TeleportService"):Teleport(536102540, LocalPlayer)
@@ -27,6 +39,8 @@ end)
 
 while not PlayerCheck() do wait() end
 
+local QuestLabel = Player:WaitForChild("PlayerGui"):WaitForChild("HUD"):WaitForChild("FullSize"):WaitForChild("Quests"):WaitForChild("TextLabel")
+
 if (game.PlaceId == 536102540) then
     --Hearth Setup
     local HRP = PlayerCheck()
@@ -42,6 +56,8 @@ if (game.PlaceId == 536102540) then
         while PlayerCheck() and _G.AutoBroly do FastWait()
             HRP.CFrame = BrolyPosition
             HRP.Transparency = 0
+            local TimerTime = game:GetService("Workspace").BrolyTeleport:FindFirstChildWhichIsA("Model").Name
+            QuestLabel.Text = "Timer: "..TimerTime
         end
     end
 end
@@ -59,25 +75,40 @@ if (game.PlaceId == 2050207304) then
 
     HRP.CFrame = CFrame.new(Broly.HumanoidRootPart.Position + Broly.HumanoidRootPart.CFrame.LookVector/2, Broly.HumanoidRootPart.Position)
 
-    local v = Player.Backpack:FindFirstChild("Dragon Throw")
-    if v then
-        v.Parent = Player.Character 
-        v:Activate()
-        wait(0.5)
-        v:Deactivate()
-        v.Parent = Player.Backpack
-    end
-
     spawn(function()
         while _G.AutoBroly and PlayerCheck() do FastWait()
             HRP.CFrame = CFrame.new(-20, -127, -15)
         end
     end)
 
+    local Throw = Player.Backpack:FindFirstChild("Dragon Throw")
+    if Throw then
+        Throw.Parent = Player.Character 
+        Throw:Activate()
+        wait(0.5)
+        Throw:Deactivate()
+        Throw.Parent = Player.Backpack
+    end
+
+    local function Pugno()
+
+        local args = {
+            [1] = {
+                [1] = "m2"
+            },
+            [2] = Player.Character.HumanoidRootPart.CFrame,
+        }
+    
+        Player.Backpack.ServerTraits.Input:FireServer(unpack(args))
+    end
+
+    local KiStat = Player.Character:WaitForChild("Ki")
+
     while _G.AutoBroly and PlayerCheck() do FastWait()
-        for i, v in pairs(Player.Backpack:GetChildren()) do
-            for _, Move in pairs(Moves) do
-                if v.Name == Move and PlayerCheck() then
+        local KiPercentage = KiStat.Value
+        if KiPercentage > 32 then
+            for i, v in pairs(Player.Backpack:GetChildren()) do
+                if table.find(Moves, v.Name) and PlayerCheck() then
                     v.Parent = Player.Character 
                     wait()
                     v:Activate()
@@ -86,7 +117,10 @@ if (game.PlaceId == 2050207304) then
                     v.Parent = Player.Backpack
                 end
             end
+        else
+            Pugno()
         end
+        QuestLabel.Text = "BrolyHealth: "..Broly.Humanoid.Health
         Player.Backpack.ServerTraits.EatSenzu:FireServer(true)
     end
 end

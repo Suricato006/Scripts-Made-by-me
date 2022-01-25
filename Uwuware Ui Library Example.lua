@@ -54,4 +54,5 @@ Library:Init()
     AddBox
     AddColor
     AddFolder
+    AddDivider
 ]]

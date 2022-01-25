@@ -1,9 +1,11 @@
 if not CheckFunction then
     if not game:IsLoaded() then game.Loaded:Wait() end
     Player = game:GetService("Players").LocalPlayer
+    HttpService = game:GetService('HttpService')
 
-    function PlayerCheck()
-        local a = Player.Character:FindFirstChild("HumanoidRootPart")
+    function PlayerCheck(PartName)
+        local b = PartName or "HumanoidRootPart"
+        local a = Player.Character:FindFirstChild(b)
         if a then
             return a
         else
@@ -39,7 +41,7 @@ if not CheckFunction then
     end
 
     function FastWait()
-        return game:GetService("RunService").Heartbeat:wait()
+        return task.wait()
     end
 
     function PrintTable(Table)
@@ -72,7 +74,6 @@ if not CheckFunction then
     function NameFind(String, Typed)
         local TempString = String:lower()
         local Typed = Typed:lower()
-
         for i=1, #TempString do
             local StringPart = TempString:sub(1,i)
             if Typed == StringPart then
@@ -80,6 +81,15 @@ if not CheckFunction then
             end
         end
         return false
+    end
+
+    function WaitForMoreChilds(table, OriginPart)
+        local c = nil
+        for i=1, #table do
+            local ThingToSearch = c or OriginPart or Player.Character
+            c = ThingToSearch:WaitForChild(table[i])
+        end
+        return c
     end
 end
 CheckFunction = true
