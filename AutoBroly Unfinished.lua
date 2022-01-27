@@ -4,6 +4,7 @@ _G.AutoBroly = true
 
 local Moves = {"TS Molotov", "Wolf Fang Fist", "Mach Kick", "Flash Skewer", "Vital Strike", "Meteor Crash", "Neo Wolf Fang Fist","GOD Hakai","GOD Wrath","Trash","Strong Kick", "Combo Barrage", "Aerial Breaker"}
 
+local AllowedPlayers = {"SgCortez"}
 local RejoinTimer = 3600
 
 
@@ -105,7 +106,7 @@ end
 
 if (game.PlaceId == 2050207304) then
     for i, v in pairs(game.Players:GetChildren()) do
-        if not (v.Name == Player.Name) and not (v.Name == "Broly BR") then
+        if not (v.Name == Player.Name) and not (v.Name == "Broly BR") and not table.find(AllowedPlayers, v.Name) then
             ReturnToEarth()
         end
     end
@@ -191,11 +192,11 @@ if (game.PlaceId == 2050207304) then
             end)
         end
         local Prevention = {"CanDieFin", "True", "Opos", "MoveStart", "Action"}
-        for i, v in pairs(Broly:GetChildren()) do
-            if table.find(Prevention, v.Name) then
+        --[[ for i, v in pairs(Broly:GetChildren()) do
+            if not v:IsA("Part") and not v:IsA("MeshPart") and not v:IsA("Humanoid") then
                 v:Destroy()
             end
-        end
+        end ]]
 
         Player.Backpack.ServerTraits.EatSenzu:FireServer(true)
     end
