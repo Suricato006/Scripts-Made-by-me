@@ -220,7 +220,7 @@ end})
 
 local Window, SpecificName = AddGame("Final Stand", {536102540, 569994010, 882399924, 2046990924, 478132461, 3552157537, 2651456105, 3565304751, 882375367})
 
-if Window and (SpecificName == "Final Stand")  then
+if (SpecificName == "Final Stand")  then
 
     Window:AddBind({text = "TeleSpeed", key = Enum.KeyCode.V, hold = true, callback = function()
         wait()
