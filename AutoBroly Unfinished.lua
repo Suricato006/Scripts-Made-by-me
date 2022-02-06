@@ -15,7 +15,7 @@ if not game:IsLoaded() then
     AutoExec = true
 end
 
-if not AutoExec then
+if AutoExec then
     Player.CharacterAdded:wait()
 else
     while not PlayerCheck() do FastWait() end
@@ -83,17 +83,27 @@ end)
 local QuestLabel = WaitForMoreChilds({"PlayerGui", "HUD", "FullSize", "Quests", "TextLabel"}, Player)
 
 if (game.PlaceId == 536102540) then
+    spawn(function()
+        while true do
+            local a = PlayerCheck("PowerOutput")
+            if a then
+                a:Destroy()
+                return
+            end
+            FastWait()
+        end
+    end)
     --Hearth Setup
     local HRP = PlayerCheck()
     if HRP then
-        LerpCFrame(CFrame.new(219, 46, -6381))
+        HRP.CFrame = CFrame.new(219, 46, -6381)
         local Joint = Player.Character.LowerTorso:FindFirstChild("Root")
         if Joint then
             Joint:Destroy()
         end
         wait()
         local BrolyPosition = CFrame.new(2755, 3945, -2273)
-        LerpCFrame(BrolyPosition)
+        HRP.CFrame = BrolyPosition
         while PlayerCheck() and _G.AutoBroly do FastWait()
             HRP.CFrame = BrolyPosition
             HRP.Transparency = 0
@@ -161,6 +171,7 @@ if (game.PlaceId == 2050207304) then
     local Form = false
 
     while _G.AutoBroly and PlayerCheck() do FastWait()
+        --Player.Character.Humanoid:ChangeState(11)
         local KiPercentage = KiStat.Value
         if Android and not Form and ((KiPercentage * 100 / KiMax) < 80) then
             wait(0.2)
@@ -168,7 +179,7 @@ if (game.PlaceId == 2050207304) then
             Form = true
         elseif KiPercentage > 32 then
             for i, v in pairs(Player.Backpack:GetChildren()) do
-                if table.find(Moves, v.Name) and PlayerCheck() then
+                if table.find(Moves, v.Name) then
                     v.Parent = Player.Character 
                     wait()
                     v:Activate()
@@ -182,21 +193,13 @@ if (game.PlaceId == 2050207304) then
         end
         local BrolyHealth = tostring(math.floor(tonumber(Broly.Humanoid.Health)))
         QuestLabel.Text = "BrolyHealth: "..BrolyHealth
-
         --Broly goes bonkers prevention
-        if tonumber(BrolyHealth) == 0 then
+        if (Broly.Parent == nil) then
             spawn(function()
                 wait(2)
                 ReturnToEarth()
             end)
         end
-        local Prevention = {"CanDieFin", "True", "Opos", "MoveStart", "Action"}
-        --[[ for i, v in pairs(Broly:GetChildren()) do
-            if not v:IsA("Part") and not v:IsA("MeshPart") and not v:IsA("Humanoid") then
-                v:Destroy()
-            end
-        end ]]
-
         Player.Backpack.ServerTraits.EatSenzu:FireServer(true)
     end
 end
