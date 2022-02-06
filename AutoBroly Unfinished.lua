@@ -3,7 +3,6 @@ loadstring(game:HttpGet(('https://raw.githubusercontent.com/Suricato006/Scripts-
 _G.AutoBroly = true
 
 local Moves = {"TS Molotov", "Wolf Fang Fist", "Mach Kick", "Flash Skewer", "Vital Strike", "Meteor Crash", "Neo Wolf Fang Fist","GOD Hakai","GOD Wrath","Trash","Strong Kick", "Combo Barrage", "Aerial Breaker"}
-
 local AllowedPlayers = {"SgCortez"}
 local RejoinTimer = 3600
 
