@@ -1,5 +1,5 @@
 local Moves = {"TS Molotov", "Wolf Fang Fist", "Mach Kick", "Flash Skewer", "Vital Strike", "Meteor Crash", "Neo Wolf Fang Fist","GOD Hakai","GOD Wrath","Trash","Strong Kick", "Combo Barrage", "Aerial Breaker"}
-local AllowedPlayers = {"SgCortez", "Corteso006"}
+local AllowedPlayers = {"SgCortez", "Corteso006", "suricato006"}
 local RejoinTimer = 3600
 
 
