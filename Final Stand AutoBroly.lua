@@ -1,8 +1,8 @@
-local Moves = {"TS Molotov", "Wolf Fang Fist", "Mach Kick", "Flash Skewer", "Vital Strike", "Meteor Crash", "Neo Wolf Fang Fist","GOD Hakai","GOD Wrath","Trash","Strong Kick", "Combo Barrage", "Aerial Breaker"}
-local AllowedPlayers = {"SgCortez", "Corteso006", "suricato006"}
-local RejoinTimer = 3600
-
-
+local Settings = Settings or {
+    Moves = {"TS Molotov", "Wolf Fang Fist", "Mach Kick", "Flash Skewer", "Vital Strike", "Meteor Crash", "Neo Wolf Fang Fist","GOD Hakai","GOD Wrath","Trash","Strong Kick", "Combo Barrage", "Aerial Breaker"},
+    AllowedPlayers = {"SgCortez", "Corteso006", "suricato006"},
+    RejoinTimer = 3600
+}
 
 
 local AutoExec = false
@@ -41,7 +41,7 @@ end)
 local KiMax = Player.Character:WaitForChild("Ki").Value
 
 coroutine.wrap(function()
-    wait(RejoinTimer)
+    wait(Settings.RejoinTimer)
     ReturnToEarth()
 end)
 
@@ -84,7 +84,7 @@ if (game.PlaceId == 536102540) then
     end)
 elseif (game.PlaceId == 2050207304) then
     for i, v in pairs(game.Players:GetChildren()) do
-        if not (v.Name == Player.Name) and not (v.Name == "Broly BR") and not table.find(AllowedPlayers, v.Name) then
+        if not (v.Name == Player.Name) and not (v.Name == "Broly BR") and not table.find(Settings.AllowedPlayers, v.Name) then
             ReturnToEarth()
         end
     end
@@ -148,7 +148,7 @@ elseif (game.PlaceId == 2050207304) then
             Form = true
         elseif KiPercentage > 32 then
             for i, v in pairs(Player.Backpack:GetChildren()) do
-                if table.find(Moves, v.Name) then
+                if table.find(Settings.Moves, v.Name) then
                     v.Parent = Player.Character
                     wait()
                     v:Activate()
