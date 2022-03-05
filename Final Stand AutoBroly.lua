@@ -1,7 +1,6 @@
 local Moves = {"TS Molotov", "Wolf Fang Fist", "Mach Kick", "Flash Skewer", "Vital Strike", "Meteor Crash", "Neo Wolf Fang Fist","GOD Hakai","GOD Wrath","Trash","Strong Kick", "Combo Barrage", "Aerial Breaker"}
-local AllowedPlayers = {"SgCortez"}
+local AllowedPlayers = {"SgCortez", "Corteso006"}
 local RejoinTimer = 3600
-local AllowedPlayersCheck = "Earth"  --"Earth" (default) or anything else to deactivate
 
 
 
@@ -18,7 +17,7 @@ if AutoExec then
     Player.CharacterAdded:Wait()
 end
 
-local OwnScriptUrl = "" --https://pastebin.com/raw/2RWZL7fQ
+local OwnScriptUrl = "https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Final%20Stand%20AutoBroly.lua" --https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Final%20Stand%20AutoBroly.lua
 if not (OwnScriptUrl == "") then
     syn.queue_on_teleport(game:HttpGet(OwnScriptUrl))
 end
@@ -52,19 +51,6 @@ RunService.Heartbeat:Connect(function()
     end
 end)
 
-RunService.Heartbeat:Connect(function()
-    local a = Player.Character:FindFirstChild("Dragon Crush") or Player.Character:FindFirstChild("Dragon Throw")
-    if a then
-        local b = a:FindFirstChild("Activator")
-        if b then
-            local c = b:FindFirstChild("Flip")
-            if c then
-                c:Destroy()
-            end
-        end
-    end
-end)
-
 local MoveNames = {"Action", "Attacking", "Using", "hyper", "Hyper", "heavy", "KiBlasted", "Tele", "tele", "Killed", "Slow", "Blocked", "MoveStart", "NotHardBack"}
 RunService.Heartbeat:Connect(function()
     for i, v in pairs(MoveNames) do
@@ -93,24 +79,8 @@ if (game.PlaceId == 536102540) then
     local OriginalBrolyPosition = CFrame.new(2762, 3945, -2250)
     local BrolyPosition = OriginalBrolyPosition
     RunService.Heartbeat:Connect(function()
-        if (AllowedPlayersCheck == "Earth") then
-            for i, v in pairs(game:GetService("Players"):GetChildren()) do
-                if not (v == Player) then
-                    local OtherHRP = v.Character:FindFirstChild("HumanoidRootPart")
-                    if OtherHRP then
-                        OtherHRP.Transparency = 0
-                        local Distance = (HRP.Position - OtherHRP.Position).magnitude
-                        if (Distance <= 50) then
-                            BrolyPosition = (OriginalBrolyPosition * CFrame.new(0, 40 , 0))
-                        end
-                        break
-                    end 
-                end
-            end
-        end
         HRP.CFrame = BrolyPosition
         QuestLabel.Text = "Timer: "..TimerTime.Name
-        BrolyPosition = OriginalBrolyPosition
     end)
 elseif (game.PlaceId == 2050207304) then
     for i, v in pairs(game.Players:GetChildren()) do
@@ -126,6 +96,8 @@ elseif (game.PlaceId == 2050207304) then
     Broly.Destroying:Connect(function()
         ReturnToEarth()
     end)
+
+    local OriginalPosition = CFrame.new(Broly.HumanoidRootPart.Position - Broly.HumanoidRootPart.CFrame.LookVector/2, Broly.HumanoidRootPart.Position)
 
     local Connection = nil
     Connection = RunService.Heartbeat:Connect(function()
@@ -146,8 +118,13 @@ elseif (game.PlaceId == 2050207304) then
         local Throw = Player.Backpack:FindFirstChild("Dragon Crush") or Player.Backpack:FindFirstChild("Dragon Throw") or Player.Backpack:WaitForChild("Dragon Throw")
         if Throw then
             Throw.Parent = Player.Character
+            local b = Throw:FindFirstChild("Flip", true)
+            if b then
+                b:Destroy()
+            end
+            wait()
             Throw:Activate()
-            wait(0.1)
+            wait()
             Throw:Deactivate()
             Throw.Parent = Player.Backpack
         end
@@ -163,7 +140,7 @@ elseif (game.PlaceId == 2050207304) then
     local Form = false
 
     RunService.Heartbeat:Connect(function()
-        HRP.CFrame = CFrame.new(-24, -127, -12)
+        HRP.CFrame = CFrame.new(Broly.HumanoidRootPart.Position - Broly.HumanoidRootPart.CFrame.LookVector/2, Broly.HumanoidRootPart.Position)
         local KiPercentage = KiStat.Value
         if Android and not Form and ((KiPercentage * 100 / KiMax) < 80) then
             wait(0.2)
@@ -172,7 +149,7 @@ elseif (game.PlaceId == 2050207304) then
         elseif KiPercentage > 32 then
             for i, v in pairs(Player.Backpack:GetChildren()) do
                 if table.find(Moves, v.Name) then
-                    v.Parent = Player.Character 
+                    v.Parent = Player.Character
                     wait()
                     v:Activate()
                     wait()
