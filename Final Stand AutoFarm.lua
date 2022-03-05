@@ -19,7 +19,10 @@ end
 local Npc = nil
 local Tweening = false
 RunService.Heartbeat:Connect(function()
-    if not _G.AutoFarm then return end
+    if not _G.AutoFarm then
+        Npc = nil
+        return
+    end
     local HRP = Player.Character:FindFirstChild("HumanoidRootPart")
     if HRP then
         if not Npc then
