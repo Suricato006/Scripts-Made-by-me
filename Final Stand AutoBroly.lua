@@ -6,6 +6,11 @@ local Settings = Settings or {
     Form = "h"
 }
 
+if not (Settings.Form == "h") or not (Settings.Form == "g") then
+    warn("ofmg how did you mess up something so simple")
+    Settings.Form = "h"
+end
+
 --[[
     Settings Explanation:
     **MOVES**

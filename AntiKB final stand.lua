@@ -16,9 +16,9 @@ _G.AntiKB = true
 game:GetService("RunService").Heartbeat:Connect(function()
     if _G.AntiKB then
         ChildCheck("LowerTorso", "BodyVelocity", "KnockBacked")
-    ChildCheck("Head", "KnockBacked", "NotHardBack")
-    ChildCheck("Humanoid", "creator")
-    ChildCheck("HumanoidRootPart", "Throw", "Flip")
-    ChildCheck("LeftHand", "BodyVelocity")
+        ChildCheck("Head", "KnockBacked", "NotHardBack")
+        ChildCheck("Humanoid", "creator")
+        ChildCheck("HumanoidRootPart", "Throw", "Flip")
+        ChildCheck("LeftHand", "BodyVelocity")
     end
 end)
