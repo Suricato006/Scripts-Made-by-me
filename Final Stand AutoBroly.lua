@@ -1,9 +1,40 @@
 local Settings = Settings or {
     Moves = {"TS Molotov", "Wolf Fang Fist", "Mach Kick", "Flash Skewer", "Vital Strike", "Meteor Crash", "Neo Wolf Fang Fist","GOD Hakai","GOD Wrath","Trash","Strong Kick", "Combo Barrage", "Aerial Breaker"},
     AllowedPlayers = {"SgCortez", "Corteso006", "suricato006"},
-    RejoinTimer = 3600
+    RejoinTimer = 3600,
+    TimeToWaitForForm = 3.9,
+    Form = "h"
 }
 
+--[[
+    Settings Explanation:
+    **MOVES**
+        The moves are customizable and you can add as much as you want. Just add a , and the name of the move between quotations (examples are provvided above).
+        Also the default ones are the best but feel free to customise
+    **ALLOWEDPLAYERS**
+        The name of the players that can join the broly with you (its a lag free method not like other shitty anti-leach).
+        The method to add more players is the same as the moves: Just add a , and the name of the move between quotations (examples are provvided above).
+    **REJOINTIMER**
+        After the set ammount of time you will go back to earth to prevent strange bugs and stuff
+        (If the game crashes or other shit then you also rejoin automatically)
+        Note: the time is in seconds.
+    **FORM**
+        If you are not an android then you go in form, add a TimeToWaitForForm in seconds and you will charge for that ammount of time.
+        The form as to be either "g" or "h" otherwhise it wont work proprely.
+        If you are an android then no problem at all, stuff doesnt apply.
+    **GENEAL STUFF**
+        The autobroly was made by me (uwu) and it is open source so people can learn from it, its honestly one of the best and more optimized out there (its not obfuscated so even memory is fine.)
+        Luv u for using my broly and actually reading the source code stuff.
+
+
+    Feel free to take parts of my autobroly but give credits (not as it happened with my GUI -_-)
+    The discord server is the following: https://discord.gg/5NYqSVwH9Q
+    Credit the discord server and join for some fun/help
+
+
+    Much love :v:
+
+]]
 
 local AutoExec = false
 if not game:IsLoaded() then
@@ -18,7 +49,7 @@ if AutoExec then
 end
 
 local OwnScriptUrl = "https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Final%20Stand%20AutoBroly.lua" --https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Final%20Stand%20AutoBroly.lua
-if not (OwnScriptUrl == "") then
+if not (OwnScriptUrl == "") and syn then
     syn.queue_on_teleport(game:HttpGet(OwnScriptUrl))
 end
 
@@ -45,6 +76,10 @@ coroutine.wrap(function()
     ReturnToEarth()
 end)
 
+pcall(function()
+    game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("Damn bro, Z-Shuko scripts roblox in python bro", "All")
+end)
+
 RunService.Heartbeat:Connect(function()
     if game:GetService("CoreGui").RobloxPromptGui:FindFirstChild("ErrorPrompt", true) then
         ReturnToEarth()
@@ -66,7 +101,7 @@ local QuestLabel = Player:FindFirstChild("Quests", true).TextLabel
 if (game.PlaceId == 536102540) then
     local PowerOutput = Player.Character:FindFirstChild("PowerOutput")
     if PowerOutput then
-        PowerOutput:Destroy() 
+        PowerOutput:Destroy()
     end
     HRP.CFrame = CFrame.new(219, 46, -6381)
     local Joint = Player.Character:FindFirstChild("Root", true)
@@ -97,8 +132,6 @@ elseif (game.PlaceId == 2050207304) then
         ReturnToEarth()
     end)
 
-    local OriginalPosition = CFrame.new(Broly.HumanoidRootPart.Position - Broly.HumanoidRootPart.CFrame.LookVector/2, Broly.HumanoidRootPart.Position)
-
     local Connection = nil
     Connection = RunService.Heartbeat:Connect(function()
         if Broly:FindFirstChild("MoveStart") then
@@ -114,7 +147,6 @@ elseif (game.PlaceId == 2050207304) then
             SecondConnection:Disconnect()
             return
         end
-        -- SISTEMA CHE STA ROBA NON FUNZIONA
         local Throw = Player.Backpack:FindFirstChild("Dragon Crush") or Player.Backpack:FindFirstChild("Dragon Throw") or Player.Backpack:WaitForChild("Dragon Throw")
         if Throw then
             Throw.Parent = Player.Character
@@ -139,29 +171,66 @@ elseif (game.PlaceId == 2050207304) then
     local Android = (Player.Character:WaitForChild("Race").Value == "Android")
     local Form = false
 
-    RunService.Heartbeat:Connect(function()
-        HRP.CFrame = CFrame.new(Broly.HumanoidRootPart.Position - Broly.HumanoidRootPart.CFrame.LookVector/2, Broly.HumanoidRootPart.Position)
-        local KiPercentage = KiStat.Value
-        if Android and not Form and ((KiPercentage * 100 / KiMax) < 80) then
-            wait(0.2)
-            Player.Backpack.ServerTraits.Transform:FireServer("g")
-            Form = true
-        elseif KiPercentage > 32 then
-            for i, v in pairs(Player.Backpack:GetChildren()) do
-                if table.find(Settings.Moves, v.Name) then
-                    v.Parent = Player.Character
-                    wait()
-                    v:Activate()
-                    wait()
-                    v:Deactivate()
-                    v.Parent = Player.Backpack
+    if Android then
+        RunService.Heartbeat:Connect(function()
+            HRP.CFrame = CFrame.new(Broly.HumanoidRootPart.Position - Broly.HumanoidRootPart.CFrame.LookVector/2, Broly.HumanoidRootPart.Position)
+            local KiPercentage = KiStat.Value
+            if not Form and ((KiPercentage * 100 / KiMax) < 70) then
+                wait(0.2)
+                Player.Backpack.ServerTraits.Transform:FireServer("g")
+                Form = true
+            elseif KiPercentage > 32 then
+                for i, v in pairs(Player.Backpack:GetChildren()) do
+                    if table.find(Settings.Moves, v.Name) then
+                        v.Parent = Player.Character
+                        wait()
+                        v:Activate()
+                        wait()
+                        v:Deactivate()
+                        v.Parent = Player.Backpack
+                    end
                 end
+            else
+                Pugno()
             end
-        else
-            Pugno()
-        end
-        local BrolyHealth = tostring(math.floor(tonumber(Broly.Humanoid.Health)))
-        QuestLabel.Text = "BrolyHealth: "..BrolyHealth
-        Player.Backpack.ServerTraits.EatSenzu:FireServer(true)
-    end)
+            local BrolyHealth = tostring(math.floor(tonumber(Broly.Humanoid.Health)))
+            QuestLabel.Text = "BrolyHealth: "..BrolyHealth
+            Player.Backpack.ServerTraits.EatSenzu:FireServer(true)
+        end)
+    else
+        RunService.Heartbeat:Connect(function()
+            if not Form then
+                local InputEvent = Player:FindFirstChild("Input", true)
+                local TransformEvent = Player:FindFirstChild("Transform", true)
+                if InputEvent and TransformEvent then
+                    InputEvent:FireServer({[1] = "x"},CFrame.new(0,0,0),nil,false)
+                    wait(Settings.TimeToWaitForForm)
+                    TransformEvent:FireServer(Settings.Form)
+                    wait(1)
+                    InputEvent:FireServer({[1] = "xoff"},CFrame.new(0,0,0),nil,false)
+                    Form = true
+                end
+            else
+                HRP.CFrame = CFrame.new(Broly.HumanoidRootPart.Position - Broly.HumanoidRootPart.CFrame.LookVector/2, Broly.HumanoidRootPart.Position)
+                local KiPercentage = KiStat.Value
+                if KiPercentage > 32 then
+                    for i, v in pairs(Player.Backpack:GetChildren()) do
+                        if table.find(Settings.Moves, v.Name) then
+                            v.Parent = Player.Character
+                            wait()
+                            v:Activate()
+                            wait()
+                            v:Deactivate()
+                            v.Parent = Player.Backpack
+                        end
+                    end
+                else
+                    Pugno()
+                end
+                local BrolyHealth = tostring(math.floor(tonumber(Broly.Humanoid.Health)))
+                QuestLabel.Text = "BrolyHealth: "..BrolyHealth
+                Player.Backpack.ServerTraits.EatSenzu:FireServer(true)
+            end
+        end)
+    end
 end
