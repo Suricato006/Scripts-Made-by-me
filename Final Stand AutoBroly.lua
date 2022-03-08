@@ -7,7 +7,11 @@ local Settings = Settings or {
     Anchored = true
 }
 
-if not (Settings.Form == "h") or not (Settings.Form == "g") then
+local Dumb = true
+if (Settings.Form == "h") or (Settings.Form == "h") then
+    Dumb = false
+end
+if Dumb then
     warn("ofmg how did you mess up something so simple")
     Settings.Form = "h"
 end
@@ -209,15 +213,14 @@ elseif (game.PlaceId == 2050207304) then
             else
                 if InputEvent and TransformEvent then
                     InputEvent:FireServer({[1] = "x"},CFrame.new(0,0,0),nil,false)
-                    wait(Settings.TimeToWaitForForm)
+                    task.wait(Settings.TimeToWaitForForm)
                     TransformEvent:FireServer(Settings.Form)
-                    wait(1)
+                    task.wait(1)
                     InputEvent:FireServer({[1] = "xoff"},CFrame.new(0,0,0),nil,false)
                     Form = true
                 end
             end
         end
-        HRP.CFrame = CFrame.new(Broly.HumanoidRootPart.Position - Broly.HumanoidRootPart.CFrame.LookVector/2, Broly.HumanoidRootPart.Position)
         if KiValue > 32 then
             for i, v in pairs(Player.Backpack:GetChildren()) do
                 if table.find(Settings.Moves, v.Name) then
@@ -241,6 +244,8 @@ elseif (game.PlaceId == 2050207304) then
         end
         if Settings.Anchored then
             Player.Character.HumanoidRootPart.Anchored = true
+        else
+            HRP.CFrame = CFrame.new(Broly.HumanoidRootPart.Position - Broly.HumanoidRootPart.CFrame.LookVector/2, Broly.HumanoidRootPart.Position)
         end
     end
 end
