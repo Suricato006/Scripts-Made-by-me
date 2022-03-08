@@ -182,16 +182,8 @@ elseif (game.PlaceId == 2050207304) then
     local InputEvent = Player:FindFirstChild("Input", true)
     local Humanoid = Player.Character.Humanoid
     local MaxHealth = Humanoid.MaxHealth
-    local GodConnection = nil
-    local KiPercentage = 0
-    GodConnection = RunService.Heartbeat:Connect(function()
-        KiPercentage = KiStat.Value
-        if ((KiPercentage * 100 / KiMax) <= 5) and ((Humanoid.Health * 100 / MaxHealth) <= 15) then
-            TransformEvent:FireServer("g")
-            GodConnection:Disconnect()
-            return
-        end
-    end)
+    local GodForm = false
+
     local function UseMove(Move)
         Move.Parent = Player.Character
         task.wait()
@@ -201,10 +193,12 @@ elseif (game.PlaceId == 2050207304) then
         Move.Parent = Player.Backpack
     end
     while true do
+        local KiValue = KiStat.Value
+        local KiPercentage = KiValue * 100 / KiMax
         if not Form then
             if Android then
-                if ((KiPercentage * 100 / KiMax) < 70) then
-                    wait(0.2)
+                if (KiPercentage < 70) then
+                    task.wait(0.2)
                     TransformEvent:FireServer("g")
                     Form = true
                 end
@@ -220,7 +214,7 @@ elseif (game.PlaceId == 2050207304) then
             end
         end
         HRP.CFrame = CFrame.new(Broly.HumanoidRootPart.Position - Broly.HumanoidRootPart.CFrame.LookVector/2, Broly.HumanoidRootPart.Position)
-        if KiPercentage > 32 then
+        if KiValue > 32 then
             for i, v in pairs(Player.Backpack:GetChildren()) do
                 if table.find(Settings.Moves, v.Name) then
                     UseMove(v)
@@ -229,6 +223,11 @@ elseif (game.PlaceId == 2050207304) then
         else
             Pugno()
             task.wait()
+        end
+        if (KiPercentage < 5) and (Humanoid.Health * 100 / MaxHealth) and not GodForm then
+            task.wait(0.2)
+            TransformEvent:FireServer("g")
+            GodForm = true
         end
         local BrolyHealth = tostring(math.floor(tonumber(Broly.Humanoid.Health)))
         QuestLabel.Text = "BrolyHealth: "..BrolyHealth
