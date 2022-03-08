@@ -159,9 +159,9 @@ elseif (game.PlaceId == 2050207304) then
             if b then
                 b:Destroy()
             end
-            task.wait()
+            wait()
             Throw:Activate()
-            task.wait()
+            wait()
             Throw:Deactivate()
             Throw.Parent = Player.Backpack
         end
@@ -193,7 +193,7 @@ elseif (game.PlaceId == 2050207304) then
         if Android then
             HRP.CFrame = CFrame.new(Broly.HumanoidRootPart.Position - Broly.HumanoidRootPart.CFrame.LookVector/2, Broly.HumanoidRootPart.Position)
             if not Form and ((KiPercentage * 100 / KiMax) < 70) then
-                task.wait(0.2)
+                wait(0.2)
                 TransformEvent:FireServer("g")
                 Form = true
             elseif KiPercentage > 32 then
