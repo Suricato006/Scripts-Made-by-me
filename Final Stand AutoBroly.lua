@@ -1,5 +1,5 @@
 local Settings = Settings or {
-    Moves = {"TS Molotov", "Wolf Fang Fist", "Mach Kick", "Flash Skewer", "Vital Strike", "Meteor Crash", "Neo Wolf Fang Fist","GOD Hakai","GOD Wrath","Trash","Strong Kick", "Combo Barrage", "Aerial Breaker"},
+    Moves = {"TS Molotov", "Wolf Fang Fist", "Mach Kick", "Flash Skewer", "Vital Strike", "Meteor Crash", "Neo Wolf Fang Fist","GOD Hakai","Trash","Strong Kick", "Combo Barrage", "Aerial Breaker"},
     AllowedPlayers = {"SgCortez", "Corteso006", "suricato006"},
     RejoinTimer = 3600,
     TimeToWaitForForm = 3.9,
@@ -235,6 +235,9 @@ elseif (game.PlaceId == 2050207304) then
                 local BrolyHealth = tostring(math.floor(tonumber(Broly.Humanoid.Health)))
                 QuestLabel.Text = "BrolyHealth: "..BrolyHealth
                 Player.Backpack.ServerTraits.EatSenzu:FireServer(true)
+                if (BrolyHealth == 0) then
+                    ReturnToEarth()
+                end
             end
         end)
     end
