@@ -224,10 +224,10 @@ elseif (game.PlaceId == 2050207304) then
             TransformEvent:FireServer("g")
             GodForm = true
         end
-        local BrolyHealth = tostring(math.floor(tonumber(Broly.Humanoid.Health)))
+        local BrolyHealth = tostring(math.floor(Broly.Humanoid.Health))
         QuestLabel.Text = "BrolyHealth: "..BrolyHealth
         Player.Backpack.ServerTraits.EatSenzu:FireServer(true)
-        if (BrolyHealth == 0) and (Broly.HumanoidRootPart.Transformation3.Enabled == true) then
+        if (Broly.Humanoid.Health == 0) and (Broly.HumanoidRootPart.Transformation3.Enabled == true) then
             ReturnToEarth()
         end
         if Settings.Anchored then
