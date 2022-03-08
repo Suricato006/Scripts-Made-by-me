@@ -161,7 +161,7 @@ elseif (game.PlaceId == 2050207304) then
             end
             task.wait()
             Throw:Activate()
-            task.wait()()
+            task.wait()
             Throw:Deactivate()
             Throw.Parent = Player.Backpack
         end
@@ -193,16 +193,16 @@ elseif (game.PlaceId == 2050207304) then
         if Android then
             HRP.CFrame = CFrame.new(Broly.HumanoidRootPart.Position - Broly.HumanoidRootPart.CFrame.LookVector/2, Broly.HumanoidRootPart.Position)
             if not Form and ((KiPercentage * 100 / KiMax) < 70) then
-                task.wait()(0.2)
+                task.wait(0.2)
                 TransformEvent:FireServer("g")
                 Form = true
             elseif KiPercentage > 32 then
                 for i, v in pairs(Player.Backpack:GetChildren()) do
                     if table.find(Settings.Moves, v.Name) then
                         v.Parent = Player.Character
-                        task.wait()()
+                        task.wait()
                         v:Activate()
-                        task.wait()()
+                        task.wait()
                         v:Deactivate()
                         v.Parent = Player.Backpack
                     end
