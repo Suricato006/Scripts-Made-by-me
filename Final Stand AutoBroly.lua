@@ -1,5 +1,5 @@
 local Settings = Settings or {
-    Moves = {"TS Molotov", "Wolf Fang Fist", "Mach Kick", "Flash Skewer", "Vital Strike", "Meteor Crash", "Neo Wolf Fang Fist","GOD Hakai","Trash","Strong Kick", "Combo Barrage", "Aerial Breaker"},
+    Moves = {"Deadly Dance",'Blaster Meteor',"Trash???",'Anger Rush','Meteor Crash',"TS Molotov","Flash Skewer","Vital Strike", "Demon Flash","Wolf Fang Fist","Neo Wolf Fang Fist","Trash?","Strong Kick","Strong Kick",},
     AllowedPlayers = {"SgCortez", "Corteso006", "suricato006"},
     RejoinTimer = 3600,
     TimeToWaitForForm = 3.9,
@@ -159,9 +159,9 @@ elseif (game.PlaceId == 2050207304) then
             if b then
                 b:Destroy()
             end
-            wait()
+            task.wait()
             Throw:Activate()
-            wait()
+            task.wait()()
             Throw:Deactivate()
             Throw.Parent = Player.Backpack
         end
@@ -189,21 +189,20 @@ elseif (game.PlaceId == 2050207304) then
             return
         end
     end)
-
-    if Android then
-        RunService.Heartbeat:Connect(function()
+    RunService.Heartbeat:Connect(function()
+        if Android then
             HRP.CFrame = CFrame.new(Broly.HumanoidRootPart.Position - Broly.HumanoidRootPart.CFrame.LookVector/2, Broly.HumanoidRootPart.Position)
             if not Form and ((KiPercentage * 100 / KiMax) < 70) then
-                wait(0.2)
+                task.wait()(0.2)
                 TransformEvent:FireServer("g")
                 Form = true
             elseif KiPercentage > 32 then
                 for i, v in pairs(Player.Backpack:GetChildren()) do
                     if table.find(Settings.Moves, v.Name) then
                         v.Parent = Player.Character
-                        wait()
+                        task.wait()()
                         v:Activate()
-                        wait()
+                        task.wait()()
                         v:Deactivate()
                         v.Parent = Player.Backpack
                     end
@@ -211,12 +210,7 @@ elseif (game.PlaceId == 2050207304) then
             else
                 Pugno()
             end
-            local BrolyHealth = tostring(math.floor(tonumber(Broly.Humanoid.Health)))
-            QuestLabel.Text = "BrolyHealth: "..BrolyHealth
-            Player.Backpack.ServerTraits.EatSenzu:FireServer(true)
-        end)
-    else
-        RunService.Heartbeat:Connect(function()
+        else
             if not Form then
                 if InputEvent and TransformEvent then
                     InputEvent:FireServer({[1] = "x"},CFrame.new(0,0,0),nil,false)
@@ -242,13 +236,13 @@ elseif (game.PlaceId == 2050207304) then
                 else
                     Pugno()
                 end
-                local BrolyHealth = tostring(math.floor(tonumber(Broly.Humanoid.Health)))
-                QuestLabel.Text = "BrolyHealth: "..BrolyHealth
-                Player.Backpack.ServerTraits.EatSenzu:FireServer(true)
-                if (BrolyHealth == 0) then
-                    ReturnToEarth()
-                end
             end
-        end)
-    end
+        end
+        local BrolyHealth = tostring(math.floor(tonumber(Broly.Humanoid.Health)))
+        QuestLabel.Text = "BrolyHealth: "..BrolyHealth
+        Player.Backpack.ServerTraits.EatSenzu:FireServer(true)
+        if (BrolyHealth == 0) and (Broly.HumanoidRootPart.Transformation3.Enabled) then
+            ReturnToEarth()
+        end
+    end)
 end
