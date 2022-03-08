@@ -219,7 +219,7 @@ elseif (game.PlaceId == 2050207304) then
             Pugno()
             task.wait()
         end
-        if (KiPercentage < 5) and (Humanoid.Health * 100 / MaxHealth) and not GodForm then
+        if (KiPercentage < 5) and ((Humanoid.Health * 100 / MaxHealth) < 15) and not GodForm then
             task.wait(0.2)
             TransformEvent:FireServer("g")
             GodForm = true
