@@ -175,6 +175,8 @@ elseif (game.PlaceId == 2050207304) then
     local KiStat = Player.Character:WaitForChild("Ki")
     local Android = (Player.Character:WaitForChild("Race").Value == "Android")
     local Form = false
+    local TransformEvent = Player.Backpack.ServerTraits.Transform
+    local InputEvent = Player:FindFirstChild("Input", true)
 
     if Android then
         RunService.Heartbeat:Connect(function()
@@ -182,7 +184,7 @@ elseif (game.PlaceId == 2050207304) then
             local KiPercentage = KiStat.Value
             if not Form and ((KiPercentage * 100 / KiMax) < 70) then
                 wait(0.2)
-                Player.Backpack.ServerTraits.Transform:FireServer("g")
+                TransformEvent:FireServer("g")
                 Form = true
             elseif KiPercentage > 32 then
                 for i, v in pairs(Player.Backpack:GetChildren()) do
@@ -205,8 +207,6 @@ elseif (game.PlaceId == 2050207304) then
     else
         RunService.Heartbeat:Connect(function()
             if not Form then
-                local InputEvent = Player:FindFirstChild("Input", true)
-                local TransformEvent = Player:FindFirstChild("Transform", true)
                 if InputEvent and TransformEvent then
                     InputEvent:FireServer({[1] = "x"},CFrame.new(0,0,0),nil,false)
                     wait(Settings.TimeToWaitForForm)
