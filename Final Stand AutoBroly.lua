@@ -201,14 +201,14 @@ elseif (game.PlaceId == 2050207304) then
         Move.Parent = Player.Backpack
     end
     while true do
-        if Android then
-            if not Form and ((KiPercentage * 100 / KiMax) < 70) then
-                wait(0.2)
-                TransformEvent:FireServer("g")
-                Form = true
-            end
-        else
-            if not Form then
+        if not Form then
+            if Android then
+                if ((KiPercentage * 100 / KiMax) < 70) then
+                    wait(0.2)
+                    TransformEvent:FireServer("g")
+                    Form = true
+                end
+            else
                 if InputEvent and TransformEvent then
                     InputEvent:FireServer({[1] = "x"},CFrame.new(0,0,0),nil,false)
                     wait(Settings.TimeToWaitForForm)
