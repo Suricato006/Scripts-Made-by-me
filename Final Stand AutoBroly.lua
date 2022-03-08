@@ -50,15 +50,15 @@ if not game:IsLoaded() then
     game.Loaded:Wait()
 end
 
+local OwnScriptUrl = "https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Final%20Stand%20AutoBroly.lua" --https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Final%20Stand%20AutoBroly.lua
+if syn then
+    syn.queue_on_teleport(game:HttpGet(OwnScriptUrl))
+end
+
 local Player = game.Players.LocalPlayer
 local RunService = game:GetService("RunService")
 if AutoExec then
     Player.CharacterAdded:Wait()
-end
-
-local OwnScriptUrl = "https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Final%20Stand%20AutoBroly.lua" --https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Final%20Stand%20AutoBroly.lua
-if not (OwnScriptUrl == "") and syn then
-    syn.queue_on_teleport(game:HttpGet(OwnScriptUrl))
 end
 
 local function ReturnToEarth()
