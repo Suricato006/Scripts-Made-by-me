@@ -189,26 +189,20 @@ elseif (game.PlaceId == 2050207304) then
             return
         end
     end)
-    RunService.Heartbeat:Connect(function()
+    local function UseMove(Move)
+        Move.Parent = Player.Character
+        task.wait()
+        Move:Activate()
+        task.wait()
+        Move:Deactivate()
+        Move.Parent = Player.Backpack
+    end
+    while true do
         if Android then
-            HRP.CFrame = CFrame.new(Broly.HumanoidRootPart.Position - Broly.HumanoidRootPart.CFrame.LookVector/2, Broly.HumanoidRootPart.Position)
             if not Form and ((KiPercentage * 100 / KiMax) < 70) then
                 wait(0.2)
                 TransformEvent:FireServer("g")
                 Form = true
-            elseif KiPercentage > 32 then
-                for i, v in pairs(Player.Backpack:GetChildren()) do
-                    if table.find(Settings.Moves, v.Name) then
-                        v.Parent = Player.Character
-                        task.wait()
-                        v:Activate()
-                        task.wait()
-                        v:Deactivate()
-                        v.Parent = Player.Backpack
-                    end
-                end
-            else
-                Pugno()
             end
         else
             if not Form then
@@ -220,29 +214,24 @@ elseif (game.PlaceId == 2050207304) then
                     InputEvent:FireServer({[1] = "xoff"},CFrame.new(0,0,0),nil,false)
                     Form = true
                 end
-            else
-                HRP.CFrame = CFrame.new(Broly.HumanoidRootPart.Position - Broly.HumanoidRootPart.CFrame.LookVector/2, Broly.HumanoidRootPart.Position)
-                if KiPercentage > 32 then
-                    for i, v in pairs(Player.Backpack:GetChildren()) do
-                        if table.find(Settings.Moves, v.Name) then
-                            v.Parent = Player.Character
-                            wait()
-                            v:Activate()
-                            wait()
-                            v:Deactivate()
-                            v.Parent = Player.Backpack
-                        end
-                    end
-                else
-                    Pugno()
+            end
+        end
+        HRP.CFrame = CFrame.new(Broly.HumanoidRootPart.Position - Broly.HumanoidRootPart.CFrame.LookVector/2, Broly.HumanoidRootPart.Position)
+        if KiPercentage > 32 then
+            for i, v in pairs(Player.Backpack:GetChildren()) do
+                if table.find(Settings.Moves, v.Name) then
+                    UseMove(v)
                 end
             end
+        else
+            Pugno()
+            task.wait()
         end
         local BrolyHealth = tostring(math.floor(tonumber(Broly.Humanoid.Health)))
         QuestLabel.Text = "BrolyHealth: "..BrolyHealth
         Player.Backpack.ServerTraits.EatSenzu:FireServer(true)
-        if (BrolyHealth == 0) and (Broly.HumanoidRootPart.Transformation3.Enabled) then
+        if (BrolyHealth == 0) and (Broly.HumanoidRootPart.Transformation3.Enabled == true) then
             ReturnToEarth()
         end
-    end)
+    end
 end
