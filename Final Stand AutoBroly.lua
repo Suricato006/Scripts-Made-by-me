@@ -124,7 +124,7 @@ if (game.PlaceId == 536102540) then
     if Joint then
         Joint:Destroy()
     end
-    wait()
+    task.wait()
     HRP.Transparency = 0
     local TimerTime = game:GetService("Workspace").BrolyTeleport:FindFirstChildWhichIsA("Model")
     local OriginalBrolyPosition = CFrame.new(2762, 3945, -2250)
@@ -148,21 +148,8 @@ elseif (game.PlaceId == 2050207304) then
         ReturnToEarth()
     end)
 
-    local Connection = nil
-    Connection = RunService.Heartbeat:Connect(function()
-        if Broly:FindFirstChild("MoveStart") then
-            Connection:Disconnect()
-            return
-        end
+    while (not Broly:FindFirstChild("MoveStart")) do
         HRP.CFrame = CFrame.new(Broly.HumanoidRootPart.Position - Broly.HumanoidRootPart.CFrame.LookVector/2, Broly.HumanoidRootPart.Position)
-    end)
-
-    local SecondConnection = nil
-    SecondConnection = RunService.Heartbeat:Connect(function()
-        if Broly:FindFirstChild("MoveStart") then
-            SecondConnection:Disconnect()
-            return
-        end
         local Throw = Player.Backpack:FindFirstChild("Dragon Crush") or Player.Backpack:FindFirstChild("Dragon Throw") or Player.Backpack:WaitForChild("Dragon Throw")
         if Throw then
             Throw.Parent = Player.Character
@@ -176,9 +163,8 @@ elseif (game.PlaceId == 2050207304) then
             Throw:Deactivate()
             Throw.Parent = Player.Backpack
         end
-    end)
-
-    Broly:WaitForChild("MoveStart")
+        task.wait()
+    end
 
     local function Pugno()
         Player.Backpack.ServerTraits.Input:FireServer({"m2"}, HRP.CFrame)
