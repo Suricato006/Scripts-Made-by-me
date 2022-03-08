@@ -1,10 +1,25 @@
 local Settings = Settings or {
-    Moves = {"Deadly Dance",'Blaster Meteor',"Trash???",'Anger Rush','Meteor Crash',"TS Molotov","Flash Skewer","Vital Strike", "Demon Flash","Wolf Fang Fist","Neo Wolf Fang Fist","Trash?","Strong Kick","Strong Kick",},
     AllowedPlayers = {"SgCortez", "Corteso006", "suricato006"},
     RejoinTimer = 3600,
     TimeToWaitForForm = 3.9,
     Form = "h",
-    Anchored = true
+    Anchored = true,
+    Moves = {
+        "Deadly Dance",
+        'Blaster Meteor',
+        "Trash???",
+        "Anger Rush",
+        "Meteor Crash",
+        "TS Molotov",
+        "Flash Skewer",
+        "Vital Strike",
+        "Demon Flash",
+        "Wolf Fang Fist",
+        "Neo Wolf Fang Fist",
+        "Trash?",
+        "Strong Kick",
+        "Strong Kick"
+    }
 }
 
 local Dumb = true
@@ -139,13 +154,10 @@ elseif (game.PlaceId == 2050207304) then
         end
     end
     local Broly = game:GetService("Workspace").Live:GetChildren()[1]
-    --Bug Check
-    if not (Broly.Name == "Broly BR") or ((HRP.Position - Broly.HumanoidRootPart.Position).magnitude > 5000) then
+
+    if not (Broly.Name == "Broly BR") then
         ReturnToEarth()
     end
-    Broly.Destroying:Connect(function()
-        ReturnToEarth()
-    end)
 
     while (not Broly:FindFirstChild("MoveStart")) do
         HRP.CFrame = CFrame.new(Broly.HumanoidRootPart.Position - Broly.HumanoidRootPart.CFrame.LookVector/2, Broly.HumanoidRootPart.Position)
