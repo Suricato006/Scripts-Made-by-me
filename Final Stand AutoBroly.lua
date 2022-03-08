@@ -177,11 +177,22 @@ elseif (game.PlaceId == 2050207304) then
     local Form = false
     local TransformEvent = Player.Backpack.ServerTraits.Transform
     local InputEvent = Player:FindFirstChild("Input", true)
+    local Humanoid = Player.Character.Humanoid
+    local MaxHealth = Humanoid.MaxHealth
+    local GodConnection = nil
+    local KiPercentage = 0
+    GodConnection = RunService.Heartbeat:Connect(function()
+        KiPercentage = KiStat.Value
+        if ((KiPercentage * 100 / KiMax) <= 5) and ((Humanoid.Health * 100 / MaxHealth) <= 15) then
+            TransformEvent:FireServer("g")
+            GodConnection:Disconnect()
+            return
+        end
+    end)
 
     if Android then
         RunService.Heartbeat:Connect(function()
             HRP.CFrame = CFrame.new(Broly.HumanoidRootPart.Position - Broly.HumanoidRootPart.CFrame.LookVector/2, Broly.HumanoidRootPart.Position)
-            local KiPercentage = KiStat.Value
             if not Form and ((KiPercentage * 100 / KiMax) < 70) then
                 wait(0.2)
                 TransformEvent:FireServer("g")
@@ -217,7 +228,6 @@ elseif (game.PlaceId == 2050207304) then
                 end
             else
                 HRP.CFrame = CFrame.new(Broly.HumanoidRootPart.Position - Broly.HumanoidRootPart.CFrame.LookVector/2, Broly.HumanoidRootPart.Position)
-                local KiPercentage = KiStat.Value
                 if KiPercentage > 32 then
                     for i, v in pairs(Player.Backpack:GetChildren()) do
                         if table.find(Settings.Moves, v.Name) then
