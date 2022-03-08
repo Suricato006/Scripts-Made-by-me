@@ -3,7 +3,8 @@ local Settings = Settings or {
     AllowedPlayers = {"SgCortez", "Corteso006", "suricato006"},
     RejoinTimer = 3600,
     TimeToWaitForForm = 3.9,
-    Form = "h"
+    Form = "h",
+    Anchored = true
 }
 
 if not (Settings.Form == "h") or not (Settings.Form == "g") then
@@ -27,6 +28,8 @@ end
         If you are not an android then you go in form, add a TimeToWaitForForm in seconds and you will charge for that ammount of time.
         The form as to be either "g" or "h" otherwhise it wont work proprely.
         If you are an android then no problem at all, stuff doesnt apply.
+    **ANCHORED**
+        Blocks your character when doing the broly
     **GENEAL STUFF**
         The autobroly was made by me (uwu) and it is open source so people can learn from it, its honestly one of the best and more optimized out there (its not obfuscated so even memory is fine.)
         Luv u for using my broly and actually reading the source code stuff.
@@ -232,6 +235,9 @@ elseif (game.PlaceId == 2050207304) then
         Player.Backpack.ServerTraits.EatSenzu:FireServer(true)
         if (BrolyHealth == 0) and (Broly.HumanoidRootPart.Transformation3.Enabled == true) then
             ReturnToEarth()
+        end
+        if Settings.Anchored then
+            Player.Character.HumanoidRootPart.Anchored = true
         end
     end
 end
