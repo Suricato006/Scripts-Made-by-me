@@ -127,8 +127,7 @@ if (game.PlaceId == 536102540) then
     task.wait()
     HRP.Transparency = 0
     local TimerTime = game:GetService("Workspace").BrolyTeleport:FindFirstChildWhichIsA("Model")
-    local OriginalBrolyPosition = CFrame.new(2762, 3945, -2250)
-    local BrolyPosition = OriginalBrolyPosition
+    local BrolyPosition = CFrame.new(2762, 3945, -2250)
     RunService.Heartbeat:Connect(function()
         HRP.CFrame = BrolyPosition
         QuestLabel.Text = "Timer: "..TimerTime.Name
@@ -186,6 +185,9 @@ elseif (game.PlaceId == 2050207304) then
         Move:Deactivate()
         Move.Parent = Player.Backpack
     end
+
+    local BrolyPosition = CFrame.new(Broly.HumanoidRootPart.Position - Broly.HumanoidRootPart.CFrame.LookVector/2, Broly.HumanoidRootPart.Position)
+
     while true do
         local KiValue = KiStat.Value
         local KiPercentage = KiValue * 100 / KiMax
@@ -230,6 +232,7 @@ elseif (game.PlaceId == 2050207304) then
         end
         if Settings.Anchored then
             Player.Character.HumanoidRootPart.Anchored = true
+            HRP.CFrame = BrolyPosition
         else
             HRP.CFrame = CFrame.new(Broly.HumanoidRootPart.Position - Broly.HumanoidRootPart.CFrame.LookVector/2, Broly.HumanoidRootPart.Position)
         end
