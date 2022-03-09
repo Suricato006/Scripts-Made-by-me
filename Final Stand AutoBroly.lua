@@ -149,9 +149,7 @@ local Insults = {"Damn bro, Z-Shuko scripts roblox in python bro", "Sypse dont s
 
 spawn(function()
     while true do
-        pcall(function()
-            game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(Insults[math.random(1,#Insults)], "All")
-        end)
+        game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(Insults[math.random(1,#Insults)], "All")
         task.wait(1)
     end
 end)
