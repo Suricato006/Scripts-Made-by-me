@@ -1,5 +1,9 @@
 {
     "robloxLsp.diagnostics.globals": [
-        "syn"
+        "syn",
+        "http_request",
+        "fluxus",
+        "getgenv",
+        "request"
     ]
 }

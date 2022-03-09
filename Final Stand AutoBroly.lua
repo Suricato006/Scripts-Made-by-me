@@ -75,6 +75,47 @@ if AutoExec then
     Player.CharacterAdded:Wait()
 end
 
+coroutine.wrap(function()
+    local Library = loadstring(game:HttpGet("https://pastebin.com/raw/GX28T0pH", true))()
+    local Credits = Library:CreateWindow("Credits")
+    Credits.open = false
+
+    Credits:AddLabel({text = "Who Created This Gui?"})
+
+    Credits:AddLabel({text = "CrabGuy#8711"})
+
+    Credits:AddLabel({text = "Nevertrack#4219"})
+
+    local DiscordServer = Credits:AddFolder("DiscordServer")
+
+    DiscordServer:AddLabel({text = "https://discord.gg/5NYqSVwH9Q"})
+
+    Credits:AddButton({text = "Join Discord Server", callback = function()
+        local http = game:GetService('HttpService')
+        pcall(function()
+            syn.write_clipboard("https://discord.gg/5NYqSVwH9Q")
+        end)
+        local req = syn and syn.request or http and http.request or http_request or fluxus and fluxus.request or getgenv().request or request
+        if req then
+            req({
+                Url = 'http://127.0.0.1:6463/rpc?v=1',
+                Method = 'POST',
+                Headers = {
+                    ['Content-Type'] = 'application/json',
+                    Origin = 'https://discord.com'
+                },
+                Body = http:JSONEncode({
+                    cmd = 'INVITE_BROWSER',
+                    nonce = http:GenerateGUID(false),
+                    args = {code = '5NYqSVwH9Q'}
+                })
+            })
+        end
+    end})
+
+    Library:Init()
+end)
+
 local function ReturnToEarth()
     game:GetService("TeleportService"):Teleport(536102540, game.Players.LocalPlayer)
 end
@@ -107,9 +148,17 @@ coroutine.wrap(function()
     ReturnToEarth()
 end)
 
-pcall(function()
-    game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("Damn bro, Z-Shuko scripts roblox in python bro", "All")
+local Insults = {"Damn bro, Z-Shuko scripts roblox in python bro", "Sypse dont steal my DeezNuts jokes", "Chris is a cool guy", "Cake autobroly is sooo bad :kekw:", "DiscordServer: .gg/5NYqSVwH9Q", "Nevertrack, what a clown", "Damn bro, Crab looking so fine :thicc_peach:"}
+
+coroutine.wrap(function()
+    while true do
+        pcall(function()
+            game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(Insults[math.random(1,#Insults)], "All")
+        end)
+        task.wait(1)
+    end
 end)
+
 
 RunService.Heartbeat:Connect(function()
     if game:GetService("CoreGui").RobloxPromptGui:FindFirstChild("ErrorPrompt", true) then
@@ -134,13 +183,7 @@ if (game.PlaceId == 536102540) then
     if PowerOutput then
         PowerOutput:Destroy()
     end
-    HRP.CFrame = CFrame.new(219, 46, -6381)
-    local Joint = Player.Character:FindFirstChild("Root", true)
-    if Joint then
-        Joint:Destroy()
-    end
     task.wait()
-    HRP.Transparency = 0
     local TimerTime = game:GetService("Workspace").BrolyTeleport:FindFirstChildWhichIsA("Model")
     local BrolyPosition = CFrame.new(2762, 3945, -2250)
     RunService.Heartbeat:Connect(function()
