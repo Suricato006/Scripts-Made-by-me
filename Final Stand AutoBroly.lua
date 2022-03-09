@@ -145,7 +145,7 @@ spawn(function()
     ReturnToEarth()
 end)
 
-local Insults = {"Damn bro, Z-Shuko scripts roblox in python bro", "Sypse dont steal my DeezNuts jokes", "Chris is a cool guy", "Cake autobroly is sooo bad :kekw:", "DiscordServer: .gg/5NYqSVwH9Q", "Nevertrack, what a clown", "Damn bro, Crab looking so fine :thicc_peach:"}
+local Insults = {"Damn bro, Z-Shuko scripts roblox in python bro", "Sypse dont steal my jokes", "Chris is a cool guy", "Cake autobroly is sooo bad :kekw:", "DiscoServer: .gg/5NYqSVwH9Q", "Nevertrack, what a clown", "Damn bro, Crab looking so fine thicc_peach"}
 
 spawn(function()
     while true do
@@ -170,8 +170,6 @@ RunService.Heartbeat:Connect(function()
         end
     end
 end)
-
-local QuestLabel = Player:FindFirstChild("Quests", true).TextLabel
 
 if (game.PlaceId == 536102540) then
     local PowerOutput = Player.Character:FindFirstChild("PowerOutput")
