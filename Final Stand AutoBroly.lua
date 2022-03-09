@@ -181,7 +181,6 @@ if (game.PlaceId == 536102540) then
     local BrolyPosition = CFrame.new(2762, 3945, -2250)
     RunService.Heartbeat:Connect(function()
         HRP.CFrame = BrolyPosition
-        QuestLabel.Text = "Timer: "..TimerTime.Name
     end)
 elseif (game.PlaceId == 2050207304) then
     for i, v in pairs(game.Players:GetChildren()) do
@@ -273,10 +272,9 @@ elseif (game.PlaceId == 2050207304) then
             TransformEvent:FireServer("g")
             GodForm = true
         end
-        local BrolyHealth = tostring(math.floor(Broly.Humanoid.Health))
-        QuestLabel.Text = "BrolyHealth: "..BrolyHealth
+        local BrolyHealth = math.floor(Broly.Humanoid.Health)
         Player.Backpack.ServerTraits.EatSenzu:FireServer(true)
-        if (Broly.Humanoid.Health == 0) and (Broly.HumanoidRootPart.Transformation3.Enabled == true) then
+        if (BrolyHealth == 0) and (Broly.HumanoidRootPart.Transformation3.Enabled == true) then
             ReturnToEarth()
         end
         if Settings.Anchored then
