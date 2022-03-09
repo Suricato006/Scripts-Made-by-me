@@ -75,7 +75,7 @@ if AutoExec then
     Player.CharacterAdded:Wait()
 end
 
-coroutine.wrap(function()
+spawn(function()
     local Library = loadstring(game:HttpGet("https://pastebin.com/raw/GX28T0pH", true))()
     local Credits = Library:CreateWindow("Credits")
 
@@ -140,16 +140,14 @@ RunService.Heartbeat:Connect(function()
     end
 end)
 
-local KiMax = Player.Character:WaitForChild("Ki").Value
-
-coroutine.wrap(function()
+spawn(function()
     wait(Settings.RejoinTimer)
     ReturnToEarth()
 end)
 
 local Insults = {"Damn bro, Z-Shuko scripts roblox in python bro", "Sypse dont steal my DeezNuts jokes", "Chris is a cool guy", "Cake autobroly is sooo bad :kekw:", "DiscordServer: .gg/5NYqSVwH9Q", "Nevertrack, what a clown", "Damn bro, Crab looking so fine :thicc_peach:"}
 
-coroutine.wrap(function()
+spawn(function()
     while true do
         pcall(function()
             game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(Insults[math.random(1,#Insults)], "All")
@@ -223,6 +221,7 @@ elseif (game.PlaceId == 2050207304) then
         Player.Backpack.ServerTraits.Input:FireServer({"m2"}, HRP.CFrame)
     end
     local KiStat = Player.Character:WaitForChild("Ki")
+    local KiMax = KiStat.Value
     local Android = (Player.Character:WaitForChild("Race").Value == "Android")
     local Form = false
     local TransformEvent = Player.Backpack.ServerTraits.Transform
