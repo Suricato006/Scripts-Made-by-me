@@ -85,9 +85,9 @@ spawn(function()
 
     Credits:AddLabel({text = "Nevertrack#4219"})
 
-    local DiscordServer = Credits:AddFolder("DiscordServer")
+    Credits:AddLabel({text = "----DiscordServer----"})
 
-    DiscordServer:AddLabel({text = "https://discord.gg/5NYqSVwH9Q"})
+    Credits:AddLabel({text = "https://discord.gg/5NYqSVwH9Q"})
 
     Credits:AddButton({text = "Join Discord Server", callback = function()
         local http = game:GetService('HttpService')
