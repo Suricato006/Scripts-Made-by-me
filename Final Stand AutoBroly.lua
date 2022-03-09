@@ -78,7 +78,6 @@ end
 coroutine.wrap(function()
     local Library = loadstring(game:HttpGet("https://pastebin.com/raw/GX28T0pH", true))()
     local Credits = Library:CreateWindow("Credits")
-    Credits.open = false
 
     Credits:AddLabel({text = "Who Created This Gui?"})
 
