@@ -14,16 +14,18 @@ InputMessage.Text = "Stay On This Window for a couple of seconds"
 spawn(function()
     while true do task.wait()
         if not InputMessage then
-            break
+            return
         end
 
         if not iswindowactive() then
             InputMessage:Destroy()
             local NewInputMessage = Instance.new("Message", game:GetService("CoreGui"))
             NewInputMessage.Text = "Checks didn't go proprely rejoin and execute again"
+            return
         end
     end
 end)
+
 task.wait(3)
 local OldNameCall = nil
 local EventNumber = 0
