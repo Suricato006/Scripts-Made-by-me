@@ -13,7 +13,7 @@ InputMessage.Text = "Stay On This Window for a couple of seconds"
 
 spawn(function()
     while true do task.wait()
-        if not InputMessage then
+        if InputMessage.Parent == nil then
             return
         end
 
@@ -69,6 +69,13 @@ InputMessage.Text = "Checks Done"
 task.wait(0.7)
 InputMessage:Destroy()
 
+if not game:GetService("ReplicatedStorage").Communication.Functions:FindFirstChild("Charge") then
+    InputMessage:Destroy()
+    local NewInputMessage = Instance.new("Message", game:GetService("CoreGui"))
+    NewInputMessage.Text = "Checks didn't go proprely rejoin and execute again"
+    return
+end
+
 
 local Library = loadstring(game:HttpGet("https://pastebin.com/raw/GX28T0pH"))()
 local Main = Library:CreateWindow("Dragonball Rage")
@@ -123,5 +130,40 @@ RunService.Heartbeat:Connect(function()
         end
     end
 end)
+
+local Credits = Library:CreateWindow("Credits")
+
+Credits:AddLabel({text = "Who Created This Gui?"})
+
+Credits:AddLabel({text = "CrabGuy#8711"})
+
+Credits:AddLabel({text = "Nevertrack#4219"})
+
+Credits:AddLabel({text = "----DiscordServer----"})
+
+Credits:AddLabel({text = "discord.gg/5NYqSVwH9Q"})
+
+Credits:AddButton({text = "Join Discord Server", callback = function()
+    local http = game:GetService('HttpService')
+    pcall(function()
+        syn.write_clipboard("https://discord.gg/5NYqSVwH9Q")
+    end)
+    local req = syn and syn.request or http and http.request or http_request or fluxus and fluxus.request or getgenv().request or request
+    if req then
+        req({
+            Url = 'http://127.0.0.1:6463/rpc?v=1',
+            Method = 'POST',
+            Headers = {
+                ['Content-Type'] = 'application/json',
+                Origin = 'https://discord.com'
+            },
+            Body = http:JSONEncode({
+                cmd = 'INVITE_BROWSER',
+                nonce = http:GenerateGUID(false),
+                args = {code = '5NYqSVwH9Q'}
+            })
+        })
+    end
+end})
 
 Library:Init()
