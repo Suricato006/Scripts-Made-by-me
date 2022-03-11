@@ -22,15 +22,6 @@ local Settings = Settings or {
     }
 }
 
-local Dumb = true
-if (Settings.Form == "h") or (Settings.Form == "h") then
-    Dumb = false
-end
-if Dumb then
-    warn("ofmg how did you mess up something so simple")
-    Settings.Form = "h"
-end
-
 --[[
     Settings Explanation:
     **MOVES**
