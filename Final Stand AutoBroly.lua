@@ -81,7 +81,7 @@ spawn(function()
 
     Credits:AddLabel({text = "----DiscordServer----"})
 
-    Credits:AddLabel({text = "https://discord.gg/5NYqSVwH9Q"})
+    Credits:AddLabel({text = "discord.gg/5NYqSVwH9Q"})
 
     Credits:AddButton({text = "Join Discord Server", callback = function()
         local http = game:GetService('HttpService')
@@ -175,6 +175,8 @@ if Settings.LowGraphics then
 		end)()
 	end)
 end
+local KiStat = Player.Character:WaitForChild("Ki")
+local KiMax = KiStat.Value
 
 spawn(function()
     wait(Settings.RejoinTimer)
@@ -256,8 +258,7 @@ elseif (game.PlaceId == 2050207304) then
     local function Pugno()
         Player.Backpack.ServerTraits.Input:FireServer({"m2"}, HRP.CFrame)
     end
-    local KiStat = Player.Character:WaitForChild("Ki")
-    local KiMax = KiStat.Value
+
     local Android = (Player.Character:WaitForChild("Race").Value == "Android")
     local Form = false
     local TransformEvent = Player.Backpack.ServerTraits.Transform
@@ -279,10 +280,10 @@ elseif (game.PlaceId == 2050207304) then
 
     while true do
         local KiValue = KiStat.Value
-        local KiPercentage = KiValue * 100 / KiMax
+        local KiPercentage = (KiValue * 100 / KiMax)
         if not Form then
             if Android then
-                if (KiPercentage < 70) then
+                if (KiPercentage <= 70) then
                     task.wait(0.2)
                     TransformEvent:FireServer("g")
                     Form = true
@@ -308,7 +309,7 @@ elseif (game.PlaceId == 2050207304) then
             Pugno()
             task.wait()
         end
-        if (KiPercentage < 5) and ((Humanoid.Health * 100 / MaxHealth) < 15) and not GodForm then
+        if (KiPercentage <= 5) and ((Humanoid.Health * 100 / MaxHealth) < 15) and not GodForm then
             task.wait(0.2)
             TransformEvent:FireServer("g")
             GodForm = true
