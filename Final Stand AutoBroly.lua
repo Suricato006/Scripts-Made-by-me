@@ -224,7 +224,7 @@ if (game.PlaceId == 536102540) then
     end)
 elseif (game.PlaceId == 2050207304) then
     for i, v in pairs(game.Players:GetChildren()) do
-        if not (v.Name == Player.Name) and not (v.Name == "Broly BR") and not table.find(Settings.AllowedPlayers, v.Name) then
+        if not (v.Name == Player.Name) and not table.find(Settings.AllowedPlayers, v.Name) then
             if not Settings.AllowAnyone then
                 ReturnToEarth()
             end
