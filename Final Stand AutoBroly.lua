@@ -4,6 +4,7 @@ local Settings = Settings or {
     TimeToWaitForForm = 3.9,
     Form = "h",
     Anchored = true,
+    LowGraphics = true,
     Moves = {
         "Deadly Dance",
         'Blaster Meteor',
@@ -40,6 +41,8 @@ local Settings = Settings or {
         If you are an android then no problem at all, stuff doesnt apply.
     **ANCHORED**
         Blocks your character when doing the broly
+    **LOWGRAPHICS**
+        Makes the game look bad but boosts the fps/lowers the computer usage
     **GENEAL STUFF**
         The autobroly was made by me (uwu) and it is open source so people can learn from it, its honestly one of the best and more optimized out there (its not obfuscated so even memory is fine.)
         Luv u for using my broly and actually reading the source code stuff.
@@ -131,6 +134,48 @@ RunService.Heartbeat:Connect(function()
     end
 end)
 
+if Settings.LowGraphics then
+    workspace:FindFirstChildOfClass('Terrain').WaterWaveSize = 0
+	workspace:FindFirstChildOfClass('Terrain').WaterWaveSpeed = 0
+	workspace:FindFirstChildOfClass('Terrain').WaterReflectance = 0
+	workspace:FindFirstChildOfClass('Terrain').WaterTransparency = 0
+	game:GetService("Lighting").GlobalShadows = false
+	game:GetService("Lighting").FogEnd = 9e9
+	settings().Rendering.QualityLevel = 1
+	for i,v in pairs(game:GetDescendants()) do
+		if v:IsA("Part") or v:IsA("UnionOperation") or v:IsA("MeshPart") or v:IsA("CornerWedgePart") or v:IsA("TrussPart") then
+			v.Material = "Plastic"
+			v.Reflectance = 0
+		elseif v:IsA("Decal") then
+			v.Transparency = 1
+		elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
+			v.Lifetime = NumberRange.new(0)
+		elseif v:IsA("Explosion") then
+			v.BlastPressure = 1
+			v.BlastRadius = 1
+		end
+	end
+	for i,v in pairs(game:GetService("Lighting"):GetDescendants()) do
+		if v:IsA("BlurEffect") or v:IsA("SunRaysEffect") or v:IsA("ColorCorrectionEffect") or v:IsA("BloomEffect") or v:IsA("DepthOfFieldEffect") then
+			v.Enabled = false
+		end
+	end
+	workspace.DescendantAdded:Connect(function(child)
+		coroutine.wrap(function()
+			if child:IsA('ForceField') then
+				game:GetService('RunService').Heartbeat:Wait()
+				child:Destroy()
+			elseif child:IsA('Sparkles') then
+				game:GetService('RunService').Heartbeat:Wait()
+				child:Destroy()
+			elseif child:IsA('Smoke') or child:IsA('Fire') then
+				game:GetService('RunService').Heartbeat:Wait()
+				child:Destroy()
+			end
+		end)()
+	end)
+end
+
 spawn(function()
     wait(Settings.RejoinTimer)
     ReturnToEarth()
@@ -187,7 +232,12 @@ elseif (game.PlaceId == 2050207304) then
 
     while (not Broly:FindFirstChild("MoveStart")) do
         HRP.CFrame = CFrame.new(Broly.HumanoidRootPart.Position - Broly.HumanoidRootPart.CFrame.LookVector/2, Broly.HumanoidRootPart.Position)
-        local Throw = Player.Backpack:FindFirstChild("Dragon Crush") or Player.Backpack:FindFirstChild("Dragon Throw") or Player.Backpack:WaitForChild("Dragon Throw")
+        local Throw = Player.Backpack:FindFirstChild("Dragon Crush") or Player.Backpack:FindFirstChild("Dragon Throw") or Player.Backpack:WaitForChild("Dragon Throw", 5)
+        if not Throw then
+            local ThrowMessage = Instance.new("Message", game:GetService("CoreGui"))
+            ThrowMessage.Text = "You need to have Dragon Crush or Dragon Throw, rejoin and buy it"
+            return
+        end
         if Throw then
             Throw.Parent = Player.Character
             local b = Throw:FindFirstChild("Flip", true)
