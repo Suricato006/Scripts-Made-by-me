@@ -158,7 +158,8 @@ if (game.PlaceId == 882375367) then
     local GokuPosition = CFrame.new(Goku.HumanoidRootPart.Position - Goku.HumanoidRootPart.CFrame.LookVector/2, Goku.HumanoidRootPart.Position)
     local LevelLabel = Player.PlayerGui:WaitForChild("HUD"):WaitForChild("Bottom"):WaitForChild("Stats"):WaitForChild("LVL"):WaitForChild("Val")
     local SenzuLabel = Player.PlayerGui:FindFirstChild("Senzu", true)
-    local LevelsToRejoin = {101, 181, 251, 321}
+    local LevelsToRejoin = {100, 180, 250, 320}
+    local ActualLevelToRejoin = {101, 181, 251, 321}
 
     local Returning = false
 
@@ -181,8 +182,12 @@ if (game.PlaceId == 882375367) then
         end
 
         if (table.find(LevelsToRejoin, tonumber(LevelLabel.Text))) and not Returning then
-            Rejoin()
             Returning = true
+        end
+        if Returning then
+            if (table.find(ActualLevelToRejoin, tonumber(LevelLabel.Text))) then
+               Rejoin()
+            end
         end
     end
 end
