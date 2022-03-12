@@ -260,7 +260,6 @@ elseif (game.PlaceId == 2050207304) then
     end
 
     local Android = (Player.Character:WaitForChild("Race").Value == "Android")
-    print("Android: "..tostring(Android))
     local TransformEvent = Player.Backpack.ServerTraits.Transform
     local InputEvent = Player:FindFirstChild("Input", true)
     local Humanoid = Player.Character.Humanoid
@@ -281,12 +280,9 @@ elseif (game.PlaceId == 2050207304) then
     while true do
         local KiValue = KiStat.Value
         local KiPercentage = (KiValue * 100 / KiMax)
-        print("Ki: "..tostring(KiValue))
-        print("KiPercentage: "..tostring(KiPercentage))
         if (Player.Character.ExpGain.Value == 1) then
             if Android then
                 if (KiPercentage <= 70) then
-                    print("Tranform")
                     task.wait(0.2)
                     TransformEvent:FireServer("g")
                 end
