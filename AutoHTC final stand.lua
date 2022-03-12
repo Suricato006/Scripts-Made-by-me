@@ -14,8 +14,8 @@ if AutoExec then
     Player.CharacterAdded:Wait()
 end
 
-local OwnScriptUrl = ""
-if syn and not (OwnScriptUrl == "") then
+local OwnScriptUrl = "https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/AutoHTC%20final%20stand.lua"
+if syn then
     Player.OnTeleport:Connect(function(State)
         if State == Enum.TeleportState.Started then
             syn.queue_on_teleport(game:HttpGet(OwnScriptUrl))
@@ -25,7 +25,6 @@ end
 
 local HRP = Player.Character:WaitForChild("HumanoidRootPart")
 local KiStat = Player.Character:WaitForChild("Ki")
-local KiMax = KiStat.Value
 
 local TrueDestroyed = false
 RunService.Heartbeat:Connect(function()
@@ -51,7 +50,7 @@ local function Rejoin()
     local Players = game.Players
     if #Players:GetPlayers() <= 1 then
         Players.LocalPlayer:Kick("\nRejoining...")
-        wait()
+        task.wait()
         game:GetService('TeleportService'):Teleport(game.PlaceId, Players.LocalPlayer)
     else
         game:GetService('TeleportService'):TeleportToPlaceInstance(game.PlaceId, game.JobId, Players.LocalPlayer)
