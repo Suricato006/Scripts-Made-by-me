@@ -1,4 +1,4 @@
-local Settings = Settings or {
+Settings = Settings or {
     AllowedPlayers = {"SgCortez", "Corteso006", "suricato006"},
     RejoinTimer = 3600,
     TimeToWaitForForm = 3.9,
