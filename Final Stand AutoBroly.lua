@@ -1,5 +1,6 @@
 Settings = Settings or {
     AllowedPlayers = {"SgCortez", "Corteso006", "suricato006"},
+    AllowAnyone = false,
     RejoinTimer = 3600,
     TimeToWaitForForm = 3.9,
     Form = "h",
@@ -31,6 +32,7 @@ Settings = Settings or {
     **ALLOWEDPLAYERS**
         The name of the players that can join the broly with you (its a lag free method not like other shitty anti-leach).
         The method to add more players is the same as the moves: Just add a , and the name of the move between quotations (examples are provvided above).
+        If AllowAnyone is set to true then no matter who is in your broly it will start
     **REJOINTIMER**
         After the set ammount of time you will go back to earth to prevent strange bugs and stuff
         (If the game crashes or other shit then you also rejoin automatically)
@@ -223,7 +225,9 @@ if (game.PlaceId == 536102540) then
 elseif (game.PlaceId == 2050207304) then
     for i, v in pairs(game.Players:GetChildren()) do
         if not (v.Name == Player.Name) and not (v.Name == "Broly BR") and not table.find(Settings.AllowedPlayers, v.Name) then
-            ReturnToEarth()
+            if not Settings.AllowAnyone then
+                ReturnToEarth()
+            end
         end
     end
     local Broly = game:GetService("Workspace").Live:GetChildren()[1]
