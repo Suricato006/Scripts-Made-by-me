@@ -4,6 +4,9 @@
         "http_request",
         "fluxus",
         "getgenv",
-        "request"
+        "request",
+        "isfile",
+        "readfile",
+        "writefile"
     ]
 }

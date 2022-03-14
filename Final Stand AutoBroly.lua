@@ -1,31 +1,5 @@
-Settings = Settings or {
-    AllowedPlayers = {"SgCortez", "Corteso006", "suricato006"},
-    AllowAnyone = false,
-    RejoinTimer = 3600,
-    TimeToWaitForForm = 3.9,
-    Form = "h",
-    Anchored = true,
-    LowGraphics = true,
-    Moves = {
-        "Deadly Dance",
-        'Blaster Meteor',
-        "Trash???",
-        "Anger Rush",
-        "Meteor Crash",
-        "TS Molotov",
-        "Flash Skewer",
-        "Vital Strike",
-        "Demon Flash",
-        "Wolf Fang Fist",
-        "Neo Wolf Fang Fist",
-        "Trash?",
-        "Strong Kick",
-        "Strong Kick"
-    }
-}
-
 --[[
-    Settings Explanation:
+    _G.BrolySettings Explanation:
     **MOVES**
         The moves are customizable and you can add as much as you want. Just add a , and the name of the move between quotations (examples are provvided above).
         Also the default ones are the best but feel free to customise
@@ -59,6 +33,32 @@ Settings = Settings or {
 
 ]]
 
+local DefaultSettings = {
+    AllowedPlayers = {"SgCortez", "Corteso006", "suricato006"},
+    AllowAnyone = false,
+    RejoinTimer = 3600,
+    TimeToWaitForForm = 3.9,
+    Form = "h",
+    Anchored = true,
+    LowGraphics = true,
+    Moves = {
+        "Deadly Dance",
+        'Blaster Meteor',
+        "Trash???",
+        "Anger Rush",
+        "Meteor Crash",
+        "TS Molotov",
+        "Flash Skewer",
+        "Vital Strike",
+        "Demon Flash",
+        "Wolf Fang Fist",
+        "Neo Wolf Fang Fist",
+        "Trash?",
+        "Strong Kick",
+        "Strong Kick"
+    }
+}
+
 local AutoExec = false
 if not game:IsLoaded() then
     AutoExec = true
@@ -67,6 +67,26 @@ end
 
 local Player = game.Players.LocalPlayer
 local RunService = game:GetService("RunService")
+local HttpService = game:GetService("HttpService")
+
+local OwnScriptUrl = "https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Final%20Stand%20AutoBroly.lua"
+if syn then
+    Player.OnTeleport:Connect(function(State)
+        if State == Enum.TeleportState.Started then
+            syn.queue_on_teleport(game:HttpGet(OwnScriptUrl))
+        end
+    end)
+
+    local FileName = "AutoBroly.CRAB"
+    if isfile(FileName) then
+        _G.BrolySettings = _G.BrolySettings or HttpService:JSONDecode(readfile(FileName))
+    end
+    local ToEncode = _G.BrolySettings or DefaultSettings
+    writefile(FileName, HttpService:JSONEncode(ToEncode))
+end
+
+_G.BrolySettings = _G.BrolySettings or DefaultSettings
+
 if AutoExec then
     Player.CharacterAdded:Wait()
 end
@@ -86,11 +106,10 @@ spawn(function()
     Credits:AddLabel({text = "discord.gg/5NYqSVwH9Q"})
 
     Credits:AddButton({text = "Join Discord Server", callback = function()
-        local http = game:GetService('HttpService')
         pcall(function()
             syn.write_clipboard("https://discord.gg/5NYqSVwH9Q")
         end)
-        local req = syn and syn.request or http and http.request or http_request or fluxus and fluxus.request or getgenv().request or request
+        local req = syn and syn.request or HttpService and HttpService.request or http_request or fluxus and fluxus.request or getgenv().request or request
         if req then
             req({
                 Url = 'http://127.0.0.1:6463/rpc?v=1',
@@ -99,9 +118,9 @@ spawn(function()
                     ['Content-Type'] = 'application/json',
                     Origin = 'https://discord.com'
                 },
-                Body = http:JSONEncode({
+                Body = HttpService:JSONEncode({
                     cmd = 'INVITE_BROWSER',
-                    nonce = http:GenerateGUID(false),
+                    nonce = HttpService:GenerateGUID(false),
                     args = {code = '5NYqSVwH9Q'}
                 })
             })
@@ -113,15 +132,6 @@ end)
 
 local function ReturnToEarth()
     game:GetService("TeleportService"):Teleport(536102540, game.Players.LocalPlayer)
-end
-
-local OwnScriptUrl = "https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Final%20Stand%20AutoBroly.lua"
-if syn then
-    Player.OnTeleport:Connect(function(State)
-        if State == Enum.TeleportState.Started then
-            syn.queue_on_teleport(game:HttpGet(OwnScriptUrl))
-        end
-    end)
 end
 
 local HRP = Player.Character:WaitForChild("HumanoidRootPart")
@@ -136,7 +146,7 @@ RunService.Heartbeat:Connect(function()
     end
 end)
 
-if Settings.LowGraphics then
+if _G.BrolySettings.LowGraphics then
     workspace:FindFirstChildOfClass('Terrain').WaterWaveSize = 0
 	workspace:FindFirstChildOfClass('Terrain').WaterWaveSpeed = 0
 	workspace:FindFirstChildOfClass('Terrain').WaterReflectance = 0
@@ -181,7 +191,7 @@ local KiStat = Player.Character:WaitForChild("Ki")
 local KiMax = KiStat.Value
 
 spawn(function()
-    wait(Settings.RejoinTimer)
+    wait(_G.BrolySettings.RejoinTimer)
     ReturnToEarth()
 end)
 
@@ -217,15 +227,14 @@ if (game.PlaceId == 536102540) then
         PowerOutput:Destroy()
     end
     task.wait()
-    local TimerTime = game:GetService("Workspace").BrolyTeleport:FindFirstChildWhichIsA("Model")
     local BrolyPosition = CFrame.new(2762, 3945, -2250)
     RunService.Heartbeat:Connect(function()
         HRP.CFrame = BrolyPosition
     end)
 elseif (game.PlaceId == 2050207304) then
     for i, v in pairs(game.Players:GetChildren()) do
-        if not (v.Name == Player.Name) and not table.find(Settings.AllowedPlayers, v.Name) then
-            if not Settings.AllowAnyone then
+        if not (v.Name == Player.Name) and not table.find(_G.BrolySettings.AllowedPlayers, v.Name) then
+            if not _G.BrolySettings.AllowAnyone then
                 ReturnToEarth()
             end
         end
@@ -293,8 +302,8 @@ elseif (game.PlaceId == 2050207304) then
             else
                 if InputEvent and TransformEvent then
                     InputEvent:FireServer({[1] = "x"},CFrame.new(0,0,0),nil,false)
-                    task.wait(Settings.TimeToWaitForForm)
-                    TransformEvent:FireServer(Settings.Form)
+                    task.wait(_G.BrolySettings.TimeToWaitForForm)
+                    TransformEvent:FireServer(_G.BrolySettings.Form)
                     task.wait(1)
                     InputEvent:FireServer({[1] = "xoff"},CFrame.new(0,0,0),nil,false)
                 end
@@ -302,7 +311,7 @@ elseif (game.PlaceId == 2050207304) then
         end
         if KiValue > 32 then
             for i, v in pairs(Player.Backpack:GetChildren()) do
-                if table.find(Settings.Moves, v.Name) then
+                if table.find(_G.BrolySettings.Moves, v.Name) then
                     UseMove(v)
                 end
             end
@@ -320,7 +329,7 @@ elseif (game.PlaceId == 2050207304) then
         if (BrolyHealth == 0) and (Broly.HumanoidRootPart.Transformation3.Enabled == true) then
             ReturnToEarth()
         end
-        if Settings.Anchored then
+        if _G.BrolySettings.Anchored then
             Player.Character.HumanoidRootPart.Anchored = true
             HRP.CFrame = BrolyPosition
         else
