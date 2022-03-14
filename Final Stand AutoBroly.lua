@@ -43,8 +43,6 @@ local DefaultSettings = {
     LowGraphics = true,
     Moves = {
         "Deadly Dance",
-        'Blaster Meteor',
-        "Trash???",
         "Anger Rush",
         "Meteor Crash",
         "TS Molotov",
@@ -53,8 +51,6 @@ local DefaultSettings = {
         "Demon Flash",
         "Wolf Fang Fist",
         "Neo Wolf Fang Fist",
-        "Trash?",
-        "Strong Kick",
         "Strong Kick"
     }
 }
