@@ -13,7 +13,7 @@ local DefaultSettings = {}
 local DeleteConfig = false
 local FileName = "Crab.hub"
 
-local OwnScriptUrl = ""
+local OwnScriptUrl = "https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Final%20Stand%20AutoFarm%20New%20Version.lua"
 if syn then
     Player.OnTeleport:Connect(function(State)
         if State == Enum.TeleportState.Started and not (OwnScriptUrl == "") then
