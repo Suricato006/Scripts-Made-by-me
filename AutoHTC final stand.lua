@@ -111,9 +111,9 @@ end
 
 if (game.PlaceId == 882375367) then
     local Goku = game:GetService("Workspace").Live:GetChildren()[1]
+    local Throw = Player.Backpack:FindFirstChild("Dragon Crush") or Player.Backpack:FindFirstChild("Dragon Throw") or Player.Backpack:WaitForChild("Dragon Throw", 5)
     while (not Goku:FindFirstChild("MoveStart")) do
         HRP.CFrame = CFrame.new(Goku.HumanoidRootPart.Position - Goku.HumanoidRootPart.CFrame.LookVector/2, Goku.HumanoidRootPart.Position)
-        local Throw = Player.Backpack:FindFirstChild("Dragon Crush") or Player.Backpack:FindFirstChild("Dragon Throw") or Player.Backpack:WaitForChild("Dragon Throw", 5)
         if not Throw then
             local ThrowMessage = Instance.new("Message", game:GetService("CoreGui"))
             ThrowMessage.Text = "You need to have Dragon Crush or Dragon Throw, rejoin and buy it"
