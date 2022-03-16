@@ -58,6 +58,19 @@ Utilities:AddToggle({text = "No Slow", state = false, callback = function(bool)
     end
 end})
 
+Utilities:AddToggle({text = "Throw Stuck", state = false, callback = function(bool)
+    _G.CrabHub.ThrowStuck = bool
+    while _G.CrabHub.ThrowStuck do task.wait()
+        local Throw = Player.Character:FindFirstChild("Dragon Crush") or Player.Character:FindFirstChild("Dragon Throw")
+        if Player.Character:FindFirstChild("HumanoidRootPart") and Throw then
+            local a = Throw:FindFirstChild("Flip", true)
+            if a then
+                a:Destroy()
+            end
+        end
+    end
+end})
+
 local function UseMove(Move)
     Move.Parent = Player.Character
     task.wait()
@@ -139,6 +152,10 @@ if syn then
         end
     end})
 end
+
+Main:AddButton({text = "Destroy Gui", callback = function()
+    Library:Close()
+end})
 
 
 
