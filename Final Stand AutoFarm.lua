@@ -38,7 +38,7 @@ RunService.Heartbeat:Connect(function()
                 return
             end
             if not Tweening then
-                if ((HRP.Position - Npc.HumanoidRootPart.Position).magnitude <= 300) then
+                if ((HRP.Position - Npc.HumanoidRootPart.Position).magnitude <= 900) then
                     HRP.CFrame = CFrame.new(Npc.HumanoidRootPart.Position - Npc.HumanoidRootPart.CFrame.LookVector/2, Npc.HumanoidRootPart.Position)
                     Pugno()
                 else
