@@ -44,7 +44,7 @@ local Utilities = Main:AddFolder("Utilities")
 local MoveSpamFolder = Main:AddFolder("Move Spam")
 
 local Names = {"Action", "Attacking", "Using", "hyper", "Hyper", "heavy", "KiBlasted", "Tele", "tele", "Killed", "Slow", "Blocked", "MoveStart", "NotHardBack"}
-Utilities:AddToggle({text = "No Slow", state = false, callback = function(bool)
+local NoSlowToggle = Utilities:AddToggle({text = "No Slow", state = false, callback = function(bool)
     _G.CrabHub.NoSlow = bool
     while _G.CrabHub.NoSlow do task.wait()
         if Player.Character:FindFirstChild("HumanoidRootPart") then
@@ -87,6 +87,9 @@ _G.CrabHub.MovesToSpam = {}
 
 MoveSpamFolder:AddToggle({text = "Move Spam", state = false, callback = function(bool)
     _G.CrabHub.MoveSpam = bool
+    if (bool == true) then
+        NoSlowToggle:SetState(true)
+    end
     while _G.CrabHub.MoveSpam do task.wait()
         local KiStat = Player.Character:FindFirstChild("Ki")
         if KiStat then
