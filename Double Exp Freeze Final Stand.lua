@@ -4,13 +4,18 @@ local FinalStandTable = {536102540, 569994010, 882399924, 2046990924, 478132461,
 
 if not table.find(FinalStandTable, game.PlaceId) then return end
 
-while not game.Players.LocalPlayer.Character do task.wait() end
+local Player = game.Players.LocalPlayer
 
-task.wait(0.5)
+while not Player.Character do task.wait() end
 
 game:GetService("RunService").Heartbeat:Connect(function()
-    local a = game.Players.LocalPlayer.Character:FindFirstChild("True")
-    if a then
-        a:Destroy()
+    local TimerLabel = Player.PlayerGui:WaitForChild("HUD"):FindFirstChild("Timer", true)
+    if TimerLabel then
+        if TimerLabel.Visible and not (TimerLabel.Text == "") then
+            local a = Player.Character:FindFirstChild("True")
+            if a then
+                a:Destroy()
+            end
+        end
     end
 end)
