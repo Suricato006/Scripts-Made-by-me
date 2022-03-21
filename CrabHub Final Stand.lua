@@ -41,7 +41,7 @@
     local Library = loadstring(game:HttpGet("https://pastebin.com/raw/GX28T0pH", true))()
     local Main = Library:CreateWindow("CrabHub")
     local Utilities = Main:AddFolder("Utilities")
-    local MoveSpamFolder = Main:AddFolder("Move Spam")
+    local AutoFarmFolder = Main:AddFolder("AutoFarm")
 
     local Names = {"Action", "Attacking", "Using", "hyper", "Hyper", "heavy", "KiBlasted", "Tele", "tele", "Killed", "Slow", "Blocked", "MoveStart", "NotHardBack"}
     local NoSlowToggle = Utilities:AddToggle({text = "No Slow", state = _G.CrabHub.NoSlow, callback = function(bool)
@@ -70,7 +70,18 @@
             end
         end
     end})
-
+    local Moves = {
+        "Deadly Dance",
+        "Anger Rush",
+        "Meteor Crash",
+        "TS Molotov",
+        "Flash Skewer",
+        "Vital Strike",
+        "Demon Flash",
+        "Wolf Fang Fist",
+        "Neo Wolf Fang Fist",
+        "Strong Kick"
+    }
     local function UseMove(Move)
         Move.Parent = Player.Character
         task.wait()
@@ -82,69 +93,72 @@
     local function Pugno()
         Player.Backpack.ServerTraits.Input:FireServer({"m2"}, Player.Character.HumanoidRootPart.CFrame)
     end
-
-    _G.CrabHub.MovesToSpam = {}
-
-    MoveSpamFolder:AddToggle({text = "Move Spam", state = _G.CrabHub.MoveSpam, callback = function(bool)
-        _G.CrabHub.MoveSpam = bool
-        if (bool == true) then
-            NoSlowToggle:SetState(true)
+    local function FindNpc()
+        for i, v in pairs(workspace.Live:GetChildren()) do
+            if string.find(v.Name, _G.CrabHub.NpcToFarm) and (v.Humanoid.Health > 0) then
+                return v
+            end
         end
-        while _G.CrabHub.MoveSpam do task.wait()
+        return nil
+    end
+
+    AutoFarmFolder:AddToggle({text = "AutoFarm", state = _G.CrabHub.AutoFarm, callback = function(bool)
+        _G.CrabHub.AutoFarm = bool
+        while _G.CrabHub.AutoFarm do
+            local HRP = Player.Character:FindFirstChild("HumanoidRootPart")
             local KiStat = Player.Character:FindFirstChild("Ki")
-            if KiStat then
-                local KiValue = KiStat.Value
-                if KiValue > 32 then
-                    for i, v in pairs(Player.Backpack:GetChildren()) do
-                        if table.find(_G.CrabHub.MovesToSpam, v.Name) then
-                            UseMove(v)
+            if HRP and KiStat then
+                local Npc = FindNpc()
+                if Npc then
+                    while _G.CrabHub.AutoFarm do
+                        if (Npc.Humanoid.Health > 0) then
+                            if ((HRP.Position - Npc.HumanoidRootPart.Position).magnitude <= 900) then
+                                HRP.CFrame = CFrame.new(Npc.HumanoidRootPart.Position - Npc.HumanoidRootPart.CFrame.LookVector, Npc.HumanoidRootPart.Position)
+                                if _G.CrabHub.UseMoves then
+                                    if (KiStat.Value > 32) then
+                                        for i, v in pairs(Player.Backpack:GetChildren()) do
+                                            if table.find(Moves, v.Name) then
+                                                UseMove(v)
+                                            end
+                                        end
+                                    else
+                                        Pugno()
+                                        task.wait()
+                                    end
+                                else
+                                    Pugno()
+                                    task.wait()
+                                end
+                            else
+                                local tween = game:GetService("TweenService"):Create(HRP, TweenInfo.new(1), {CFrame = Npc.HumanoidRootPart.CFrame})
+                                tween:Play()
+                                while (tween.PlaybackState == Enum.PlaybackState.Playing) do task.wait()
+                                    if ((HRP.Position - Npc.HumanoidRootPart.Position).magnitude <= 500) then
+                                        tween:Cancel()
+                                        break
+                                    end
+                                end
+                            end
+                        else
+                            break
                         end
                     end
-                else
-                    Pugno()
-                    task.wait()
                 end
             end
+            task.wait()
         end
     end})
 
-    local List = MoveSpamFolder:AddList({text = "Moves", values = _G.CrabHub.MovesToSpam, value = _G.CrabHub.MovesToSpam[1], callback = function(chosen)
-        print("This Move is in the autofarm: ".. chosen)
+    local NpcToFarmBox = AutoFarmFolder:AddBox({text = "NpcToFarm", value = _G.CrabHub.NpcToFarm or "", callback = function(typed)
+        _G.CrabHub.NpcToFarm = typed
     end})
 
-    MoveSpamFolder:AddBox({text = "Add Move", value = "", callback = function(typed)
-        for i, v in pairs(Player.Backpack:GetChildren()) do
-            if v:IsA("Tool") then
-                local a = v.Name
-                if string.find(a, typed) and not table.find(_G.CrabHub.MovesToSpam, a) then
-                    _G.CrabHub.MovesToSpam[#_G.CrabHub.MovesToSpam + 1] = a
-                    List:AddValue(a)
-                    break
-                end
-            end
-        end
+    AutoFarmFolder:AddToggle({text = "UseMoves", state = _G.CrabHub.UseMoves, callback = function(bool)
+        _G.CrabHub.UseMoves = bool
     end})
 
-    MoveSpamFolder:AddBox({text = "Delete Move", value = "", callback = function(typed)
-        for i, v in pairs(_G.CrabHub.MovesToSpam) do
-            if string.find(v, typed) then
-                table.remove(v)
-                List:RemoveValue(v)
-                break
-            end
-        end
-    end})
-
-    local SuggestedMoves = {"Deadly Dance", "Anger Rush", "Meteor Crash", "TS Molotov", "Flash Skewer", "Vital Strike", "Demon Flash", "Wolf Fang Fist", "Neo Wolf Fang Fist", "Strong Kick"}
-
-    MoveSpamFolder:AddButton({text = "Load Suggested Moves", callback = function()
-        for i, v in pairs(_G.CrabHub.MovesToSpam) do
-            List:RemoveValue(v)
-        end
-        for i, v in pairs(SuggestedMoves) do
-            List:AddValue(v)
-        end
-        _G.CrabHub.MovesToSpam = SuggestedMoves
+    AutoFarmFolder:AddButton({text = "Load Suggested Farm", callback = function()
+        NpcToFarmBox:SetValue("Evil")
     end})
 
     if syn then
