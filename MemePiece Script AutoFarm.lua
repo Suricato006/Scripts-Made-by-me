@@ -1,5 +1,6 @@
 
 _G.AutoOre = _G.AutoOre or false
+_G.AutoCollect = _G.AutoCollect or false --Automatically collects ingots and fruits from raids
 _G.AutoSkill = _G.AutoSkill or false
 _G.SlillToUse = _G.SlillToUse or "B" -- either "A" or "B" or "C"
 _G.SkillDelay = _G.SkillDelay or 0.5
@@ -10,7 +11,7 @@ _G.AutoFarm = _G.AutoFarm or true
 
 local Player = game.Players.LocalPlayer
 
-if fireclickdetector and firetouchinterest then
+if fireclickdetector then
     coroutine.wrap(function()
         while _G.AutoOre do task.wait()
             for i, v in pairs(game:GetService("Workspace").Ore:GetDescendants()) do
@@ -18,18 +19,6 @@ if fireclickdetector and firetouchinterest then
                     local ClickDetector = v:FindFirstChild("ClickDetector")
                     if ClickDetector then
                         fireclickdetector(ClickDetector)
-                    end
-                end
-            end
-        end
-    end)()
-    coroutine.wrap(function()
-        while _G.AutoOre do task.wait()
-            for i, v in pairs(game.Workspace:GetChildren()) do
-                if v:IsA("Tool") then
-                    local HRP = Player.Character:FindFirstChild("HumanoidRootPart")
-                    if HRP then
-                        firetouchinterest(HRP, v.Handle, 0)
                     end
                 end
             end
@@ -49,7 +38,29 @@ else
     end
 end
 coroutine.wrap(function()
+    while _G.AutoCollect do task.wait()
+        for i, v in pairs(game.Workspace:GetChildren()) do
+            if v:IsA("Tool") then
+                local HRP = Player.Character:FindFirstChild("HumanoidRootPart")
+                if HRP then
+                    if firetouchinterest then
+                        firetouchinterest(HRP, v.Handle, 0)
+                    else
+                        HRP.CFrame = v.Handle.CFrame
+                    end
+                end
+            end
+        end
+    end
+end)()
+
+coroutine.wrap(function()
     while _G.AutoSkill do task.wait(_G.SkillDelay)
+        if not Player.Stats.Bottle.Value then
+            local ErrorMessage = Instance.new("Message", game:GetService("CoreGui"))
+            ErrorMessage.Name = "ErrorMessage"
+            ErrorMessage.Text = "You need to have a devil fruit for the autofarm"
+        end
         game:GetService("ReplicatedStorage").SkillRemotes[Player.Stats.Bottle.Value][_G.SlillToUse]:FireServer()
     end
 end)()
