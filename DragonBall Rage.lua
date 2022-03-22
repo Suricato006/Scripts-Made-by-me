@@ -1,3 +1,4 @@
+---@diagnostic disable: undefined-global
 local Player = game.Players.LocalPlayer
 local RunService = game:GetService("RunService")
 

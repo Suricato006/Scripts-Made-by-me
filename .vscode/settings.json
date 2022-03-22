@@ -8,6 +8,11 @@
         "isfile",
         "readfile",
         "writefile",
-        "delfile"
+        "delfile",
+        "hookmetamethod",
+        "getnamecallmethod",
+        "checkcaller",
+        "fireclickdetector",
+        "firetouchinterest"
     ]
 }
