@@ -1,4 +1,4 @@
-local Library = loadstring(game:HttpGet("https://pastebin.com/raw/GX28T0pH", true))()
+local Library = loadstring(game:HttpGet("https://pastebin.com/raw/GX28T0pH"))()
 local Main = Library:CreateWindow("Example Window")
 
 Main:AddLabel({text = "Label"})

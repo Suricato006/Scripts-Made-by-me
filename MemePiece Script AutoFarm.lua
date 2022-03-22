@@ -1,10 +1,10 @@
 
-_G.AutoOre = false
-_G.AutoSkill = false
-_G.SlillToUse = "B" -- either "A" or "B" or "C"
-_G.SkillDelay = 0
+_G.AutoOre = _G.AutoOre or false
+_G.AutoSkill = _G.AutoSkill or false
+_G.SlillToUse = _G.SlillToUse or "B" -- either "A" or "B" or "C"
+_G.SkillDelay = _G.SkillDelay or 0.5
 
-_G.AutoFarm = true
+_G.AutoFarm = _G.AutoFarm or true
 
 
 
