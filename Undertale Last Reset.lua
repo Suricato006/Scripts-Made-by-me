@@ -16,10 +16,6 @@ game:GetService("RunService").Heartbeat:Connect(function()
         if InviteGUI then
             InviteGUI.Enabled = false
         end
-    else
-        if InviteGUI then
-            InviteGUI.Enabled = true
-        end
     end
 end)
 
