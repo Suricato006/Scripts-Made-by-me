@@ -132,12 +132,11 @@ end
 
 local HRP = Player.Character:WaitForChild("HumanoidRootPart")
 
-local TrueDestroyed = false
-RunService.Heartbeat:Connect(function()
-    if TrueDestroyed then return end
+local TrueConnection = nil
+TrueConnection = RunService.Heartbeat:Connect(function()
     local a = Player.Character:FindFirstChild("True")
     if a then
-        TrueDestroyed = true
+        TrueConnection:Disconnect()
         a:Destroy()
     end
 end)
