@@ -1,5 +1,5 @@
-_G.AutoFarm = true
-_G.MonsterName = "Weak Dust Sans"
+_G.AutoFarm = _G.AutoFarm or true
+_G.MonsterName = _G.MonsterName or "Weak Dust Sans"
 
 local Player = game.Players.LocalPlayer
 local function Punch()
