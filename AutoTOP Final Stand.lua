@@ -224,11 +224,20 @@ elseif (game.PlaceId == 535527772) then
             local EHRP = Enemy:FindFirstChild("HumanoidRootPart")
             local Jiren = (Enemy.Name == "Jiren")
             local JirenPos = EHRP.CFrame
-            if EHum and EHRP then
+            if EHum then
                 if (EHum.Health > 0) then
                     while true do
                         local KiValue = KiStat.Value
                         local KiPercentage = (KiValue * 100 / KiMax)
+                        local EHRP = Enemy:FindFirstChild("HumanoidRootPart")
+                        if Humanoid.Health <= 1 then
+                            repeat
+                                task.wait()
+                            until Humanoid.Health == Humanoid.MaxHealth
+                            local tween = game:GetService("TweenService"):Create(HRP,TweenInfo.new(1,  Enum.EasingStyle.Quad),{CFrame = CFrame.new(100, 100, 100)})
+                            tween:Play()
+                            tween.Completed:Wait()
+                        end
                         if (Player.Character.ExpGain.Value == 1) and (not Player.Character.Head:FindFirstChild("Ui1")) then
                             if Android then
                                 if (KiPercentage <= 70) then
@@ -288,7 +297,7 @@ elseif (game.PlaceId == 535527772) then
                             GodForm = true
                         end
                         local EnemyHealth = math.floor(Enemy.Humanoid.Health)
-                        if EnemyHealth == 0 then
+                        if (EnemyHealth == 0) or not EHRP then
                             break
                         end
                         Player.Backpack.ServerTraits.EatSenzu:FireServer(true)

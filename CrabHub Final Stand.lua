@@ -41,10 +41,10 @@ end
 local Library = loadstring(game:HttpGet("https://pastebin.com/raw/GX28T0pH", true))()
 local Main = Library:CreateWindow("CrabHub")
 local Utilities = Main:AddFolder("Utilities")
-local AutoFarmFolder = Main:AddFolder("AutoFarm")
+local Teleport = Main:AddFolder("Teleport")
 
 local Names = {"Action", "Attacking", "Using", "hyper", "Hyper", "heavy", "KiBlasted", "Tele", "tele", "Killed", "Slow", "Blocked", "MoveStart", "NotHardBack"}
-local NoSlowToggle = Utilities:AddToggle({text = "No Slow", state = _G.CrabHub.NoSlow, callback = function(bool)
+Utilities:AddToggle({text = "No Slow", state = _G.CrabHub.NoSlow, callback = function(bool)
     _G.CrabHub.NoSlow = bool
     while _G.CrabHub.NoSlow do task.wait()
         if Player.Character:FindFirstChild("HumanoidRootPart") then
@@ -70,96 +70,64 @@ Utilities:AddToggle({text = "Throw Stuck", state = _G.CrabHub.ThrowStuck, callba
         end
     end
 end})
-local Moves = {
-    "Deadly Dance",
-    "Anger Rush",
-    "Meteor Crash",
-    "TS Molotov",
-    "Flash Skewer",
-    "Vital Strike",
-    "Demon Flash",
-    "Wolf Fang Fist",
-    "Neo Wolf Fang Fist",
-    "Strong Kick"
-}
-local function UseMove(Move)
-    Move.Parent = Player.Character
-    task.wait()
-    Move:Activate()
-    task.wait()
-    Move:Deactivate()
-    Move.Parent = Player.Backpack
-end
-local function Pugno()
-    Player.Backpack.ServerTraits.Input:FireServer({"m2"}, Player.Character.HumanoidRootPart.CFrame)
-end
-local function FindNpc()
-    for i, v in pairs(workspace.Live:GetChildren()) do
-        if string.find(v.Name, _G.CrabHub.NpcToFarm) and (v.Humanoid.Health > 0) then
-            return v
+
+Utilities:AddToggle({text = "GodMode", state = _G.CrabHub.GodMode, callback = function(bool)
+    _G.CrabHub.GodMode = bool
+    while _G.CrabHub.GodMode do task.wait()
+        local Animator = Player.Character:FindFirstChild("Animator", true)
+        if Animator then
+            local Parent = Animator.Parent
+            local Animator2 = Animator:Clone()
+            Animator2.Name = "Animator2"
+            Animator:Destroy()
+            task.wait()
+            Animator2.Parent = Parent
         end
     end
-    return nil
-end
+end})
 
-AutoFarmFolder:AddToggle({text = "AutoFarm", state = _G.CrabHub.AutoFarm, callback = function(bool)
-    _G.CrabHub.AutoFarm = bool
-    while _G.CrabHub.AutoFarm do
-        local HRP = Player.Character:FindFirstChild("HumanoidRootPart")
-        local KiStat = Player.Character:FindFirstChild("Ki")
-        if HRP and KiStat then
-            local Npc = FindNpc()
-            if Npc then
-                while _G.CrabHub.AutoFarm do
-                    if (Npc.Humanoid.Health > 0) then
-                        if ((HRP.Position - Npc.HumanoidRootPart.Position).magnitude <= 900) then
-                            HRP.CFrame = CFrame.new(Npc.HumanoidRootPart.Position - Npc.HumanoidRootPart.CFrame.LookVector, Npc.HumanoidRootPart.Position)
-                            if _G.CrabHub.UseMoves then
-                                if (KiStat.Value > 32) then
-                                    for i, v in pairs(Player.Backpack:GetChildren()) do
-                                        if table.find(Moves, v.Name) then
-                                            UseMove(v)
-                                        end
-                                    end
-                                else
-                                    Pugno()
-                                    task.wait()
-                                end
-                            else
-                                Pugno()
-                                task.wait()
-                            end
-                        else
-                            local tween = game:GetService("TweenService"):Create(HRP, TweenInfo.new(1), {CFrame = Npc.HumanoidRootPart.CFrame})
-                            tween:Play()
-                            while (tween.PlaybackState == Enum.PlaybackState.Playing) do task.wait()
-                                if ((HRP.Position - Npc.HumanoidRootPart.Position).magnitude <= 500) then
-                                    tween:Cancel()
-                                    break
-                                end
-                            end
-                        end
-                    else
-                        break
-                    end
+Utilities:AddToggle({text = "Smol", state = _G.CrabHub.Smol, callback = function(bool)
+    _G.CrabHub.Smol = bool
+    while _G.CrabHub.Smol do task.wait()
+        local Hum = Player.Character:FindFirstChild("Humanoid")
+        if Hum then
+            for i, v in pairs(Hum:GetChildren()) do
+                if v:IsA("NumberValue") then
+                    v:Destroy()
                 end
             end
         end
-        task.wait()
     end
 end})
 
-local NpcToFarmBox = AutoFarmFolder:AddBox({text = "NpcToFarm", value = _G.CrabHub.NpcToFarm or "", callback = function(typed)
-    _G.CrabHub.NpcToFarm = typed
+Teleport:AddBox({text = "Player To Teleport", value = _G.CrabHub.Teleport or "", callback = function(typed)
+    _G.CrabHub.Teleport = typed
 end})
 
-AutoFarmFolder:AddToggle({text = "UseMoves", state = _G.CrabHub.UseMoves, callback = function(bool)
-    _G.CrabHub.UseMoves = bool
+Teleport:AddBind({text = "TeleportBind", key = Enum.KeyCode.KeypadPlus, hold = false, callback = function()
+    local Hrp = Player.Character:FindFirstChild("HumanoidRootPart")
+    local PlayerToTp = game.Workspace.Live[_G.CrabHub.Teleport]
+    if not PlayerToTp then
+        for i, v in pairs(game.Workspace.Live:GetChildren()) do
+            if string.find(v.Name, _G.CrabHub.Teleport) then
+                PlayerToTp = v
+                break
+            end
+        end
+    end
+    if PlayerToTp then
+        local TpHrp = PlayerToTp:FindFirstChild("HumanoidRootPart")
+        if TpHrp and Hrp then
+            game:GetService("TweenService"):Create(Hrp,TweenInfo.new(_G.CrabHub.TeleportTime or 1,  Enum.EasingStyle.Quad),{CFrame = TpHrp.CFrame}):Play()
+        end
+    end
 end})
 
-AutoFarmFolder:AddButton({text = "Load Suggested Farm", callback = function()
-    NpcToFarmBox:SetValue("Evil")
+Teleport:AddSlider({text = "Time it takes", min = 1, max = 10, dual = false, value = 1, callback = function(number)
+    _G.CrabHub.TeleportTime = number
 end})
+
+
 
 if syn then
     Main:AddButton({text = "Delete Configuration", callback = function()
