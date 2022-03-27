@@ -1,22 +1,29 @@
 local DefaultSettings = {
+    Anchored = true,
     DoubleExpFreeze = true,
     TimeToWaitForForm = 3.9,
     Form = "h",
     LowGraphics = true,
     AutoExecuteTheScript = true, --Synapse only
+    ResetWhenLowKi = true,
     Moves = {
-        "Deadly Dance",
-        "Anger Rush",
-        "Meteor Crash",
-        "TS Molotov",
-        "Flash Skewer",
-        "Vital Strike",
-        "Demon Flash",
-        "Wolf Fang Fist",
-        "Neo Wolf Fang Fist",
-        "Strong Kick"
+        "Neo Wolf Fang Fist";
+        "Final Blow";
+        "Wolf Fang Fist";
+        "Anger Rush";
+        "Flash Strike";
+        "Trash?";
+        "Flash Skewer";
+        "Meteor Crash";
+        "Deadly Dance";
+        "Trash???";
+        "TS Molotov";
+        "Sweep Kick";
+        "God Slicer";
+        }
     }
-}
+
+_G.TOPSettings = DefaultSettings
 
 local AutoExec = false
 if not game:IsLoaded() then
@@ -153,7 +160,7 @@ end
 local KiStat = Player.Character:WaitForChild("Ki")
 local KiMax = KiStat.Value
 
-local Insults = {"Damn bro, Z-Shuko scripts roblox in python bro", "Sypse dont steal my jokes", "Chris is a cool guy", "Cake autov is sooo bad :kekw:", "DiscoServer: .gg/5NYqSVwH9Q", "Nevertrack, what a clown", "Damn bro, Crab looks so fine, DRIP"}
+local Insults = {"Damn bro, Z-Shuko scripts roblox in python bro", "Sypse gets clipped in brawlhalla", "Chris is a cool guy", "Cake autobroly is sooo bad :kekw:", "DiscoServer: .gg/5NYqSVwH9Q", "Nevertrack, what a clown", "Damn bro, Crab looks so fine, DRIP", "Black is a skid ;)"}
 
 coroutine.wrap(function()
     while true do
@@ -169,7 +176,7 @@ RunService.Heartbeat:Connect(function()
     end
 end)
 
-local MoveNames = {"Action", "Attacking", "Using", "hyper", "Hyper", "heavy", "KiBlasted", "Tele", "tele", "Killed", "Slow", "Blocked", "MoveStart", "NotHardBack"}
+local MoveNames = {"Action", "Attacking", "Using", "hyper", "Hyper", "heavy", "KiBlasted", "Tele", "tele", "Killed", "Slow", "Blocked", "MoveStart", "NotHardBack", "SuperAction"}
 RunService.Heartbeat:Connect(function()
     for i, v in pairs(MoveNames) do
         local a = Player.Character:FindFirstChild(v)
@@ -182,13 +189,16 @@ end)
 
 
 if (game.PlaceId == 536102540) then
-    local Tile = game.Workspace:FindFirstChild("Tile", true)
-    if not (Tile.Color == Color3.new(1, 1, 0)) then
-        Tile.Parent:Destroy()
-        Tile = game.Workspace:FindFirstChild("Tile", true)
+    local Humanoid = Player.Character.Humanoid
+    while not (Humanoid.Sit) do task.wait()
+        local Tile = game.Workspace:FindFirstChild("Tile", true)
+        if not (Tile.Color == Color3.new(1, 1, 0)) then
+            Tile.Parent:Destroy()
+            Tile = game.Workspace:FindFirstChild("Tile", true)
+        end
+        Tile.Anchored = false
+        Tile.CFrame = Player.Character.HumanoidRootPart.CFrame
     end
-    Tile.Anchored = false
-    Tile.CFrame = Player.Character.HumanoidRootPart.CFrame
 elseif (game.PlaceId == 535527772) then
     local function Pugno()
         Player.Backpack.ServerTraits.Input:FireServer({"m2"}, HRP.CFrame)
@@ -204,65 +214,72 @@ elseif (game.PlaceId == 535527772) then
     local Android = (Player.Character:WaitForChild("Race").Value == "Android")
     local TransformEvent = Player.Backpack.ServerTraits.Transform
     local InputEvent = Player:FindFirstChild("Input", true)
+    local GodForm = false
     local Humanoid = Player.Character.Humanoid
     local MaxHealth = Humanoid.MaxHealth
-    local GodForm = false
 
     while true do
         for i, Enemy in pairs(game.Workspace.Live:GetChildren()) do
             local EHum = Enemy:FindFirstChild("Humanoid")
             local EHRP = Enemy:FindFirstChild("HumanoidRootPart")
+            local Jiren = (Enemy.Name == "Jiren")
+            local JirenPos = EHRP.CFrame
             if EHum and EHRP then
                 if (EHum.Health > 0) then
-                    while (not Enemy:FindFirstChild("MoveStart")) do
-                        HRP.CFrame = CFrame.new(Enemy.HumanoidRootPart.Position - Enemy.HumanoidRootPart.CFrame.LookVector/2, Enemy.HumanoidRootPart.Position)
-                        local Throw = Player.Backpack:FindFirstChild("Dragon Crush") or Player.Backpack:FindFirstChild("Dragon Throw") or Player.Backpack:WaitForChild("Dragon Crush", 5) or Player.Backpack:WaitForChild("Dragon Throw", 5)
-                        if not Throw then
-                            local ThrowMessage = Instance.new("Message", game:GetService("CoreGui"))
-                            ThrowMessage.Text = "You need to have Dragon Crush or Dragon Throw, rejoin and buy it. If this is an error then just rejoin"
-                            return
-                        end
-                        if Throw then
-                            Throw.Parent = Player.Character
-                            local b = Throw:FindFirstChild("Flip", true)
-                            if b then
-                                b:Destroy()
-                            end
-                            task.wait()
-                            Throw:Activate()
-                            task.wait()
-                            Throw:Deactivate()
-                            Throw.Parent = Player.Backpack
-                        end
-                        task.wait()
-                    end
                     while true do
                         local KiValue = KiStat.Value
                         local KiPercentage = (KiValue * 100 / KiMax)
-                        if (Player.Character.ExpGain.Value == 1) then
+                        if (Player.Character.ExpGain.Value == 1) and (not Player.Character.Head:FindFirstChild("Ui1")) then
                             if Android then
                                 if (KiPercentage <= 70) then
-                                    task.wait(0.2)
                                     TransformEvent:FireServer("g")
                                 end
                             else
                                 if InputEvent and TransformEvent then
                                     InputEvent:FireServer({[1] = "x"},CFrame.new(0,0,0),nil,false)
-                                    task.wait(_G.BrolySettings.TimeToWaitForForm)
-                                    TransformEvent:FireServer(_G.BrolySettings.Form)
+                                    task.wait(_G.TOPSettings.TimeToWaitForForm)
+                                    TransformEvent:FireServer(_G.TOPSettings.Form)
                                     task.wait(1)
                                     InputEvent:FireServer({[1] = "xoff"},CFrame.new(0,0,0),nil,false)
                                 end
                             end
                         end
+                        if Jiren then
+                            while (not Enemy:FindFirstChild("MoveStart")) do
+                                HRP.CFrame = CFrame.new(Enemy.HumanoidRootPart.Position - Enemy.HumanoidRootPart.CFrame.LookVector/2, Enemy.HumanoidRootPart.Position)
+                                local Throw = Player.Backpack:FindFirstChild("Dragon Crush") or Player.Backpack:FindFirstChild("Dragon Throw")
+                                if not Throw then
+                                    local ThrowMessage = Instance.new("Message", game:GetService("CoreGui"))
+                                    ThrowMessage.Text = "You need to have Dragon Crush or Dragon Throw, rejoin and buy it. If this is an error then just rejoin"
+                                    return
+                                end
+                                if Throw then
+                                    Throw.Parent = Player.Character
+                                    local b = Throw:FindFirstChild("Flip", true)
+                                    if b then
+                                        b:Destroy()
+                                    end
+                                    task.wait()
+                                    Throw:Activate()
+                                    task.wait()
+                                    Throw:Deactivate()
+                                    Throw.Parent = Player.Backpack
+                                end
+                                task.wait()
+                            end
+                        end
                         if KiValue > 32 then
                             for i, v in pairs(Player.Backpack:GetChildren()) do
-                                if table.find(_G.BrolySettings.Moves, v.Name) then
+                                if table.find(_G.TOPSettings.Moves, v.Name) then
                                     UseMove(v)
                                 end
                             end
                         else
-                            Pugno()
+                            if not _G.TOPSettings.ResetWhenLowKi then
+                                Pugno()
+                            else
+                                game:GetService("ReplicatedStorage").ResetChar:FireServer()
+                            end
                             task.wait()
                         end
                         if (KiPercentage <= 5) and ((Humanoid.Health * 100 / MaxHealth) < 15) and not GodForm then
@@ -275,11 +292,11 @@ elseif (game.PlaceId == 535527772) then
                             break
                         end
                         Player.Backpack.ServerTraits.EatSenzu:FireServer(true)
-                        if _G.BrolySettings.Anchored then
+                        if Jiren then
                             Player.Character.HumanoidRootPart.Anchored = true
-                            HRP.CFrame = BrolyPosition
+                            HRP.CFrame = JirenPos
                         else
-                            HRP.CFrame = CFrame.new(Broly.HumanoidRootPart.Position - Broly.HumanoidRootPart.CFrame.LookVector/2, Broly.HumanoidRootPart.Position)
+                            HRP.CFrame = CFrame.new(Enemy.HumanoidRootPart.Position - Enemy.HumanoidRootPart.CFrame.LookVector/2, Enemy.HumanoidRootPart.Position)
                         end
                     end
                 end

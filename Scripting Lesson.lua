@@ -38,17 +38,3 @@ end
 while AutoFarm == true do wait(0.5)
     print("Hit")
 end
-
--- AutoFarm for Anime Clickers
-
-_G.Ciao = true
-
-while _G.Ciao == true do wait()
-    local args = {
-        [1] = false,
-        [2] = "Clicker!"
-    }
-    game:GetService("ReplicatedStorage").Remotes.ClickRemote:FireServer(unpack(args))
-end
-
---Tmrw: For, CFrame

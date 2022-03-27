@@ -3,7 +3,7 @@ local Player = game.Players.LocalPlayer
 
 while not Player.Character do task.wait() end
 
-game:GetService("RunService").Heartbeat:Connect(function()
+while true do
     local TimerLabel = Player.PlayerGui:WaitForChild("HUD"):FindFirstChild("Timer", true)
     if TimerLabel then
         if TimerLabel.Visible and not (TimerLabel.Text == "") then
@@ -13,4 +13,5 @@ game:GetService("RunService").Heartbeat:Connect(function()
             end
         end
     end
-end)
+    task.wait()
+end
