@@ -42,7 +42,7 @@ local Library = loadstring(game:HttpGet("https://pastebin.com/raw/GX28T0pH", tru
 local Main = Library:CreateWindow("CrabHub")
 local Utilities = Main:AddFolder("Utilities")
 local Teleport = Main:AddFolder("Teleport")
-local KiTrack = Main:AddFolder("KiTracker")
+local Aimbot = Main:AddFolder("Aimbot")
 
 local Names = {"Action", "Attacking", "Using", "hyper", "Hyper", "heavy", "KiBlasted", "Tele", "tele", "Killed", "Slow", "Blocked", "MoveStart", "NotHardBack"}
 Utilities:AddToggle({text = "No Slow", state = _G.CrabHub.NoSlow, callback = function(bool)
@@ -72,18 +72,15 @@ Utilities:AddToggle({text = "Throw Stuck", state = _G.CrabHub.ThrowStuck, callba
     end
 end})
 
-Utilities:AddToggle({text = "GodMode", state = _G.CrabHub.GodMode, callback = function(bool)
-    _G.CrabHub.GodMode = bool
-    while _G.CrabHub.GodMode do task.wait()
-        local Animator = Player.Character:FindFirstChild("Animator", true)
-        if Animator then
-            local Parent = Animator.Parent
-            local Animator2 = Animator:Clone()
-            Animator2.Name = "Animator2"
-            Animator:Destroy()
-            task.wait()
-            Animator2.Parent = Parent
-        end
+Utilities:AddButton({text = "GodMode (breaks stuff)", callback = function()
+    local Animator = Player.Character:FindFirstChild("Animator", true)
+    if Animator then
+        local Parent = Animator.Parent
+        local Animator2 = Animator:Clone()
+        Animator2.Name = "Animator2"
+        Animator:Destroy()
+        task.wait()
+        Animator2.Parent = Parent
     end
 end})
 
@@ -188,9 +185,9 @@ local function TableHit(Folder)
     end
 end
 
-KiTrack:AddToggle({text = "Ki tracking", state = _G.Toggle, callback = function(bool)
-    _G.Toggle = bool
-    while _G.Toggle do task.wait()
+Aimbot:AddToggle({text = "Ki attacks Aimbot", state = _G.CrabHub.Aimbot, callback = function(bool)
+    _G.CrabHub.Aimbot = bool
+    while _G.CrabHub.Aimbot do task.wait()
         TableHit(game.Players.LocalPlayer.Character)
         TableHit(game.Workspace.Effects)
         TableHit(game.Workspace)
@@ -198,8 +195,8 @@ KiTrack:AddToggle({text = "Ki tracking", state = _G.Toggle, callback = function(
     end
 end})
 
-Main:AddBox({text = "Npc or Player Name", value = "", callback = function(typed)
-    _G.TrackerName = typed
+Aimbot:AddBox({text = "Npc or Player Name", value = _G.CrabHub.TrackedName or "", callback = function(typed)
+    _G.CrabHub.TrackedName = typed
 end})
 
 
