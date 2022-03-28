@@ -13,7 +13,7 @@ local DefaultSettings = {}
 local DeleteConfig = false
 local FileName = "Crab.hub"
 
-local OwnScriptUrl = ""
+local OwnScriptUrl = "https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/CrabHub%20Final%20Stand.lua"
 if syn then
     Player.OnTeleport:Connect(function(State)
         if State == Enum.TeleportState.Started and not (OwnScriptUrl == "") then
@@ -42,6 +42,7 @@ local Library = loadstring(game:HttpGet("https://pastebin.com/raw/GX28T0pH", tru
 local Main = Library:CreateWindow("CrabHub")
 local Utilities = Main:AddFolder("Utilities")
 local Teleport = Main:AddFolder("Teleport")
+local KiTrack = Main:AddFolder("KiTracker")
 
 local Names = {"Action", "Attacking", "Using", "hyper", "Hyper", "heavy", "KiBlasted", "Tele", "tele", "Killed", "Slow", "Blocked", "MoveStart", "NotHardBack"}
 Utilities:AddToggle({text = "No Slow", state = _G.CrabHub.NoSlow, callback = function(bool)
@@ -100,31 +101,105 @@ Utilities:AddToggle({text = "Smol", state = _G.CrabHub.Smol, callback = function
     end
 end})
 
-Teleport:AddBox({text = "Player To Teleport", value = _G.CrabHub.Teleport or "", callback = function(typed)
-    _G.CrabHub.Teleport = typed
+Utilities:AddToggle({text = "Hide Level", state = _G.CrabHub.HideLevel, callback = function(bool)
+    _G.CrabHub.HideLevel = bool
+    while _G.CrabHub.HideLevel do task.wait()
+        local LevelLabel = Player.Character:FindFirstChildWhichIsA("Model")
+        if LevelLabel then
+            LevelLabel:Destroy()
+        end
+    end
 end})
 
-Teleport:AddBind({text = "TeleportBind", key = Enum.KeyCode.KeypadPlus, hold = false, callback = function()
-    local Hrp = Player.Character:FindFirstChild("HumanoidRootPart")
-    local PlayerToTp = game.Workspace.Live[_G.CrabHub.Teleport]
-    if not PlayerToTp then
-        for i, v in pairs(game.Workspace.Live:GetChildren()) do
-            if string.find(v.Name, _G.CrabHub.Teleport) then
-                PlayerToTp = v
-                break
+Utilities:AddToggle({text = "Hide Wings/Halo", state = _G.CrabHub.HideWings, callback = function(bool)
+    _G.CrabHub.HideWings = bool
+    while _G.CrabHub.HideWings do task.wait()
+        local Wings = Player.Character:FindFirstChild("RebirthWings") or Player.Character:FindFirstChild("RealHalo")
+        if Wings then
+            Wings:Destroy()
+        end
+    end
+end})
+
+Utilities:AddToggle({text = "AntiKnockBack", state = _G.CrabHub.AntiKnockBack, callback = function(bool)
+    _G.CrabHub.AntiKnockBack = bool
+    while _G.CrabHub.AntiKnockBack do task.wait()
+        for i, v in pairs(Names) do
+            local a = Player.Character:FindFirstChild(v, true)
+            if a then
+                a:Destroy()
             end
         end
     end
-    if PlayerToTp then
-        local TpHrp = PlayerToTp:FindFirstChild("HumanoidRootPart")
-        if TpHrp and Hrp then
-            game:GetService("TweenService"):Create(Hrp,TweenInfo.new(_G.CrabHub.TeleportTime or 1,  Enum.EasingStyle.Quad),{CFrame = TpHrp.CFrame}):Play()
+end})
+
+Teleport:AddToggle({text = "Teleport", state = _G.CrabHub.Teleport, callback = function(bool)
+    _G.CrabHub.Teleport = bool
+end})
+
+Teleport:AddBox({text = "Player or Npc To Teleport", value = _G.CrabHub.TeleportPlayerName or "", callback = function(typed)
+    _G.CrabHub.TeleportPlayerName = typed
+end})
+
+Teleport:AddBind({text = "TeleportBind", key = Enum.KeyCode.KeypadPlus, hold = false, callback = function()
+    if _G.CrabHub.Teleport then
+        local Hrp = Player.Character:FindFirstChild("HumanoidRootPart")
+        local PlayerToTp = game.Workspace.Live:FindFirstChild(_G.CrabHub.TeleportPlayerName)
+        if not PlayerToTp then
+            for i, v in pairs(game.Workspace.Live:GetChildren()) do
+                if string.find(v.Name, _G.CrabHub.TeleportPlayerName) then
+                    PlayerToTp = v
+                    break
+                end
+            end
+        end
+        if PlayerToTp then
+            local TpHrp = PlayerToTp:FindFirstChild("HumanoidRootPart")
+            if TpHrp and Hrp then
+                game:GetService("TweenService"):Create(Hrp,TweenInfo.new(_G.CrabHub.TeleportTime or 1,  Enum.EasingStyle.Quad),{CFrame = TpHrp.CFrame}):Play()
+            end
         end
     end
 end})
 
 Teleport:AddSlider({text = "Time it takes", min = 1, max = 10, dual = false, value = 1, callback = function(number)
     _G.CrabHub.TeleportTime = number
+end})
+
+local function Hit(Part)
+    for i, v in pairs(game.Workspace.Live:GetChildren()) do
+        if string.find(v.Name:lower(), _G.TrackerName:lower()) then
+            local Hrp = v:FindFirstChild("HumanoidRootPart")
+            local Hum = v:FindFirstChild("Humanoid")
+            if Hrp and Hum then
+                if (Hum.Health > 0) then
+                    Part.CFrame = Hrp.CFrame
+                end
+            end
+        end
+    end
+end
+
+local function TableHit(Folder)
+    for i, v in pairs(Folder:GetChildren()) do
+        if v:FindFirstChild("Ki") and v:FindFirstChild("Mesh") then
+            Hit(v)
+        end
+    end
+end
+
+KiTrack:AddToggle({text = "Ki tracking", state = _G.Toggle, callback = function(bool)
+    _G.Toggle = bool
+    while _G.Toggle do task.wait()
+        TableHit(game.Players.LocalPlayer.Character)
+        TableHit(game.Workspace.Effects)
+        TableHit(game.Workspace)
+        TableHit(game.Players.LocalPlayer.Character.Humanoid)
+    end
+end})
+
+Main:AddBox({text = "Npc or Player Name", value = "", callback = function(typed)
+    _G.TrackerName = typed
 end})
 
 

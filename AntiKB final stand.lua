@@ -1,24 +1,11 @@
-local function ChildCheck(String1, ...)
-    local a = game.Players.LocalPlayer.Character:FindFirstChild(String1)
-    if a then
-        local c = {...}
-        for i, v in pairs(c) do
-            local z = a:FindFirstChild(v)
-            if z then
-                z:Destroy()
-            end
+local Names = {"BodyVelocity", "KnockBacked", "NotHardBack", "creator", "Throw", "Flip"}
+
+_G.AntiKB = true
+while _G.AntiKB do task.wait()
+    for i, v in pairs(Names) do
+        local a = game.Players.LocalPlayer.Character:FindFirstChild(v, true)
+        if a then
+            a:Destroy()
         end
     end
 end
-
-_G.AntiKB = true
-
-game:GetService("RunService").Heartbeat:Connect(function()
-    if _G.AntiKB then
-        ChildCheck("LowerTorso", "BodyVelocity", "KnockBacked")
-        ChildCheck("Head", "KnockBacked", "NotHardBack")
-        ChildCheck("Humanoid", "creator")
-        ChildCheck("HumanoidRootPart", "Throw", "Flip")
-        ChildCheck("LeftHand", "BodyVelocity")
-    end
-end)
