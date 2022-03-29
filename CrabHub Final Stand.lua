@@ -87,15 +87,12 @@ Utilities:AddToggle({text = "GodMode", state = _G.CrabHub.GodMode, callback = fu
     end
 end})
 
-Utilities:AddToggle({text = "Smol", state = _G.CrabHub.Smol, callback = function(bool)
-    _G.CrabHub.Smol = bool
-    while _G.CrabHub.Smol do task.wait()
-        local Hum = Player.Character:FindFirstChild("Humanoid")
-        if Hum then
-            for i, v in pairs(Hum:GetChildren()) do
-                if v:IsA("NumberValue") then
-                    v:Destroy()
-                end
+Utilities:AddButton({text = "Smol", callback = function()
+    local Hum = Player.Character:FindFirstChild("Humanoid")
+    if Hum then
+        for i, v in pairs(Hum:GetChildren()) do
+            if v:IsA("NumberValue") then
+                v:Destroy()
             end
         end
     end
