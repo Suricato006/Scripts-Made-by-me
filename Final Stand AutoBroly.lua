@@ -240,6 +240,23 @@ elseif (game.PlaceId == 2050207304) then
         ReturnToEarth()
     end
 
+    local Android = (Player.Character:WaitForChild("Race").Value == "Android")
+    local TransformEvent = Player.Backpack.ServerTraits.Transform
+    local InputEvent = Player:FindFirstChild("Input", true)
+    local Humanoid = Player.Character.Humanoid
+    local MaxHealth = Humanoid.MaxHealth
+    local GodForm = false
+
+    if not Android then
+        if InputEvent and TransformEvent then
+            InputEvent:FireServer({[1] = "x"},CFrame.new(0,0,0),nil,false)
+            task.wait(_G.BrolySettings.TimeToWaitForForm)
+            TransformEvent:FireServer(_G.BrolySettings.Form)
+            task.wait(1)
+            InputEvent:FireServer({[1] = "xoff"},CFrame.new(0,0,0),nil,false)
+        end
+    end
+
     while (not Broly:FindFirstChild("MoveStart")) do
         HRP.CFrame = CFrame.new(Broly.HumanoidRootPart.Position - Broly.HumanoidRootPart.CFrame.LookVector/2, Broly.HumanoidRootPart.Position)
         local Throw = Player.Backpack:FindFirstChild("Dragon Crush") or Player.Backpack:FindFirstChild("Dragon Throw") or Player.Backpack:WaitForChild("Dragon Crush", 5) or Player.Backpack:WaitForChild("Dragon Throw", 5)
@@ -267,12 +284,6 @@ elseif (game.PlaceId == 2050207304) then
         Player.Backpack.ServerTraits.Input:FireServer({"m2"}, HRP.CFrame)
     end
 
-    local Android = (Player.Character:WaitForChild("Race").Value == "Android")
-    local TransformEvent = Player.Backpack.ServerTraits.Transform
-    local InputEvent = Player:FindFirstChild("Input", true)
-    local Humanoid = Player.Character.Humanoid
-    local MaxHealth = Humanoid.MaxHealth
-    local GodForm = false
 
     local function UseMove(Move)
         Move.Parent = Player.Character
@@ -293,14 +304,6 @@ elseif (game.PlaceId == 2050207304) then
                 if (KiPercentage <= 70) then
                     task.wait(0.2)
                     TransformEvent:FireServer("g")
-                end
-            else
-                if InputEvent and TransformEvent then
-                    InputEvent:FireServer({[1] = "x"},CFrame.new(0,0,0),nil,false)
-                    task.wait(_G.BrolySettings.TimeToWaitForForm)
-                    TransformEvent:FireServer(_G.BrolySettings.Form)
-                    task.wait(1)
-                    InputEvent:FireServer({[1] = "xoff"},CFrame.new(0,0,0),nil,false)
                 end
             end
         end

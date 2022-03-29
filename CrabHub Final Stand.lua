@@ -43,9 +43,10 @@ local Main = Library:CreateWindow("CrabHub")
 local Utilities = Main:AddFolder("Utilities")
 local Teleport = Main:AddFolder("Teleport")
 local Aimbot = Main:AddFolder("Aimbot")
+local TeleSpeed = Main:AddFolder("Telespeed")
 
-local Names = {"Action", "Attacking", "Using", "hyper", "Hyper", "heavy", "KiBlasted", "Tele", "tele", "Killed", "Slow", "Blocked", "MoveStart", "NotHardBack"}
 Utilities:AddToggle({text = "No Slow", state = _G.CrabHub.NoSlow, callback = function(bool)
+    local Names = {"Action", "Attacking", "Using", "hyper", "Hyper", "heavy", "KiBlasted", "Tele", "tele", "Killed", "Slow", "Blocked", "MoveStart", "NotHardBack"}
     _G.CrabHub.NoSlow = bool
     while _G.CrabHub.NoSlow do task.wait()
         if Player.Character:FindFirstChild("HumanoidRootPart") then
@@ -127,6 +128,7 @@ Utilities:AddToggle({text = "Hide Wings/Halo", state = _G.CrabHub.HideWings, cal
 end})
 
 Utilities:AddToggle({text = "AntiKnockBack", state = _G.CrabHub.AntiKnockBack, callback = function(bool)
+    local Names = {"BodyVelocity", "KnockBacked", "NotHardBack", "creator", "Throw", "Flip"}
     _G.CrabHub.AntiKnockBack = bool
     while _G.CrabHub.AntiKnockBack do task.wait()
         for i, v in pairs(Names) do
@@ -173,7 +175,7 @@ end})
 
 local function Hit(Part)
     for i, v in pairs(game.Workspace.Live:GetChildren()) do
-        if string.find(v.Name:lower(), _G.TrackerName:lower()) then
+        if string.find(v.Name:lower(), _G.CrabHub.TrackedName:lower()) then
             local Hrp = v:FindFirstChild("HumanoidRootPart")
             local Hum = v:FindFirstChild("Humanoid")
             if Hrp and Hum then
@@ -205,6 +207,17 @@ end})
 
 Aimbot:AddBox({text = "Npc or Player Name", value = _G.CrabHub.TrackedName or "", callback = function(typed)
     _G.CrabHub.TrackedName = typed
+end})
+
+TeleSpeed:AddToggle({text = "Telespeed", state = _G.CrabHub.Telespeed, callback = function(bool)
+    _G.CrabHub.Telespeed = bool
+end})
+
+TeleSpeed:AddBind({text = "TelespeedBind", key = Enum.KeyCode.V, hold = true, callback = function()
+    local Hrp = Player.Character:FindFirstChild("HumanoidRootPart")
+    if Hrp then
+        Hrp:ApplyImpulse(Hrp.CFrame.LookVector*30000)
+    end
 end})
 
 if syn then
