@@ -72,15 +72,18 @@ Utilities:AddToggle({text = "Throw Stuck", state = _G.CrabHub.ThrowStuck, callba
     end
 end})
 
-Utilities:AddButton({text = "GodMode (breaks stuff)", callback = function()
-    local Animator = Player.Character:FindFirstChild("Animator", true)
-    if Animator then
-        local Parent = Animator.Parent
-        local Animator2 = Animator:Clone()
-        Animator2.Name = "Animator2"
-        Animator:Destroy()
-        task.wait()
-        Animator2.Parent = Parent
+Utilities:AddToggle({text = "GodMode", state = _G.CrabHub.GodMode, callback = function(bool)
+    _G.CrabHub.GodMode = bool
+    while _G.CrabHub.GodMode do task.wait()
+        local Animator = Player.Character:FindFirstChild("Animator", true)
+        if Animator then
+            local Parent = Animator.Parent
+            local Animator2 = Animator:Clone()
+            Animator2.Name = "Animator2"
+            Animator:Destroy()
+            task.wait()
+            Animator2.Parent = Parent
+        end
     end
 end})
 

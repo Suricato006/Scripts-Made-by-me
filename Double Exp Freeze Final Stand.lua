@@ -9,7 +9,7 @@ while true do
         if TimerLabel.Visible and not (TimerLabel.Text == "") then
             local a = Player.Character:FindFirstChild("True")
             if a then
-                a.Value = false
+                a:Destroy()
             end
         end
     end
