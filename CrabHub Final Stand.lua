@@ -59,6 +59,11 @@ Utilities:AddToggle({text = "No Slow", state = _G.CrabHub.NoSlow, callback = fun
     end
 end})
 
+local ChatChannelParentFrame = Player.PlayerGui:FindFirstChild("ChatChannelParentFrame")
+if ChatChannelParentFrame then
+    ChatChannelParentFrame.Visible = true
+end
+
 Utilities:AddToggle({text = "Throw Stuck", state = _G.CrabHub.ThrowStuck, callback = function(bool)
     _G.CrabHub.ThrowStuck = bool
     while _G.CrabHub.ThrowStuck do task.wait()
@@ -113,7 +118,10 @@ Utilities:AddToggle({text = "Hide Wings/Halo", state = _G.CrabHub.HideWings, cal
     while _G.CrabHub.HideWings do task.wait()
         local Wings = Player.Character:FindFirstChild("RebirthWings") or Player.Character:FindFirstChild("RealHalo")
         if Wings then
-            Wings:Destroy()
+            local Handle = Wings:FindFirstChild("Handle")
+            if Handle then
+                Handle:Destroy()
+            end
         end
     end
 end})
@@ -198,8 +206,6 @@ end})
 Aimbot:AddBox({text = "Npc or Player Name", value = _G.CrabHub.TrackedName or "", callback = function(typed)
     _G.CrabHub.TrackedName = typed
 end})
-
-
 
 if syn then
     Main:AddButton({text = "Delete Configuration", callback = function()
