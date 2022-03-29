@@ -35,19 +35,20 @@ local RunService = game:GetService("RunService")
 local HttpService = game:GetService("HttpService")
 
 local OwnScriptUrl = "https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/AutoTOP%20Final%20Stand.lua"
-if syn and not (OwnScriptUrl == "") and _G.TOPSettings.AutoExecuteTheScript then
-    Player.OnTeleport:Connect(function(State)
-        if State == Enum.TeleportState.Started then
-            syn.queue_on_teleport(game:HttpGet(OwnScriptUrl))
-        end
-    end)
-
+if syn and not (OwnScriptUrl == "") then
     local FileName = "AutoTop.CRAB"
     if isfile(FileName) then
         _G.TOPSettings = _G.TOPSettings or HttpService:JSONDecode(readfile(FileName))
     end
     local ToEncode = _G.TOPSettings or DefaultSettings
     writefile(FileName, HttpService:JSONEncode(ToEncode))
+    if _G.TOPSettings.AutoExecuteTheScript then
+        Player.OnTeleport:Connect(function(State)
+            if State == Enum.TeleportState.Started then
+                syn.queue_on_teleport(game:HttpGet(OwnScriptUrl))
+            end
+        end)
+    end
 end
 
 _G.TOPSettings = _G.TOPSettings or DefaultSettings
@@ -217,100 +218,106 @@ elseif (game.PlaceId == 535527772) then
     local Humanoid = Player.Character.Humanoid
     local MaxHealth = Humanoid.MaxHealth
 
+    local function FoundEnemy()
+        for i, v in pairs(game.Workspace.Live:GetChildren()) do
+            if not game.Players:FindFirstChild(v.Name) then
+                return v
+            end
+        end
+    end
+
     while true do
-        if game.Workspace.Live:GetChildren()[1] then
-            for i, Enemy in pairs(game.Workspace.Live:GetChildren()) do
-                local EHum = Enemy:FindFirstChild("Humanoid")
-                local EHRP = Enemy:FindFirstChild("HumanoidRootPart")
-                local Jiren = (Enemy.Name == "Jiren")
-                local JirenPos = EHRP.CFrame
-                if EHum then
-                    if (EHum.Health > 0) then
-                        while true do
-                            local KiValue = KiStat.Value
-                            local KiPercentage = (KiValue * 100 / KiMax)
-                            local EHRP = Enemy:FindFirstChild("HumanoidRootPart")
-                            if (KiPercentage <= 5) and ((Humanoid.Health * 100 / MaxHealth) < 15) and not GodForm then
-                                task.wait(0.2)
-                                TransformEvent:FireServer("g")
-                                GodForm = true
-                            end
-                            if KiValue > 32 then
-                                for i, v in pairs(Player.Backpack:GetChildren()) do
-                                    if table.find(_G.TOPSettings.Moves, v.Name) then
-                                        UseMove(v)
-                                    end
-                                end
-                            else
-                                if not _G.TOPSettings.ResetWhenLowKi then
-                                    Pugno()
-                                else
-                                    game:GetService("ReplicatedStorage").ResetChar:FireServer()
-                                end
-                                task.wait()
-                            end
-                            if Humanoid.Health <= 1 then
-                                repeat
-                                    task.wait()
-                                until Humanoid.Health == Humanoid.MaxHealth
-                                local tween = game:GetService("TweenService"):Create(HRP,TweenInfo.new(1,  Enum.EasingStyle.Quad),{CFrame = CFrame.new(100, 100, 100)})
-                                tween:Play()
-                                tween.Completed:Wait()
-                            end
-                            if (Player.Character.ExpGain.Value == 1) and (not Player.Character.Head:FindFirstChild("Ui1")) then
-                                if Android then
-                                    if (KiPercentage <= 70) then
-                                        TransformEvent:FireServer("g")
-                                    end
-                                else
-                                    if InputEvent and TransformEvent then
-                                        InputEvent:FireServer({[1] = "x"},CFrame.new(0,0,0),nil,false)
-                                        task.wait(_G.TOPSettings.TimeToWaitForForm)
-                                        TransformEvent:FireServer(_G.TOPSettings.Form)
-                                        task.wait(1)
-                                        InputEvent:FireServer({[1] = "xoff"},CFrame.new(0,0,0),nil,false)
-                                    end
-                                end
-                            end
-                            if Jiren then
-                                while (not Enemy:FindFirstChild("MoveStart")) do
-                                    HRP.CFrame = CFrame.new(Enemy.HumanoidRootPart.Position - Enemy.HumanoidRootPart.CFrame.LookVector/2, Enemy.HumanoidRootPart.Position)
-                                    local Throw = Player.Backpack:FindFirstChild("Dragon Crush") or Player.Backpack:FindFirstChild("Dragon Throw")
-                                    if not Throw then
-                                        local ThrowMessage = Instance.new("Message", game:GetService("CoreGui"))
-                                        ThrowMessage.Text = "You need to have Dragon Crush or Dragon Throw, rejoin and buy it. If this is an error then just rejoin"
-                                        return
-                                    end
-                                    if Throw then
-                                        Throw.Parent = Player.Character
-                                        local b = Throw:FindFirstChild("Flip", true)
-                                        if b then
-                                            b:Destroy()
-                                        end
-                                        task.wait()
-                                        Throw:Activate()
-                                        task.wait()
-                                        Throw:Deactivate()
-                                        Throw.Parent = Player.Backpack
-                                    end
-                                    task.wait()
-                                end
-                            end
-                            local EnemyHealth = math.floor(Enemy.Humanoid.Health)
-                            if (EnemyHealth == 0) or not EHRP then
-                                break
-                            end
-                            Player.Backpack.ServerTraits.EatSenzu:FireServer(true)
-                            if Jiren then
-                                Player.Character.HumanoidRootPart.Anchored = true
-                                HRP.CFrame = JirenPos
-                            else
-                                HRP.CFrame = CFrame.new(Enemy.HumanoidRootPart.Position - Enemy.HumanoidRootPart.CFrame.LookVector/2, Enemy.HumanoidRootPart.Position)
+        local Enemy = FoundEnemy()
+        local EHum = Enemy:FindFirstChild("Humanoid")
+        local EHRP = Enemy:FindFirstChild("HumanoidRootPart")
+        local Jiren = (Enemy.Name == "Jiren")
+        local JirenPos = EHRP.CFrame
+        if EHum then
+            if (EHum.Health > 0) then
+                while true do
+                    local KiValue = KiStat.Value
+                    local KiPercentage = (KiValue * 100 / KiMax)
+                    local EHRP = Enemy:FindFirstChild("HumanoidRootPart")
+                    if (KiPercentage <= 5) and ((Humanoid.Health * 100 / MaxHealth) < 15) and not GodForm then
+                        GodForm = true
+                        task.wait(0.2)
+                        TransformEvent:FireServer("g")
+                    end
+                    if KiValue > 32 then
+                        for i, v in pairs(Player.Backpack:GetChildren()) do
+                            if table.find(_G.TOPSettings.Moves, v.Name) then
+                                UseMove(v)
                             end
                         end
+                    else
+                        if not _G.TOPSettings.ResetWhenLowKi then
+                            Pugno()
+                        else
+                            game:GetService("ReplicatedStorage").ResetChar:FireServer()
+                        end
+                        task.wait()
+                    end
+                    if Humanoid.Health <= 1 then
+                        repeat
+                            task.wait()
+                        until Humanoid.Health == Humanoid.MaxHealth
+                        local tween = game:GetService("TweenService"):Create(HRP,TweenInfo.new(1,  Enum.EasingStyle.Quad),{CFrame = CFrame.new(100, 100, 100)})
+                        tween:Play()
+                        tween.Completed:Wait()
+                    end
+                    if (Player.Character.ExpGain.Value == 1) and (not Player.Character:FindFirstChild("Ui1", true)) then
+                        if Android then
+                            if (KiPercentage <= 70) then
+                                TransformEvent:FireServer("g")
+                            end
+                        else
+                            if InputEvent and TransformEvent then
+                                InputEvent:FireServer({[1] = "x"},CFrame.new(0,0,0),nil,false)
+                                task.wait(_G.TOPSettings.TimeToWaitForForm)
+                                TransformEvent:FireServer(_G.TOPSettings.Form)
+                                task.wait(1)
+                                InputEvent:FireServer({[1] = "xoff"},CFrame.new(0,0,0),nil,false)
+                            end
+                        end
+                    end
+                    if Jiren then
+                        while (not Enemy:FindFirstChild("MoveStart")) do
+                            HRP.CFrame = CFrame.new(Enemy.HumanoidRootPart.Position - Enemy.HumanoidRootPart.CFrame.LookVector/2, Enemy.HumanoidRootPart.Position)
+                            local Throw = Player.Backpack:FindFirstChild("Dragon Crush") or Player.Backpack:FindFirstChild("Dragon Throw")
+                            if not Throw then
+                                local ThrowMessage = Instance.new("Message", game:GetService("CoreGui"))
+                                ThrowMessage.Text = "You need to have Dragon Crush or Dragon Throw, rejoin and buy it. If this is an error then just rejoin"
+                                return
+                            end
+                            if Throw then
+                                Throw.Parent = Player.Character
+                                local b = Throw:FindFirstChild("Flip", true)
+                                if b then
+                                    b:Destroy()
+                                end
+                                task.wait()
+                                Throw:Activate()
+                                task.wait()
+                                Throw:Deactivate()
+                                Throw.Parent = Player.Backpack
+                            end
+                            task.wait()
+                        end
+                    end
+                    local EnemyHealth = math.floor(Enemy.Humanoid.Health)
+                    if (EnemyHealth == 0) or not EHRP then
+                        break
+                    end
+                    Player.Backpack.ServerTraits.EatSenzu:FireServer(true)
+                    if Jiren then
+                        Player.Character.HumanoidRootPart.Anchored = true
+                        HRP.CFrame = JirenPos
+                    else
+                        HRP.CFrame = CFrame.new(Enemy.HumanoidRootPart.Position - Enemy.HumanoidRootPart.CFrame.LookVector/2, Enemy.HumanoidRootPart.Position)
                     end
                 end
             end
         end
+        task.wait()
     end
 end
