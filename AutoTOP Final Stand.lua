@@ -22,7 +22,7 @@ local DefaultSettings = {
     }
 }
 
-_G.TOPSettings = DefaultSettings
+--_G.TOPSettings = DefaultSettings
 
 local AutoExec = false
 if not game:IsLoaded() then
