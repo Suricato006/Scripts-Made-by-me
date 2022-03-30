@@ -175,12 +175,14 @@ end})
 
 local function Hit(Part)
     for i, v in pairs(game.Workspace.Live:GetChildren()) do
-        if string.find(v.Name:lower(), _G.CrabHub.TrackedName:lower()) then
-            local Hrp = v:FindFirstChild("HumanoidRootPart")
-            local Hum = v:FindFirstChild("Humanoid")
-            if Hrp and Hum then
-                if (Hum.Health > 0) then
-                    Part.CFrame = Hrp.CFrame
+        if _G.CrabHub.TrackedName then
+            if string.find(v.Name:lower(), _G.CrabHub.TrackedName:lower()) then
+                local Hrp = v:FindFirstChild("HumanoidRootPart")
+                local Hum = v:FindFirstChild("Humanoid")
+                if Hrp and Hum then
+                    if (Hum.Health > 0) then
+                        Part.CFrame = Hrp.CFrame
+                    end
                 end
             end
         end
@@ -246,6 +248,10 @@ Credits:AddLabel({text = "Nevertrack#4219"})
 Credits:AddLabel({text = "----DiscordServer----"})
 
 Credits:AddLabel({text = "discord.gg/5NYqSVwH9Q"})
+
+Credits:AddButton({text = "Became Pokimane by sypse", callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Sypse/Freescripts/main/BecomePokimane.lua", true))()
+end})
 
 Credits:AddButton({text = "Join Discord Server", callback = function()
     pcall(function()
