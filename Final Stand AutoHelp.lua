@@ -1,7 +1,6 @@
 _G.Help = true
 _G.PlayerToHelp = "suricato006"
 
-
 local Player = game.Players.LocalPlayer
 local HelpedPlayer = game.Players:FindFirstChild(_G.PlayerToHelp)
 if not HelpedPlayer then return end
