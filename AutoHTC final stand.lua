@@ -148,10 +148,8 @@ if (game.PlaceId == 882375367) then
 
     local function UseMove(Move)
         Move.Parent = Player.Character
-        task.wait()
         Move:Activate()
         task.wait()
-        Move:Deactivate()
         Move.Parent = Player.Backpack
     end
 

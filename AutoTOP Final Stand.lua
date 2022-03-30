@@ -33,6 +33,7 @@ end
 local Player = game.Players.LocalPlayer
 local RunService = game:GetService("RunService")
 local HttpService = game:GetService("HttpService")
+local camera = workspace.CurrentCamera
 
 local OwnScriptUrl = "https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/AutoTOP%20Final%20Stand.lua"
 if syn and not (OwnScriptUrl == "") then
@@ -332,6 +333,8 @@ elseif (game.PlaceId == 535527772) then
             else
                 HRP.CFrame = CFrame.new(Enemy.HumanoidRootPart.Position - Enemy.HumanoidRootPart.CFrame.LookVector/2, Enemy.HumanoidRootPart.Position)
             end
+            camera.CameraType = Enum.CameraType.Scriptable
+            camera.CFrame = CFrame.new((HRP.CFrame.Position - (HRP.CFrame.LookVector*13)), HRP.CFrame.Position)
         end
         if Jiren then
             while _G.DevToggle do task.wait()
