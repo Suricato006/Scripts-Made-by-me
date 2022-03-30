@@ -52,8 +52,6 @@ if syn and not (OwnScriptUrl == "") then
     end
 end
 
---_G.TOPSettings = _G.TOPSettings or DefaultSettings
-
 if AutoExec then
     Player.CharacterAdded:Wait()
 end
@@ -200,7 +198,7 @@ if (game.PlaceId == 536102540) then
         Tile.Anchored = false
         Tile.CFrame = Player.Character.HumanoidRootPart.CFrame
     end
-elseif (game.PlaceId == 535527772) then
+elseif (game.PlaceId == 535527772) or (game.PlaceId == 3552158750) then
     local function Pugno()
         Player.Backpack.ServerTraits.Input:FireServer({"m2"}, HRP.CFrame)
     end
