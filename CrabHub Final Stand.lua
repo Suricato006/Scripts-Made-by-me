@@ -163,7 +163,7 @@ Teleport:AddBind({text = "TeleportBind", key = Enum.KeyCode.KeypadPlus, hold = f
         if PlayerToTp then
             local TpHrp = PlayerToTp:FindFirstChild("HumanoidRootPart")
             if TpHrp and Hrp then
-                game:GetService("TweenService"):Create(Hrp,TweenInfo.new(_G.CrabHub.TeleportTime or 1,  Enum.EasingStyle.Quad),{CFrame = TpHrp.CFrame}):Play()
+                game:GetService("TweenService"):Create(Hrp,TweenInfo.new(_G.CrabHub.TeleportTime or 1),{CFrame = TpHrp.CFrame}):Play()
             end
         end
     end

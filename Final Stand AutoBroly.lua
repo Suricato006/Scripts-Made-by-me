@@ -41,6 +41,7 @@ local DefaultSettings = {
     Form = "h",
     Anchored = true,
     LowGraphics = true,
+    AutoAimKi = true,
     Moves = {
         "Deadly Dance",
         "Anger Rush",
@@ -238,6 +239,27 @@ elseif (game.PlaceId == 2050207304) then
 
     if not (Broly.Name == "Broly BR") then
         ReturnToEarth()
+    end
+    if _G.BrolySettings.AutoAimKi then
+        local function Hit(Part)
+            Part.CFrame = Broly.HumanoidRootPart.CFrame
+        end
+
+        local function TableHit(Folder)
+            for i, v in pairs(Folder:GetChildren()) do
+                if v:FindFirstChild("Ki") and v:FindFirstChild("Mesh") then
+                    Hit(v)
+                end
+            end
+        end
+        coroutine.wrap(function()
+            while true do task.wait()
+                TableHit(game.Players.LocalPlayer.Character)
+                TableHit(game.Workspace.Effects)
+                TableHit(game.Workspace)
+                TableHit(game.Players.LocalPlayer.Character.Humanoid)
+            end
+        end)()
     end
 
     local Android = (Player.Character:WaitForChild("Race").Value == "Android")
