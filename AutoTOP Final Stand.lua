@@ -52,7 +52,7 @@ if syn and not (OwnScriptUrl == "") then
     end
 end
 
-_G.TOPSettings = _G.TOPSettings or DefaultSettings
+--_G.TOPSettings = _G.TOPSettings or DefaultSettings
 
 if AutoExec then
     Player.CharacterAdded:Wait()
