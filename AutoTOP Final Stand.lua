@@ -235,12 +235,6 @@ elseif (game.PlaceId == 535527772) or (game.PlaceId == 3552158750) then
             end
         end
     end
-    local Borders = workspace:FindFirstChild("Borders")
-    if Borders then
-        for i, v in pairs(Borders:GetChildren()) do
-            v.CanCollide = false
-        end
-    end
 
     while _G.DevToggle do
         print("looking for an Npc")
