@@ -8,7 +8,7 @@ coroutine.wrap(function()
         end
     end
 end)
-while _G.TopRespawn do
+while _G.TopRespawn do task.wait()
     local Humanoid = Player.Character:FindFirstChild("Humanoid")
     local HRP = Player.Character:FindFirstChild("HumanoidRootPart")
     if Humanoid.Health <= 1 then

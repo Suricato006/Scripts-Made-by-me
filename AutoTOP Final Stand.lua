@@ -237,7 +237,6 @@ elseif (game.PlaceId == 535527772) then
                 while true do
                     local KiValue = KiStat.Value
                     local KiPercentage = (KiValue * 100 / KiMax)
-                    local EHRP = Enemy:FindFirstChild("HumanoidRootPart")
                     if (KiPercentage <= 5) and ((Humanoid.Health * 100 / MaxHealth) < 15) and not GodForm then
                         GodForm = true
                         task.wait(0.2)
@@ -257,14 +256,14 @@ elseif (game.PlaceId == 535527772) then
                         end
                         task.wait()
                     end
-                    if Humanoid.Health <= 1 then
+                    --[[ if Humanoid.Health <= 1 then
                         repeat
                             task.wait()
                         until Humanoid.Health == Humanoid.MaxHealth
                         local tween = game:GetService("TweenService"):Create(HRP,TweenInfo.new(1,  Enum.EasingStyle.Quad),{CFrame = CFrame.new(100, 100, 100)})
                         tween:Play()
                         tween.Completed:Wait()
-                    end
+                    end ]]
                     if (Player.Character.ExpGain.Value == 1) and (not Player.Character:FindFirstChild("Ui1", true)) then
                         if Android then
                             if (KiPercentage <= 70) then
@@ -274,7 +273,7 @@ elseif (game.PlaceId == 535527772) then
                             if InputEvent and TransformEvent then
                                 InputEvent:FireServer({[1] = "x"},CFrame.new(0,0,0),nil,false)
                                 task.wait(_G.TOPSettings.TimeToWaitForForm)
-                                TransformEvent:FireServer(_G.TOPSettings.Form)
+                                TransformEvent:FireServer(_G.TOPSettings.Form:lower())
                                 task.wait(1)
                                 InputEvent:FireServer({[1] = "xoff"},CFrame.new(0,0,0),nil,false)
                             end
@@ -317,6 +316,19 @@ elseif (game.PlaceId == 535527772) then
                     end
                 end
             end
+        end
+        if Jiren then
+            game:GetService("Players").LocalPlayer.Backpack.ServerTraits.ChatStart:FireServer(workspace.FriendlyNPCs:FindFirstChild("Zenoh-sama"))
+            task.wait(0.2)
+            game:GetService("Players").LocalPlayer.Backpack.ServerTraits.ChatAdvance:FireServer({"k"})
+            task.wait(0.2)
+            game:GetService("Players").LocalPlayer.Backpack.ServerTraits.ChatAdvance:FireServer({"100k Zenni"})
+            task.wait(0.2)
+            game:GetService("Players").LocalPlayer.Backpack.ServerTraits.ChatAdvance:FireServer({"k"})
+            task.wait(0.2)
+            game:GetService("Players").LocalPlayer.Backpack.ServerTraits.ChatAdvance:FireServer({"Yes"})
+            task.wait(0.2)
+            game:GetService("Players").LocalPlayer.Backpack.ServerTraits.ChatAdvance:FireServer({"k"})
         end
         task.wait()
     end
