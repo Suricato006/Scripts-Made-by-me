@@ -216,9 +216,11 @@ TeleSpeed:AddToggle({text = "Telespeed", state = _G.CrabHub.Telespeed, callback 
 end})
 
 TeleSpeed:AddBind({text = "TelespeedBind", key = Enum.KeyCode.V, hold = true, callback = function()
-    local Hrp = Player.Character:FindFirstChild("HumanoidRootPart")
-    if Hrp then
-        Hrp:ApplyImpulse(Hrp.CFrame.LookVector*30000)
+    if _G.CrabHub.Telespeed then
+        local Hrp = Player.Character:FindFirstChild("HumanoidRootPart")
+        if Hrp then
+            Hrp:ApplyImpulse(Hrp.CFrame.LookVector*30000)
+        end
     end
 end})
 
