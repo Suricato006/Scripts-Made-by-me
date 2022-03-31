@@ -222,8 +222,9 @@ TeleSpeed:AddBind({text = "TelespeedBind", key = Enum.KeyCode.V, hold = true, ca
     end
 end})
 
+local GuiStuff = Main:AddFolder("GuiStuff")
 if syn then
-    Main:AddButton({text = "Delete Configuration", callback = function()
+    GuiStuff:AddButton({text = "Delete Configuration", callback = function()
         if isfile(FileName) then
             delfile(FileName)
             DeleteConfig = true
@@ -231,7 +232,11 @@ if syn then
     end})
 end
 
-Main:AddButton({text = "Destroy Gui", callback = function()
+GuiStuff:AddBind({text = "Toggle Gui", key = Enum.KeyCode.RightShift, hold = false, callback = function()
+    Library:Close()
+end})
+
+GuiStuff:AddButton({text = "Destroy Gui", callback = function()
     Library:Close()
 end})
 
