@@ -12,7 +12,7 @@ while _G.Help do task.wait()
         PowerOutput:Destroy()
     end
     if Hrp and HelpHrp then
-        Hrp.CFrame = HelpHrp.CFrame * CFrame.new(0, 5, 0)
+        Hrp.CFrame = HelpHrp.CFrame * CFrame.new(0, 10, 0)
     end
     local SenzuEvent = Player.Backpack:FindFirstChild("EatSenzu", true)
     if SenzuEvent then
