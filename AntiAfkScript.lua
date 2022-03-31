@@ -1,3 +1,7 @@
+if not game:IsLoaded() then
+    game.Loaded:Wait()
+end
+
 local OldNameCall = nil
 local Player = game.Players.LocalPlayer
 OldNameCall = hookmetamethod(game, "__namecall", function(Self, ...)
