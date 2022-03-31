@@ -140,6 +140,19 @@ Utilities:AddToggle({text = "AntiKnockBack", state = _G.CrabHub.AntiKnockBack, c
     end
 end})
 
+Utilities:AddToggle({text = "ExpStore", state = _G.CrabHub.ExpStore, callback = function(bool)
+    _G.CrabHub.ExpStore = bool
+    while _G.CrabHub.ExpStore do task.wait()
+        local HRP = Player.Character:FindFirstChild("HumanoidRootPart")
+        if HRP then
+            local ExpParticle = HRP:FindFirstChild("LevelParticle")
+            if ExpParticle then
+                ExpParticle:Destroy()
+            end
+        end
+    end
+end})
+
 Teleport:AddToggle({text = "Teleport", state = _G.CrabHub.Teleport, callback = function(bool)
     _G.CrabHub.Teleport = bool
 end})
