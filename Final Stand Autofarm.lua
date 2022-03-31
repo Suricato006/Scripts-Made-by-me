@@ -18,10 +18,17 @@ while _G.AutoFarm do task.wait()
                         if (EHrp.Position - Hrp.Position).magnitude < 900 then
                             Hrp.CFrame = CFrame.new((EHrp.CFrame.Position - (EHrp.CFrame.LookVector*2)), EHrp.CFrame.Position)
                         else
-                            local TweenSpeed = math.max(1, Distance/1000)
+                            local TweenSpeed = Distance/500
                             local tween = game:GetService("TweenService"):Create(Hrp, TweenInfo.new(TweenSpeed), {CFrame = EHrp.CFrame})
                             tween:Play()
-                            tween.Completed:Wait()
+                            while (tween.PlaybackState == Enum.PlaybackState.Playing) and _G.AutoFarm do
+                                if (EHrp.Position - Hrp.Position).magnitude > 900 then
+                                    task.wait()
+                                else
+                                    tween:Cancel()
+                                    Hrp.CFrame = CFrame.new((EHrp.CFrame.Position - (EHrp.CFrame.LookVector*2)), EHrp.CFrame.Position)
+                                end
+                            end
                         end
                         Player.Backpack.ServerTraits.Input:FireServer({"m2"}, Hrp.CFrame)
                         camera.CameraType = Enum.CameraType.Scriptable
