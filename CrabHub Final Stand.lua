@@ -165,9 +165,9 @@ Teleport:AddBind({text = "TeleportBind", key = Enum.KeyCode.KeypadPlus, hold = f
     if _G.CrabHub.Teleport then
         local Hrp = Player.Character:FindFirstChild("HumanoidRootPart")
         local PlayerToTp = game.Workspace.Live:FindFirstChild(_G.CrabHub.TeleportPlayerName)
-        if not PlayerToTp then
+        if not PlayerToTp and _G.CrabHub.TeleportPlayerName then
             for i, v in pairs(game.Workspace.Live:GetChildren()) do
-                if string.find(v.Name, _G.CrabHub.TeleportPlayerName) then
+                if v.Name:lower():find(_G.CrabHub.TeleportPlayerName:lower()) then
                     PlayerToTp = v
                     break
                 end
@@ -189,7 +189,7 @@ end})
 local function Hit(Part)
     for i, v in pairs(game.Workspace.Live:GetChildren()) do
         if _G.CrabHub.TrackedName then
-            if string.find(v.Name:lower(), _G.CrabHub.TrackedName:lower()) then
+            if v.Name:lower():find(_G.CrabHub.TrackedName:lower()) then
                 local Hrp = v:FindFirstChild("HumanoidRootPart")
                 local Hum = v:FindFirstChild("Humanoid")
                 if Hrp and Hum then
