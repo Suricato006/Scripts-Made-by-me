@@ -40,8 +40,10 @@ local DefaultSettings = {
     TimeToWaitForForm = 3.9,
     Form = "h",
     Anchored = true,
+    AutoExecuteTheScript = true, --Synapse only
     LowGraphics = true,
     AutoAimKi = true,
+    QueueTeleport = false,
     Moves = {
         "Deadly Dance",
         "Anger Rush",
@@ -68,11 +70,13 @@ local HttpService = game:GetService("HttpService")
 
 local OwnScriptUrl = "https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Final%20Stand%20AutoBroly.lua"
 if syn then
-    Player.OnTeleport:Connect(function(State)
-        if State == Enum.TeleportState.Started then
-            syn.queue_on_teleport(game:HttpGet(OwnScriptUrl))
-        end
-    end)
+    if _G.BrolySettings.AutoExecuteTheScript then
+        Player.OnTeleport:Connect(function(State)
+            if State == Enum.TeleportState.Started then
+                syn.queue_on_teleport(game:HttpGet(OwnScriptUrl))
+            end
+        end)
+    end
 
     local FileName = "AutoBroly.CRAB"
     if isfile(FileName) then
@@ -127,8 +131,14 @@ spawn(function()
     Library:Init()
 end)
 
+local ReturnId
+if _G.BrolySettings.QueueTeleport then
+    ReturnId = 3565304751
+else
+    ReturnId = 536102540
+end
 local function ReturnToEarth()
-    game:GetService("TeleportService"):Teleport(536102540, game.Players.LocalPlayer)
+    game:GetService("TeleportService"):Teleport(ReturnId, game.Players.LocalPlayer)
 end
 
 local HRP = Player.Character:WaitForChild("HumanoidRootPart")
@@ -217,17 +227,22 @@ RunService.Heartbeat:Connect(function()
     end
 end)
 
-if (game.PlaceId == 536102540) then
+if not (game.PlaceId == 2050207304) then
     local PowerOutput = Player.Character:FindFirstChild("PowerOutput")
     if PowerOutput then
         PowerOutput:Destroy()
     end
-    task.wait()
-    local BrolyPosition = CFrame.new(2762, 3945, -2250)
+    --task.wait()
+    local Root = Player.Character:FindFirstChild("Root", true)
+    if Root then
+        Root:Destroy()
+    end
+    local Position = workspace:FindFirstChild("BrolyTeleport"):GetModelCFrame()
     RunService.Heartbeat:Connect(function()
-        HRP.CFrame = BrolyPosition
+        HRP.CFrame = Position
     end)
-elseif (game.PlaceId == 2050207304) then
+end
+if (game.PlaceId == 2050207304) then
     for i, v in pairs(game.Players:GetChildren()) do
         if not (v.Name == Player.Name) and not table.find(_G.BrolySettings.AllowedPlayers, v.Name) then
             if not _G.BrolySettings.AllowAnyone then
@@ -273,7 +288,7 @@ elseif (game.PlaceId == 2050207304) then
         if InputEvent and TransformEvent then
             InputEvent:FireServer({[1] = "x"},CFrame.new(0,0,0),nil,false)
             task.wait(_G.BrolySettings.TimeToWaitForForm)
-            TransformEvent:FireServer(_G.BrolySettings.Form)
+            TransformEvent:FireServer(_G.BrolySettings.Form:lower())
             task.wait(1)
             InputEvent:FireServer({[1] = "xoff"},CFrame.new(0,0,0),nil,false)
         end
@@ -346,6 +361,15 @@ elseif (game.PlaceId == 2050207304) then
         Player.Backpack.ServerTraits.EatSenzu:FireServer(true)
         if (BrolyHealth == 0) and (Broly.HumanoidRootPart.Transformation3.Enabled == true) then
             ReturnToEarth()
+        end
+        local Quests = Player.PlayerGui:FindFirstChild("Quests", true)
+        if Quests then
+            local TextLabel = Quests:FindFirstChild("TextLabel")
+            local ImageLabel = Quests:FindFirstChild("ImageLabel")
+            if TextLabel and ImageLabel then
+                ImageLabel.Image = "rbxassetid://9252796484"
+                TextLabel.Text = "BrolyHealth: "..tostring(BrolyHealth)
+            end
         end
         if _G.BrolySettings.Anchored then
             Player.Character.HumanoidRootPart.Anchored = true
