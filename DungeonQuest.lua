@@ -32,6 +32,9 @@ if syn and not (OwnScriptUrl == "") then
         end)
     end
 end
+
+_G.DungeonSettings = _G.DungeonSettings or DefaultSettings
+
 if not (game.PlaceId == 2606294912) then
     local args = {
         [2] = true
