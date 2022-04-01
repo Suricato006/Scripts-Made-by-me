@@ -13,7 +13,7 @@ end
 local Player = game.Players.LocalPlayer
 local HttpService = game:GetService("HttpService")
 
-local OwnScriptUrl = "https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/AutoTOP%20Final%20Stand.lua"
+local OwnScriptUrl = "https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/DungeonQuest.lua"
 if syn and not (OwnScriptUrl == "") then
     local FileName = "Dungeon.CRAB"
     if isfile(FileName) then
