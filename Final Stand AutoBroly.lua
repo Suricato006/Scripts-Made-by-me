@@ -32,7 +32,8 @@
     Much love :v:
 
 ]]
-
+if _G.CortesoControllo then return end
+_G.CortesoControllo = true
 local DefaultSettings = {
     AllowedPlayers = {"SgCortez", "Corteso006", "suricato006"},
     AllowAnyone = false,
@@ -70,6 +71,13 @@ local HttpService = game:GetService("HttpService")
 
 local OwnScriptUrl = "https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Final%20Stand%20AutoBroly.lua"
 if syn then
+    local FileName = "AutoBroly.CRAB"
+    if isfile(FileName) then
+        _G.BrolySettings = _G.BrolySettings or HttpService:JSONDecode(readfile(FileName))
+    end
+    local ToEncode = _G.BrolySettings or DefaultSettings
+    writefile(FileName, HttpService:JSONEncode(ToEncode))
+
     if _G.BrolySettings.AutoExecuteTheScript then
         Player.OnTeleport:Connect(function(State)
             if State == Enum.TeleportState.Started then
@@ -77,13 +85,6 @@ if syn then
             end
         end)
     end
-
-    local FileName = "AutoBroly.CRAB"
-    if isfile(FileName) then
-        _G.BrolySettings = _G.BrolySettings or HttpService:JSONDecode(readfile(FileName))
-    end
-    local ToEncode = _G.BrolySettings or DefaultSettings
-    writefile(FileName, HttpService:JSONEncode(ToEncode))
 end
 
 _G.BrolySettings = _G.BrolySettings or DefaultSettings
