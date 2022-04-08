@@ -141,8 +141,8 @@ end
 local function ReturnToEarth()
     game:GetService("TeleportService"):Teleport(ReturnId, game.Players.LocalPlayer)
 end
-
-local HRP = Player.Character:WaitForChild("HumanoidRootPart")
+local Character = Player.Character or Player.CharacterAdded:Wait()
+local HRP = Character:WaitForChild("HumanoidRootPart")
 
 local TrueConnection = nil
 TrueConnection = RunService.Heartbeat:Connect(function()
