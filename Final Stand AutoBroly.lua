@@ -59,9 +59,7 @@ local DefaultSettings = {
     }
 }
 
-local AutoExec = false
 if not game:IsLoaded() then
-    AutoExec = true
     game.Loaded:Wait()
 end
 
@@ -77,20 +75,16 @@ if syn then
     end
     local ToEncode = _G.BrolySettings or DefaultSettings
     writefile(FileName, HttpService:JSONEncode(ToEncode))
-
-    if _G.BrolySettings.AutoExecuteTheScript then
-        Player.OnTeleport:Connect(function(State)
-            if State == Enum.TeleportState.Started then
-                syn.queue_on_teleport(game:HttpGet(OwnScriptUrl))
-            end
-        end)
-    end
 end
 
 _G.BrolySettings = _G.BrolySettings or DefaultSettings
 
-if AutoExec then
-    Player.CharacterAdded:Wait()
+if _G.BrolySettings.AutoExecuteTheScript and syn then
+    Player.OnTeleport:Connect(function(State)
+        if State == Enum.TeleportState.Started then
+            syn.queue_on_teleport(game:HttpGet(OwnScriptUrl))
+        end
+    end)
 end
 
 spawn(function()
@@ -132,11 +126,9 @@ spawn(function()
     Library:Init()
 end)
 
-local ReturnId
+local ReturnId = 536102540
 if _G.BrolySettings.QueueTeleport then
     ReturnId = 3565304751
-else
-    ReturnId = 536102540
 end
 local function ReturnToEarth()
     game:GetService("TeleportService"):Teleport(ReturnId, game.Players.LocalPlayer)
@@ -144,12 +136,15 @@ end
 local Character = Player.Character or Player.CharacterAdded:Wait()
 local HRP = Character:WaitForChild("HumanoidRootPart")
 
-local TrueConnection = nil
-TrueConnection = RunService.Heartbeat:Connect(function()
-    local a = Player.Character:FindFirstChild("True")
-    if a then
-        TrueConnection:Disconnect()
-        a:Destroy()
+game:GetService("RunService").Heartbeat:Connect(function()
+    local TimerLabel = Player.PlayerGui:WaitForChild("HUD"):FindFirstChild("Timer", true)
+    if TimerLabel then
+        if TimerLabel.Visible and not (TimerLabel.Text == "") then
+            local a = Player.Character:FindFirstChild("True")
+            if a then
+                a:Destroy()
+            end
+        end
     end
 end)
 
@@ -194,8 +189,6 @@ if _G.BrolySettings.LowGraphics then
 		end)()
 	end)
 end
-local KiStat = Player.Character:WaitForChild("Ki")
-local KiMax = KiStat.Value
 
 spawn(function()
     wait(_G.BrolySettings.RejoinTimer)
@@ -284,14 +277,18 @@ if (game.PlaceId == 2050207304) then
     local Humanoid = Player.Character.Humanoid
     local MaxHealth = Humanoid.MaxHealth
     local GodForm = false
+    local TrueValue = Player.Character:FindFirstChild("True") or Player.Character:WaitForChild("True")
+    local KiStat = Player.Character:WaitForChild("Ki")
+    local KiMax = KiStat.Value
+    local PowerOutput = Player.Character:FindFirstChild("PowerOutput") or Player.Character:WaitForChild("PowerOutput")
 
     if not Android then
-        if InputEvent and TransformEvent then
-            InputEvent:FireServer({[1] = "x"},CFrame.new(0,0,0),nil,false)
+        if InputEvent and TransformEvent and TrueValue and PowerOutput then
+            InputEvent:FireServer({[1] = "x"},HRP.CFrame,nil)
             task.wait(_G.BrolySettings.TimeToWaitForForm)
             TransformEvent:FireServer(_G.BrolySettings.Form:lower())
             task.wait(1)
-            InputEvent:FireServer({[1] = "xoff"},CFrame.new(0,0,0),nil,false)
+            InputEvent:FireServer({[1] = "xoff"},HRP.CFrame,nil)
         end
     end
 
