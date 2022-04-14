@@ -13,6 +13,7 @@
         "getnamecallmethod",
         "checkcaller",
         "fireclickdetector",
-        "firetouchinterest"
+        "firetouchinterest",
+        "fireproximityprompt"
     ]
 }
