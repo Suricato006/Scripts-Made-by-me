@@ -69,9 +69,7 @@ AutoFarm.Toggle({
                             local EHum = Npc:FindFirstChild("Humanoid")
                             if EHum then
                                 if EHum.Health == 0 then
-                                    if _G.AutoQuest then
-                                        game:GetService("ReplicatedStorage").CheckQuest:FireServer("Kill "..Npc.Name)
-                                    end
+                                    game:GetService("ReplicatedStorage").CheckQuest:FireServer("Kill "..Npc.Name)
                                     break
                                 end
                             end
