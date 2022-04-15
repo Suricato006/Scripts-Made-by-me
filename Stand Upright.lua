@@ -31,32 +31,34 @@ AutoFarm.Toggle({
                 for i, v in pairs(workspace.Alive:GetChildren()) do
                     if string.find(v.Name, _G.NpcName or "Jotaro Kujo P4") then
                         local Npc = v
-                        while not Player:WaitForChild("Quests"):FindFirstChild("Kill "..Npc.Name) and _G.AutoFarm do task.wait()
-                            if not Player.PlayerGui:FindFirstChild("Dialogue") then
-                                local Hrp = Player.Character:FindFirstChild("HumanoidRootPart")
-                                local GiornoGiovanna = workspace:FindFirstChild("Giorno Giovanna", true)
-                                local GHrp = GiornoGiovanna:FindFirstChild("HumanoidRootPart")
-                                if Hrp and GHrp then
-                                    if (Hrp.Position - GHrp.Position).magnitude < 100 then
-                                        local Stand = Player.Character:FindFirstChild("Stand")
-                                        local StandHrp = nil
-                                        if Stand then
-                                            StandHrp = Stand:FindFirstChild("HumanoidRootPart")
+                        if _G.AutoQuest then
+                            while not Player:WaitForChild("Quests"):FindFirstChild("Kill "..Npc.Name) and _G.AutoFarm do task.wait()
+                                if not Player.PlayerGui:FindFirstChild("Dialogue") then
+                                    local Hrp = Player.Character:FindFirstChild("HumanoidRootPart")
+                                    local GiornoGiovanna = workspace:FindFirstChild("Giorno Giovanna", true)
+                                    local GHrp = GiornoGiovanna:FindFirstChild("HumanoidRootPart")
+                                    if Hrp and GHrp then
+                                        if (Hrp.Position - GHrp.Position).magnitude < 100 then
+                                            local Stand = Player.Character:FindFirstChild("Stand")
+                                            local StandHrp = nil
+                                            if Stand then
+                                                StandHrp = Stand:FindFirstChild("HumanoidRootPart")
+                                            end
+                                            if StandHrp then
+                                                StandHrp.CFrame = GHrp.CFrame
+                                            end
+                                        else
+                                            local tween = game:GetService("TweenService"):Create(Hrp, TweenInfo.new(3), {CFrame = GHrp.CFrame})
+                                            tween:Play()
+                                            tween.Completed:Wait()
                                         end
-                                        if StandHrp then
-                                            StandHrp.CFrame = GHrp.CFrame
-                                        end
-                                    else
-                                        local tween = game:GetService("TweenService"):Create(Hrp, TweenInfo.new(3), {CFrame = GHrp.CFrame})
-                                        tween:Play()
-                                        tween.Completed:Wait()
                                     end
+                                    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.E, false, game)
+                                    task.wait()
+                                    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.E, false, game)
                                 end
-                                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.E, false, game)
-                                task.wait()
-                                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.E, false, game)
+                                game:GetService("ReplicatedStorage").GiveQuest:FireServer("Kill "..Npc.Name)
                             end
-                            game:GetService("ReplicatedStorage").GiveQuest:FireServer("Kill "..Npc.Name)
                         end
                         while _G.AutoFarm do task.wait()
                             if not Npc or (Npc.Parent == nil) then
@@ -67,7 +69,9 @@ AutoFarm.Toggle({
                             local EHum = Npc:FindFirstChild("Humanoid")
                             if EHum then
                                 if EHum.Health == 0 then
-                                    game:GetService("ReplicatedStorage").CheckQuest:FireServer("Kill "..Npc.Name)
+                                    if _G.AutoQuest then
+                                        game:GetService("ReplicatedStorage").CheckQuest:FireServer("Kill "..Npc.Name)
+                                    end
                                     break
                                 end
                             end
@@ -102,6 +106,21 @@ AutoFarm.Toggle({
         end)()
     end,
     Enabled = _G.AutoFarm
+})
+
+AutoFarm.Toggle({
+    Text = "AutoQuest",
+    Callback = function(value)
+        _G.AutoQuest = value
+    end,
+    Enabled = _G.AutoQuest,
+    Menu = {
+        Information = function(self)
+            CrabHub.Banner({
+                Text = "It works only on some npc, set it to false for a normal autofarm"
+            })
+        end
+    }
 })
 
 AutoFarm.TextField({
