@@ -155,7 +155,7 @@ ItemFarm.Toggle({
                         while (v.Parent == workspace) and _G.ItemFarm do task.wait()
                             local Hrp = Player.Character:FindFirstChild("HumanoidRootPart")
                             if Hrp then
-                                local tween = game:GetService("TweenService"):Create(Hrp, TweenInfo.new(_G.Speed or 3), {CFrame = v.CFrame})
+                                local tween = game:GetService("TweenService"):Create(Hrp, TweenInfo.new(_G.Speed or 5), {CFrame = v.CFrame})
                                 tween:Play()
                                 tween.Completed:Wait()
                                 while Hrp and (v.Parent == workspace) and _G.ItemFarm do task.wait()
@@ -178,7 +178,7 @@ ItemFarm.Slider({
     end,
     Min = 1,
     Max = 10,
-    Def = 3
+    Def = 5
 })
 _G.ItemToFarm = {
     ["Rokakaka"] = true,
