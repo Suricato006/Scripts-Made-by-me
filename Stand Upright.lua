@@ -1,4 +1,6 @@
 local Player = game.Players.LocalPlayer
+local UserInputService = game:GetService("UserInputService")
+local VirtualInputManager = game:GetService("VirtualInputManager")
 local Material = loadstring(game:HttpGet("https://raw.githubusercontent.com/Kinlei/MaterialLua/master/Module.lua"))()
 
 local CrabHub = Material.Load({
@@ -15,7 +17,11 @@ local CrabHub = Material.Load({
 local AutoFarm = CrabHub.New({
     Title = "AutoFarm"
 })
-
+for i, v in pairs(workspace:GetDescendants()) do
+    if v:IsA("Seat") then
+        v:Destroy()
+    end
+end
 AutoFarm.Toggle({
     Text = "AutoFarm Toggle",
     Callback = function(Value)
@@ -46,12 +52,9 @@ AutoFarm.Toggle({
                                         tween.Completed:Wait()
                                     end
                                 end
-                                if not fireproximityprompt then
-                                    local ErrorMessage = Instance.new("Message", game:GetService("CoreGui"))
-                                    ErrorMessage.Text = 'function "fireproximityprompt" not found.\nIf you REALLY want to farm then just open a chat with an npc (giorno giovanna for example) and execute again.'
-                                    return
-                                end
-                                fireproximityprompt(GiornoGiovanna:FindFirstChildWhichIsA("ProximityPrompt", true))
+                                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.E, false, game)
+                                task.wait()
+                                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.E, false, game)
                             end
                             game:GetService("ReplicatedStorage").GiveQuest:FireServer("Kill "..Npc.Name)
                         end
@@ -174,4 +177,82 @@ ItemFarm.ChipSet({
         end
     end,
     Options = _G.ItemToFarm
+})
+
+local StandFarm = CrabHub.New({
+    Title = "StandFarm"
+})
+local Attributes = {"Daemon", "Invincible", "Tragic", "Legendary", "Mythic"}
+local Stands = {"Silver Chariot OVA", "The World OVA", "Jotaro's Star Platinum", "Star Platinum OVA", "Dio's The World"}
+local function ScaleToOffset(x, y)
+	x *= workspace.Camera.ViewportSize.X
+	y *= workspace.Camera.ViewportSize.Y
+	return x, y
+end
+--Tanks to CandyIsAbsolute for the function and the virtual input manager stuff, big props to him. Check his github: https://github.com/CandyIsAbsolute
+local StandFarmToggle = nil
+StandFarmToggle = StandFarm.Toggle({
+    Text = "StandFarm",
+    Callback = function(Value)
+        _G.StandFarm = Value
+        coroutine.wrap(function()
+            local Connection = nil
+            Connection = UserInputService.InputBegan:Connect(function(a, b)
+                if a.KeyCode == Enum.KeyCode.N then
+                    StandFarmToggle:SetState(false)
+                    Connection:Disconnect()
+                end
+            end)
+            while _G.StandFarm do task.wait()
+                while _G.StandFarm do
+                    if Player.PlayerGui:FindFirstChild("ItemPrompt") then
+                        break
+                    end
+                    local Object = nil
+                    if Player.Data.Stand.Value == "None" then
+                        Object = Player.Backpack:FindFirstChild("Stand Arrow") or Player.Backpack:FindFirstChild("Unusual Arrow")
+                    else
+                        pcall(function()
+                            print(Player.Data.Stand.Value, Player.Data.Attribute.Value)
+                        end)
+                        if table.find(Attributes, Player.Data.Attribute.Value) or table.find(Stands, Player.Data.Stand.Value) then
+                            StandFarmToggle:SetState(false)
+                        end
+                        Object = Player.Backpack:FindFirstChild("Rokakaka")
+                    end
+                    if Object then
+                        Object.Parent = Player.Character
+                        Object:Activate()
+                    else
+                        StandFarmToggle:SetState(false)
+                    end
+                    task.wait(0.5)
+                end
+                while _G.StandFarm do task.wait()
+                    local ItemPrompt = Player.PlayerGui:FindFirstChild("ItemPrompt")
+                    local YesLabel = nil
+                    if ItemPrompt then
+                        if not (ItemPrompt.Parent == Player.PlayerGui) then
+                            break
+                        end
+                        YesLabel = ItemPrompt:FindFirstChild("Yes", true)
+                        if YesLabel then
+                            local X, Y = ScaleToOffset(YesLabel.Position.X.Scale, YesLabel.Position.Y.Scale)
+                            VirtualInputManager:SendMouseButtonEvent(X + (YesLabel.AbsoluteSize.X / 2), Y + (YesLabel.AbsoluteSize.Y / 2), 0, true, game, 0)
+                            task.wait()
+                            VirtualInputManager:SendMouseButtonEvent(X + (YesLabel.AbsoluteSize.X / 2), Y + (YesLabel.AbsoluteSize.Y / 2), 0, true, game, 0)
+                        else break end
+                    else break end
+                end
+            end
+        end)()
+    end,
+    Enabled = _G.StandFarm,
+    Menu = {
+        Information = function(self)
+            CrabHub.Banner({
+                Text = "Press N to stop it"
+            })
+        end
+    }
 })
