@@ -8,23 +8,23 @@ Library.TweenPart = function(PartToTween, TweenTime, CFrameToTweenTo, ...)
 end
 local VirtualInputManager = game:GetService("VirtualInputManager")
 Library.MouseClick = function(PositionX, PositionY, HoldTime)
-    VirtualInputManager:SendMouseButtonEvent(PositionX, PositionY, 0, true, game, 0)
+    VirtualInputManager:SendMouseButtonEvent(PositionX, PositionY, 0, true, nil, 0)
     if HoldTime then
         task.wait(HoldTime)
     end
-    VirtualInputManager:SendMouseButtonEvent(PositionX, PositionY, 0, false, game, 0)
+    VirtualInputManager:SendMouseButtonEvent(PositionX, PositionY, 0, false, nil, 0)
 end
 
 Library.MoveMouse = function(PositionX, PositionY)
-    VirtualInputManager:SendMouseMoveEvent(PositionX, PositionY, game)
+    VirtualInputManager:SendMouseMoveEvent(PositionX, PositionY, nil)
 end
 
 Library.PressKey = function(KeyCode, HoldTime)
-    VirtualInputManager:SendKeyEvent(true, KeyCode, false, game)
+    VirtualInputManager:SendKeyEvent(true, KeyCode, false, nil)
     if HoldTime then
         task.wait(HoldTime)
     end
-    VirtualInputManager:SendKeyEvent(false, KeyCode, false, game)
+    VirtualInputManager:SendKeyEvent(false, KeyCode, false, nil)
 end
 
 return Library
