@@ -2,7 +2,12 @@ local camera = workspace.CurrentCamera;
 local Player = game.Players.LocalPlayer
 
 _G.AutoFarm = true
-_G.NpcNames = {"Evil", "Saiba", "Chi", "Kick"}
+_G.NpcNames = {
+    "Evil",
+    "Saiba",
+    "Chi",
+    "Kick"
+}
 
 while _G.AutoFarm do task.wait()
     for i, Enemy in pairs(workspace.Live:GetChildren()) do
