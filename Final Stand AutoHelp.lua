@@ -1,5 +1,6 @@
 _G.Help = true
 _G.PlayerToHelp = "suricato006"
+_G.AutoSpamJars = true
 
 local Player = game.Players.LocalPlayer
 local HelpedPlayer = game.Players:FindFirstChild(_G.PlayerToHelp)
@@ -14,8 +15,10 @@ while _G.Help do task.wait()
     if Hrp and HelpHrp then
         Hrp.CFrame = HelpHrp.CFrame * CFrame.new(0, 10, 0)
     end
-    local SenzuEvent = Player.Backpack:FindFirstChild("EatSenzu", true)
-    if SenzuEvent then
-        SenzuEvent:FireServer(true)
+    if _G.AutoSpamJars then
+        local SenzuEvent = Player.Backpack:FindFirstChild("EatSenzu", true)
+        if SenzuEvent then
+            SenzuEvent:FireServer(true)
+        end
     end
 end
