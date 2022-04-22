@@ -1,31 +1,31 @@
 if not game:IsLoaded() then game.Loaded:Wait() end
 
-loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))() --I dont understand why both are required...
-local NotificationLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
+local NotificationLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Notification%20Library%20Optimization.lua"))()
 
-if _G.CrabCommand then
+local function SendNotification(TitleArg, DescriptionArg, TimeArg, TypeArg, AdditionalArg)
+    local Table = {
+        OutlineColor = Color3.fromHex("E981FF"),
+        Time = TimeArg or 5,
+        Type = TypeArg or "default"
+    }
+    local AdditionalTable = {}
+    if TypeArg == "image" then
+        AdditionalTable.Image = AdditionalArg
+        AdditionalTable.ImageColor = Color3.fromHex("E981FF")
+    elseif TypeArg == "option" then
+        AdditionalTable.Callback = AdditionalArg
+    end
     NotificationLibrary:Notify(
-        {Title = "Already Running", Description = "Crab Commands is already running sweetie <3"},
-        {OutlineColor = Color3.fromHex("E981FF"),Time = 5, Type = "default"}
+        {Title = TitleArg, Description = DescriptionArg},
+        Table,
+        AdditionalTable
     )
 end
-NotificationLibrary:Notify(
-    {Title = "Already Running", Description = "Crab Commands is already running sweetie <3"},
-    {OutlineColor = Color3.fromHex("E981FF"),Time = 9e9, Type = "default"}
-)
---[[ NotificationLibrary:Notify(
-    {Title = "TEXT TITLE", Description = "DESCRIPTION"},
-    {OutlineColor = Color3.fromRGB(80, 80, 80),Time = 5, Type = "option"},
-    {Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(255, 84, 84), Callback = function(State) print(tostring(State)) end}
-)
-wait(1)
-NotificationLibrary:Notify(
-    {Title = "TEXT TITLE", Description = "DESCRIPTION"},
-    {OutlineColor = Color3.fromRGB(80, 80, 80),Time = 5, Type = "image"},
-    {Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(255, 84, 84)}
-)
-wait(1)
-NotificationLibrary:Notify(
-    {Title = "TEXT TITLE", Description = "DESCRIPTION"},
-    {OutlineColor = Color3.fromRGB(80, 80, 80),Time = 5, Type = "default"}
-) ]]
+
+if _G.CrabCommand and not _G.CrabDebug then
+    SendNotification("Already Running", "Crab Commands is already running sweetie <3")
+end
+_G.CrabCommand = true
+
+local Player = game:GetService("Players").LocalPlayer
+local InputLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/InputFunctions%20Library.lua"))()

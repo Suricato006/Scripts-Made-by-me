@@ -27,4 +27,8 @@ Library.PressKey = function(KeyCode, HoldTime)
     VirtualInputManager:SendKeyEvent(false, KeyCode, false, nil)
 end
 
+Library.PressButton = function(ButtonLabel)
+    Library.MouseClick(ButtonLabel.AbsolutePosition.X + ButtonLabel.AbsoluteSize.X/2, ButtonLabel.AbsolutePosition.Y + ButtonLabel.AbsoluteSize.Y*3/2)
+end
+
 return Library
