@@ -22,8 +22,23 @@ local function SendNotification(TitleArg, DescriptionArg, TimeArg, TypeArg, Addi
     )
 end
 
+local Prefix = "/e"
 if _G.CrabCommand then
     SendNotification("Already Running", "Crab Commands is already running sweetie <3")
+    SendNotification("Need Help?", "Are you lost and need help?", 9e9, "option", function(bool)
+        if bool then
+            SendNotification("Documentation", 'Type "'..Prefix..' cmds" to get a list of all the commands, ok?', 9e9, "option", function(bool2)
+                if not bool2 then
+                    SendNotification("（。々°）", "Dumbass")
+                else
+                    SendNotification("( ˘͈ ᵕ ˘͈♡)", "Good Job sweethearth")
+                end
+            end)
+        else
+
+        end
+    end)
+    return
 end
 _G.CrabCommand = true
 
@@ -32,7 +47,8 @@ local InputLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/
 local Camera = workspace:FindFirstChildWhichIsA("Camera")
 
 local Commands = {}
-local Prefix = "/e"
+SendNotification("CrabCommands", 'Thanks for using the script.\nType '..Prefix.." and then a command name or aliases", 10)
+SendNotification("Documentation", 'Type "'..Prefix..' cmds" to get a list of all the commands', 10)
 local function AddCommand(NameArg, AliasesArg, DescriptionArg, CallbackArg)
     table.insert(Commands, {
         Name = NameArg,
@@ -42,17 +58,6 @@ local function AddCommand(NameArg, AliasesArg, DescriptionArg, CallbackArg)
     })
 end
 
-AddCommand(
-    "Test",
-    {"ts", "testaggio"},
-    "Solo per testare",
-    function(Args)
-        print("Testato e questi sono gli argomenti: ")
-        for i, v in pairs(Args) do
-            print(i,v)
-        end
-    end
-)
 local ChattedConnection = nil
 AddCommand(
     "Unload",
@@ -111,7 +116,9 @@ AddCommand(
     "Merch",
     {},
     "A link to the sickest drip of roblox",
-    SendNotification("D R I P", "Merch Link: bit.ly/3LcmBoC", 10)
+    function()
+        SendNotification("D R I P", "Merch Link: bit.ly/3LcmBoC", 20)
+    end
 )
 AddCommand(
     "Notify",
@@ -135,9 +142,29 @@ AddCommand(
         end)
     end
 )
+AddCommand(
+    "AllCommands",
+    {"allcmds", "cmds"},
+    "A list of all the available commands",
+    function()
+        SendNotification("Printed", "All of the commands got printed.\nPress F9 to see them")
+        for i, v in pairs(Commands) do
+            if not (i == 1) then
+                print("----------------")
+            end
+            print("Name: "..v.Name)
+            local AliasesString = ""
+            for i1, v1 in pairs(v.Aliases) do
+               AliasesString = AliasesString..v1..", "
+            end
+            print("Can also type: "..AliasesString)
+            print("Description: "..v.Description)
+        end
+    end
+)
 
 ChattedConnection = Player.Chatted:Connect(function(message)
-    local StartIndex = message:find("/e")
+    local StartIndex = message:find(Prefix)
     if StartIndex == 1 then
         local CommandToCall = nil
         local Args = {}
@@ -149,7 +176,7 @@ ChattedConnection = Player.Chatted:Connect(function(message)
             end
             if Loops == 2 then
                 for i, v in pairs(Commands) do
-                    if word:lower() == v.Name:lower() or table.find(v.Aliases, word:lower()) then
+                    if (word:lower() == v.Name:lower()) or table.find(v.Aliases, word:lower()) then
                         CommandToCall = v
                     end
                 end
