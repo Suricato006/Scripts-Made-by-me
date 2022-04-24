@@ -47,6 +47,7 @@ local InputLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/
 local Camera = workspace:FindFirstChildWhichIsA("Camera")
 
 local Commands = {}
+_G.CommandStates = {}
 SendNotification("CrabCommands", 'Thanks for using the script.\nType '..Prefix.." and then a command name or aliases", 10)
 SendNotification("Documentation", 'Type "'..Prefix..' cmds" to get a list of all the commands', 10)
 local function AddCommand(NameArg, AliasesArg, DescriptionArg, CallbackArg)
@@ -68,6 +69,9 @@ AddCommand(
             ChattedConnection:Disconnect()
         end
         _G.CrabCommand = false
+        for i, v in pairs(_G.CommandStates) do
+            v = false
+        end
         SendNotification("Unloaded", "The script is now unloaded, thanks for using it")
     end
 )
@@ -162,6 +166,109 @@ AddCommand(
         end
     end
 )
+AddCommand(
+    "Fly",
+    {"swim"},
+    "A strange type of fly so its not banned",
+    function(Args)
+        _G.CommandStates.Fly = not _G.CommandStates.Fly
+        if _G.CommandStates.Fly then
+            local DefaultGravity = workspace.Gravity
+            while _G.CommandStates.Fly do task.wait()
+                local Humanoid = Player.Character:FindFirstChildWhichIsA("Humanoid", true)
+                if Humanoid then
+                    if Humanoid.Health > 0 then
+                        workspace.Gravity = 0
+                        Humanoid:SetStateEnabled(Enum.HumanoidStateType.Climbing,false)
+                        Humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown,false)
+                        Humanoid:SetStateEnabled(Enum.HumanoidStateType.Flying,false)
+                        Humanoid:SetStateEnabled(Enum.HumanoidStateType.Freefall,false)
+                        Humanoid:SetStateEnabled(Enum.HumanoidStateType.GettingUp,false)
+                        Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping,false)
+                        Humanoid:SetStateEnabled(Enum.HumanoidStateType.Landed,false)
+                        Humanoid:SetStateEnabled(Enum.HumanoidStateType.Physics,false)
+                        Humanoid:SetStateEnabled(Enum.HumanoidStateType.PlatformStanding,false)
+                        Humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll,false)
+                        Humanoid:SetStateEnabled(Enum.HumanoidStateType.Running,false)
+                        Humanoid:SetStateEnabled(Enum.HumanoidStateType.RunningNoPhysics,false)
+                        Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated,false)
+                        Humanoid:SetStateEnabled(Enum.HumanoidStateType.StrafingNoPhysics,false)
+                        Humanoid:SetStateEnabled(Enum.HumanoidStateType.Swimming,false)
+                        Humanoid:ChangeState(Enum.HumanoidStateType.Swimming)
+                    else
+                        workspace.Gravity = DefaultGravity
+                    end
+                end
+            end
+            workspace.Gravity = DefaultGravity
+            local Humanoid = Player.Character:FindFirstChildWhichIsA("Humanoid", true)
+            if Humanoid then
+                Humanoid:SetStateEnabled(Enum.HumanoidStateType.Climbing,true)
+                Humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown,true)
+                Humanoid:SetStateEnabled(Enum.HumanoidStateType.Flying,true)
+                Humanoid:SetStateEnabled(Enum.HumanoidStateType.Freefall,true)
+                Humanoid:SetStateEnabled(Enum.HumanoidStateType.GettingUp,true)
+                Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping,true)
+                Humanoid:SetStateEnabled(Enum.HumanoidStateType.Landed,true)
+                Humanoid:SetStateEnabled(Enum.HumanoidStateType.Physics,true)
+                Humanoid:SetStateEnabled(Enum.HumanoidStateType.PlatformStanding,true)
+                Humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll,true)
+                Humanoid:SetStateEnabled(Enum.HumanoidStateType.Running,true)
+                Humanoid:SetStateEnabled(Enum.HumanoidStateType.RunningNoPhysics,true)
+                Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated,true)
+                Humanoid:SetStateEnabled(Enum.HumanoidStateType.StrafingNoPhysics,true)
+                Humanoid:SetStateEnabled(Enum.HumanoidStateType.Swimming,true)
+                Humanoid:ChangeState(Enum.HumanoidStateType.RunningNoPhysics)
+            end
+        end
+    end
+)
+AddCommand(
+    "NoClip",
+    {"clip"},
+    "Makes you go through solid objects",
+    function()
+        _G.CommandStates.NoClip = not _G.CommandStates.NoClip
+        if _G.CommandStates.NoClip then
+            while _G.CommandStates.NoClip do
+                local Char = Player.Character
+                if Char then
+                    for i, v in pairs(Char:GetDescendants()) do
+                        if v:IsA("BasePart") and (v.CanCollide == true) then
+                            v.CanCollide = false
+                        end
+                    end
+                end
+                game:GetService('RunService').Stepped:Wait()
+            end
+        end
+    end
+)
+AddCommand(
+    "Teleport",
+    {"tp", "goto"},
+    "Teleports you to a player",
+    function(Args)
+        if Args[1] then
+            for _, v in pairs(game.Players:GetPlayers()) do
+                if v.Name:lower():find(Args[1]:lower()) then
+                    if not (v == Player) then
+                        local PHrp = v.Character:FindFirstChild("HumanoidRootPart")
+                        local Hrp = Player.Character:FindFirstChild("HumanoidRootPart")
+                        if PHrp and Hrp then
+                            Hrp.Anchored = true
+                            local tween = InputLibrary.TweenPart(Hrp, tonumber(Args[2]) or 5, PHrp.CFrame)
+                            tween:Play()
+                            tween.Completed:Wait()
+                            Hrp.Anchored = false
+                        end
+                    end
+                    break
+                end
+            end
+        end
+    end
+)
 
 ChattedConnection = Player.Chatted:Connect(function(message)
     local StartIndex = message:find(Prefix)
@@ -183,7 +290,10 @@ ChattedConnection = Player.Chatted:Connect(function(message)
             end
         end
         if CommandToCall then
-            CommandToCall.Callback(Args or {})
+            local success, notsuccess = pcall(CommandToCall.Callback, Args or {})
+            if notsuccess then
+                SendNotification("An error as occurred", "Error: "..notsuccess, 20)
+            end
         end
     end
 end)
