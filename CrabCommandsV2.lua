@@ -29,7 +29,7 @@ if _G.CrabCommand then
         if bool then
             SendNotification("Documentation", 'Type "'..Prefix..' cmds" to get a list of all the commands, ok?', 9e9, "option", function(bool2)
                 if not bool2 then
-                    SendNotification("（。々°）", "Dumbass")
+                    SendNotification("（。々°）", "Dumbass", 9e9)
                 else
                     SendNotification("( ˘͈ ᵕ ˘͈♡)", "Good Job sweethearth")
                 end
@@ -83,14 +83,14 @@ AddCommand(
         local word = Args[1]
         for i, v in pairs(Commands) do
             if word:lower() == v.Name:lower() or table.find(v.Aliases, word:lower()) then
-                SendNotification("CommandHelp", "CommandName: "..v.Name.."\nCommandDescription: "..v.Description)
+                SendNotification("CommandHelp", "CommandName: "..v.Name.."\nCommandDescription: "..v.Description, 10)
             end
         end
     end
 )
 AddCommand(
     "Discord",
-    {"help"},
+    {"help", "support"},
     "Gives the server discord link",
     function(Args)
         if syn then
@@ -130,7 +130,13 @@ AddCommand(
     "Sends a notification with custom text",
     function(Args)
         if Args then
-            SendNotification(Args[1], Args[2] or "")
+            local TextString = ""
+            for i, v in pairs(Args) do
+                if not (i == 1) then
+                    TextString = TextString.." "..v
+                end
+            end
+            SendNotification(Args[1], TextString)
         end
     end
 )
@@ -239,7 +245,7 @@ AddCommand(
                         end
                     end
                 end
-                game:GetService('RunService').Stepped:Wait()
+                game:GetService('RunService').Stepped:Wait()  --It has to be Stepped, because it renders before the physic update
             end
         end
     end
@@ -270,6 +276,34 @@ AddCommand(
     end
 )
 
+
+-- Some QOL additions
+
+game:GetService("RunService").Heartbeat:Connect(function()
+    if game:GetService("CoreGui").RobloxPromptGui:FindFirstChild("ErrorPrompt", true) then
+        game:GetService("TeleportService"):Teleport(game.PlaceId, Player)
+    end
+end)
+if syn then
+    local OldNameCall = nil
+    OldNameCall = hookmetamethod(game, "__namecall", function(Self, ...)
+        local NamecallMethod = getnamecallmethod()
+        if (not checkcaller()) and (Self == Player) and (NamecallMethod == "Kick") then
+            return nil
+        end
+        return OldNameCall(Self, ...)
+    end)
+end
+
+local VirtualUser = game:GetService("VirtualUser")
+Player.Idled:Connect(function()
+    VirtualUser:CaptureController()
+    VirtualUser:ClickButton2(Vector2.new())
+end)
+
+
+-- The actual script that checks when the player types
+
 ChattedConnection = Player.Chatted:Connect(function(message)
     local StartIndex = message:find(Prefix)
     if StartIndex == 1 then
@@ -290,6 +324,7 @@ ChattedConnection = Player.Chatted:Connect(function(message)
             end
         end
         if CommandToCall then
+            SendNotification("Command Called", "Command "..CommandToCall.Name.." has been called.", 3)
             local success, notsuccess = pcall(CommandToCall.Callback, Args or {})
             if notsuccess then
                 SendNotification("An error as occurred", "Error: "..notsuccess, 20)
