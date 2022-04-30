@@ -203,5 +203,26 @@ function Nofitication:Notify(nofdebug, middledebug, all)
         coroutine.wrap(ORBHB_fake_script)()
     end
 end
+local function SendNotification(TitleArg, DescriptionArg, TimeArg, TypeArg, AdditionalArg)
+    local Table = {
+        OutlineColor = Color3.fromHex("E981FF"),
+        Time = TimeArg or 5,
+        Type = TypeArg or "default"
+    }
+    local AdditionalTable = {}
+    if TypeArg == "image" then
+        AdditionalTable.Image = AdditionalArg
+        AdditionalTable.ImageColor = Color3.fromHex("E981FF")
+    elseif TypeArg == "option" then
+        AdditionalTable.Callback = AdditionalArg
+    end
+    Nofitication:Notify(
+        {Title = TitleArg, Description = DescriptionArg},
+        Table,
+        AdditionalTable
+    )
+end
+
+Nofitication.CustomNotification = SendNotification
 
 return Nofitication
