@@ -3,9 +3,9 @@ if not game:IsLoaded() then
 end
 
 _G.AutoFarm = true
-_G.NpcName = "Shrek"
+_G.NpcName = "Vegito"
 _G.FormName = "mystic"
-_G.Sponsor = true
+_G.Sponsor = false
 
 if _G.Sponsor then
     -- Instances:
@@ -31,7 +31,7 @@ if _G.Sponsor then
     TextLabel.Position = UDim2.new(0, 0, 3.79006195e-08, 0)
     TextLabel.Size = UDim2.new(1, 0, 1, 0)
     TextLabel.Font = Enum.Font.SourceSans
-    TextLabel.Text = "Play Maradona Simulator while you farm Shrek or any npc. Game Link: https://www.roblox.com/games/8095847868/SoccerStar-Simulator"
+    TextLabel.Text = "Play Maradona Simulator while you farm Vegito or any npc. Game Link: https://www.roblox.com/games/8095847868/SoccerStar-Simulator"
     TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     TextLabel.TextScaled = true
     TextLabel.TextSize = 14.000
@@ -61,6 +61,10 @@ while _G.AutoFarm do task.wait()
                     local Hrp = Player.Character:FindFirstChild("HumanoidRootPart")
                     local Transformation = Player.Character:FindFirstChild("Transformation", true)
                     local CombatState = Player.PlayerGui:FindFirstChild("CombatState", true)
+                    local Blocking = Player.Character:FindFirstChild("Blocking", true)
+                    if Blocking then
+                        Blocking:Destroy()
+                    end
                     if not EHum then
                         break
                     end
@@ -79,7 +83,7 @@ while _G.AutoFarm do task.wait()
                                 Transformed = true
                                 game:GetService("ReplicatedStorage").Transform:FireServer(_G.FormName)
                             end
-                            Hrp.CFrame = CFrame.new(EHrp.Position - (EHrp.CFrame.LookVector * (EHrp.Size.X/2)), EHrp.Position)
+                            Hrp.CFrame = CFrame.new(EHrp.CFrame.Position - (EHrp.CFrame.LookVector*3), EHrp.CFrame.Position)
                             Pugno()
                         else
                             Transformed = false
