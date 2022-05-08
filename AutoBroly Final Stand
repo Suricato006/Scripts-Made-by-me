@@ -1,0 +1,28 @@
+if _G.AlreadyRunning then return end
+--_G.AlreadyRunning = true
+
+local DefaultSettings = {
+    AnyOneCanJoin = false, -- "true" or "false" anyone can join the broly with you
+    RejoinTimer = 3600, -- time to wait (in seconds) for the script to rejoin
+    TimeToWaitForForm = 3.9, -- time to wait (in seconds) before going in form (only non-androids)
+    Form = "h", -- "h" or "g" form to go in (only non-androids)
+    LowGraphics = true, -- "true" or "false" makes the game look absolutely shit
+    AutoAimKi = true, -- "true" or "false" automatically aims moves
+    Teleport = "Queue",
+    Moves = {
+        "Deadly Dance",
+        "Anger Rush",
+        "Meteor Crash",
+        "TS Molotov",
+        "Flash Skewer",
+        "Vital Strike",
+        "Demon Flash",
+        "Wolf Fang Fist",
+        "Neo Wolf Fang Fist",
+        "Strong Kick"
+    }
+}
+
+while true do task.wait()
+    local Cut = workspace:FindFirstChild("")
+end

@@ -11,10 +11,10 @@ _G.SettingsTable.AutoFarm = true
 _G.SettingsTable.Tool = "Melee" -- "Melee", "Blox Fruit" or "Gun"
 _G.SettingsTable.Moves = {
     Punch = true,
-    MoveZ = true,
-    MoveX = true,
-    MoveC = true,
-    MoveV = true,
+    MoveZ = false,
+    MoveX = false,
+    MoveC = false,
+    MoveV = false,
     MoveF = false
 }
 _G.SettingsTable.Position = "Above" -- "Above", "Under" or "Behind"
@@ -28,7 +28,7 @@ local function FindQuest()
     local NpcName = ""
     for i, v in pairs(QuestModule) do
         for i1, v1 in pairs(v) do
-            if (v1.LevelReq <= Player.Data.Level.Value) and (ClosestQuestLevel < v1.LevelReq) then
+            if (v1.LevelReq <= Player.Data.Level.Value) and (ClosestQuestLevel < v1.LevelReq) and not (v1.Task[v1.Name] == 1) then
                 ClosestQuestLevel = v1.LevelReq
                 ClosestQuestName = i
                 QuestIndex = i1
@@ -47,6 +47,23 @@ local function NpcCheck(NpcModel)
         end
     end
     return nil
+end
+_G.SettingsTable.Distance = _G.SettingsTable.Distance or 20
+
+local function ChangeHitbox(Hrp)
+    Hrp.CanCollide = false
+    Hrp.Size = Vector3.new(_G.SettingsTable.Distance * 2.5, _G.SettingsTable.Distance * 2.5, _G.SettingsTable.Distance * 2.5)
+    Hrp.Transparency = 0.5
+end
+
+local Connection = nil
+if _G.SettingsTable.AutoFarm then
+    Connection = workspace.Enemies.ChildAdded:connect(function(child)
+        local Hrp = child:WaitForChild("HumanoidRootPart", 5)
+        if Hrp then
+            ChangeHitbox(Hrp)
+        end
+    end)
 end
 
 while _G.SettingsTable.AutoFarm do task.wait()
@@ -101,8 +118,6 @@ while _G.SettingsTable.AutoFarm do task.wait()
                     Tool.Parent = Player.Character
                 end
             end
-            _G.SettingsTable.Distance = _G.SettingsTable.Distance or 20
-            EHrp.Size = Vector3.new(_G.SettingsTable.Distance * 2.5, _G.SettingsTable.Distance * 2.5, _G.SettingsTable.Distance * 2.5)
             local PositionChange = Vector3.new(0, _G.SettingsTable.Distance, 0)
             if _G.SettingsTable.Position == "Under" then
                 PositionChange = PositionChange * -1
@@ -110,8 +125,9 @@ while _G.SettingsTable.AutoFarm do task.wait()
             if _G.SettingsTable.Position == "Behind" then
                 PositionChange = -EHrp.CFrame.LookVector * (_G.SettingsTable.Distance)
             end
-            EHrp.Transparency = 0.5
-            EHrp.CanCollide = false
+            if not (EHrp.Transparency == 0.5) then
+                ChangeHitbox(EHrp)
+            end
             Hrp.CFrame = CFrame.new(EHrp.CFrame.Position + PositionChange, EHrp.CFrame.Position)
             Camera.CFrame = CFrame.new(EHrp.CFrame.Position - Hrp.CFrame.LookVector * (_G.SettingsTable.Distance - 1), EHrp.CFrame.Position)
             if _G.SettingsTable.Moves.Punch then
@@ -126,5 +142,8 @@ while _G.SettingsTable.AutoFarm do task.wait()
             end
         end
     end
+end
+if Connection then
+    Connection:Disconnect()
 end
 Camera.CameraType = Enum.CameraType.Custom
