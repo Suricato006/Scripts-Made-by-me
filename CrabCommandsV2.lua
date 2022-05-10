@@ -1,26 +1,15 @@
+--[[
+    Script Made by CrabGuy (aka suricato006)
+
+    It was made with a lot of love so dont steal it, if you wanna learn or are going to credit me then go ahead.
+    If you are here checking the source code it means you really liked the script xoxo
+]]
+
 if not game:IsLoaded() then game.Loaded:Wait() end
 
 local NotificationLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Notification%20Library%20Optimization.lua"))()
 
-local function SendNotification(TitleArg, DescriptionArg, TimeArg, TypeArg, AdditionalArg)
-    local Table = {
-        OutlineColor = Color3.fromHex("E981FF"),
-        Time = TimeArg or 5,
-        Type = TypeArg or "default"
-    }
-    local AdditionalTable = {}
-    if TypeArg == "image" then
-        AdditionalTable.Image = AdditionalArg
-        AdditionalTable.ImageColor = Color3.fromHex("E981FF")
-    elseif TypeArg == "option" then
-        AdditionalTable.Callback = AdditionalArg
-    end
-    NotificationLibrary:Notify(
-        {Title = TitleArg, Description = DescriptionArg},
-        Table,
-        AdditionalTable
-    )
-end
+local SendNotification = NotificationLibrary.CustomNotification
 
 local Prefix = "/e"
 if _G.CrabCommand then
@@ -69,9 +58,7 @@ AddCommand(
             ChattedConnection:Disconnect()
         end
         _G.CrabCommand = false
-        for i, v in pairs(_G.CommandStates) do
-            v = false
-        end
+        _G.CommandStates = {}
         SendNotification("Unloaded", "The script is now unloaded, thanks for using it")
     end
 )
@@ -98,7 +85,7 @@ AddCommand(
             SendNotification("Discord Server", "Copied to your clipboard", 5)
         end
         local req = syn and syn.request or game:GetService("HttpService") and game:GetService("HttpService").request or http_request or fluxus and fluxus.request or getgenv().request or request
-        if req then
+        if req then --Credits to Infinite Yield
             req({
                 Url = 'http://127.0.0.1:6463/rpc?v=1',
                 Method = 'POST',
@@ -172,63 +159,40 @@ AddCommand(
         end
     end
 )
+local CFloop
 AddCommand(
     "Fly",
-    {"swim"},
-    "A strange type of fly so its not banned",
-    function(Args)
+    {"cframefly"},
+    "makes you fly, type the speed you want after",
+    function(Args) --Full credit to peyton#9148 and Infinite Yield
         _G.CommandStates.Fly = not _G.CommandStates.Fly
         if _G.CommandStates.Fly then
-            local DefaultGravity = workspace.Gravity
-            while _G.CommandStates.Fly do task.wait()
-                local Humanoid = Player.Character:FindFirstChildWhichIsA("Humanoid", true)
-                if Humanoid then
-                    if Humanoid.Health > 0 then
-                        workspace.Gravity = 0
-                        Humanoid:SetStateEnabled(Enum.HumanoidStateType.Climbing,false)
-                        Humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown,false)
-                        Humanoid:SetStateEnabled(Enum.HumanoidStateType.Flying,false)
-                        Humanoid:SetStateEnabled(Enum.HumanoidStateType.Freefall,false)
-                        Humanoid:SetStateEnabled(Enum.HumanoidStateType.GettingUp,false)
-                        Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping,false)
-                        Humanoid:SetStateEnabled(Enum.HumanoidStateType.Landed,false)
-                        Humanoid:SetStateEnabled(Enum.HumanoidStateType.Physics,false)
-                        Humanoid:SetStateEnabled(Enum.HumanoidStateType.PlatformStanding,false)
-                        Humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll,false)
-                        Humanoid:SetStateEnabled(Enum.HumanoidStateType.Running,false)
-                        Humanoid:SetStateEnabled(Enum.HumanoidStateType.RunningNoPhysics,false)
-                        Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated,false)
-                        Humanoid:SetStateEnabled(Enum.HumanoidStateType.StrafingNoPhysics,false)
-                        Humanoid:SetStateEnabled(Enum.HumanoidStateType.Swimming,false)
-                        Humanoid:ChangeState(Enum.HumanoidStateType.Swimming)
-                    else
-                        workspace.Gravity = DefaultGravity
-                    end
-                end
-            end
-            workspace.Gravity = DefaultGravity
-            local Humanoid = Player.Character:FindFirstChildWhichIsA("Humanoid", true)
-            if Humanoid then
-                Humanoid:SetStateEnabled(Enum.HumanoidStateType.Climbing,true)
-                Humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown,true)
-                Humanoid:SetStateEnabled(Enum.HumanoidStateType.Flying,true)
-                Humanoid:SetStateEnabled(Enum.HumanoidStateType.Freefall,true)
-                Humanoid:SetStateEnabled(Enum.HumanoidStateType.GettingUp,true)
-                Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping,true)
-                Humanoid:SetStateEnabled(Enum.HumanoidStateType.Landed,true)
-                Humanoid:SetStateEnabled(Enum.HumanoidStateType.Physics,true)
-                Humanoid:SetStateEnabled(Enum.HumanoidStateType.PlatformStanding,true)
-                Humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll,true)
-                Humanoid:SetStateEnabled(Enum.HumanoidStateType.Running,true)
-                Humanoid:SetStateEnabled(Enum.HumanoidStateType.RunningNoPhysics,true)
-                Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated,true)
-                Humanoid:SetStateEnabled(Enum.HumanoidStateType.StrafingNoPhysics,true)
-                Humanoid:SetStateEnabled(Enum.HumanoidStateType.Swimming,true)
-                Humanoid:ChangeState(Enum.HumanoidStateType.RunningNoPhysics)
+            Player.Character:FindFirstChildOfClass('Humanoid').PlatformStand = true
+            local Head = Player.Character:WaitForChild("Head")
+            Head.Anchored = true
+            CFloop = game:GetService("RunService").Heartbeat:Connect(function(deltaTime)
+                local moveDirection = Player.Character:FindFirstChildOfClass('Humanoid').MoveDirection * ((Args[1] or 20) * deltaTime)
+                local headCFrame = Head.CFrame
+                local cameraCFrame = workspace.CurrentCamera.CFrame
+                local cameraOffset = headCFrame:ToObjectSpace(cameraCFrame).Position
+                cameraCFrame = cameraCFrame * CFrame.new(-cameraOffset.X, -cameraOffset.Y, -cameraOffset.Z + 1)
+                local cameraPosition = cameraCFrame.Position
+                local headPosition = headCFrame.Position
+
+                local objectSpaceVelocity = CFrame.new(cameraPosition, Vector3.new(headPosition.X, cameraPosition.Y, headPosition.Z)):VectorToObjectSpace(moveDirection)
+                Head.CFrame = CFrame.new(headPosition) * (cameraCFrame - cameraPosition) * CFrame.new(objectSpaceVelocity)
+            end)
+        else
+            if CFloop then
+                CFloop:Disconnect()
+                Player.Character:FindFirstChildOfClass('Humanoid').PlatformStand = false
+                local Head = Player.Character:WaitForChild("Head")
+                Head.Anchored = false
             end
         end
     end
 )
+local NoClipConnection
 AddCommand(
     "NoClip",
     {"clip"},
@@ -236,7 +200,7 @@ AddCommand(
     function()
         _G.CommandStates.NoClip = not _G.CommandStates.NoClip
         if _G.CommandStates.NoClip then
-            while _G.CommandStates.NoClip do
+            NoClipConnection = game:GetService("RunService").Stepped:Connect(function() --It has to be Stepped, because it renders before the physic update
                 local Char = Player.Character
                 if Char then
                     for i, v in pairs(Char:GetDescendants()) do
@@ -245,7 +209,10 @@ AddCommand(
                         end
                     end
                 end
-                game:GetService('RunService').Stepped:Wait()  --It has to be Stepped, because it renders before the physic update
+            end)
+        else
+            if NoClipConnection then
+                NoClipConnection:Disconnect()
             end
         end
     end
@@ -273,6 +240,128 @@ AddCommand(
                 end
             end
         end
+    end
+)
+AddCommand(
+    "DarkDex",
+    {"dex"},
+    "Opens Dark Dex (not made by me)",
+    loadstring(game:HttpGet("https://gist.githubusercontent.com/DinosaurXxX/b757fe011e7e600c0873f967fe427dc2/raw/ee5324771f017073fc30e640323ac2a9b3bfc550/dark%2520dex%2520v4"))
+)
+AddCommand(
+    "RemoteSpy",
+    {"rspy", "spy"},
+    "Opens MrSpy",
+    loadstring(game:HttpGet("https://pastebin.com/raw/DU2RTZkq"))
+)
+AddCommand(
+    "CopyPlaceId",
+    {"placeid", "pid", "copyid"},
+    "Copies the place id to your clipboard",
+    function()
+        if setclipboard then
+            setclipboard(game.PlaceId)
+            SendNotification("Id Copied", 'the PlaceId has been copied to your clipboard')
+        else
+            SendNotification("Injector not supported", 'the function "setclipboard" does not exist')
+        end
+    end
+)
+AddCommand(
+    "Rejoin",
+    {"rj"},
+    "Rejoins you in the same server",
+    function() --Credits to Infinite Yield (altho there is not another way of writing this)
+        local Players = game:GetService("Players")
+        if #Players:GetPlayers() <= 1 then
+            Player:Kick("\nRejoining...")
+        else
+            game:GetService('TeleportService'):TeleportToPlaceInstance(game.PlaceId, game.JobId, Player)
+        end
+    end
+)
+AddCommand(
+    "ServerHop",
+    {"shop"},
+    "Rejoins the same game in a different server",
+    function() --Credits to Infinite Yield (altho there is not another way of writing this)
+        local x = {}
+        for _, v in ipairs(game:GetService("HttpService"):JSONDecode(game:HttpGetAsync("https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?sortOrder=Asc&limit=100")).data) do
+            if type(v) == "table" and v.maxPlayers > v.playing and v.id ~= game.JobId then
+                x[#x + 1] = v.id
+            end
+        end
+        if #x > 0 then
+            game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, x[math.random(1, #x)])
+        else
+            SendNotification("Error", "Couldn't find any server to join")
+        end
+    end
+)
+AddCommand(
+    "ToggleNotification",
+    {"tnotify", "togglenotify"},
+    "Chooses if commands send a notification on execution",
+    function(Args)
+        _G.CommandStates.ToggleNotification = not _G.CommandStates.ToggleNotification
+    end
+)
+_G.CommandStates.LastCommandUsed = {}
+AddCommand(
+    "LastCommand",
+    {"last", "l"},
+    "Executes the last command",
+    function()
+        if (type(_G.CommandStates.LastCommandUsed.Callback) == "function") and not (_G.CommandStates.LastCommandUsed.Name == "LastCommand") then
+            _G.CommandStates.LastCommandUsed.Callback(_G.CommandStates.LastCommandUsed.Args)
+        end
+    end
+)
+AddCommand(
+    "FpsBoost",
+    {"fps", "potato", "badpc"},
+    "Makes the game look really bad",
+    function() --Straight from Infinite Yield (its the best optimization)
+        SendNotification("U noob", "Potato pc", 5)
+        workspace:FindFirstChildOfClass('Terrain').WaterWaveSize = 0
+        workspace:FindFirstChildOfClass('Terrain').WaterWaveSpeed = 0
+        workspace:FindFirstChildOfClass('Terrain').WaterReflectance = 0
+        workspace:FindFirstChildOfClass('Terrain').WaterTransparency = 0
+        game:GetService("Lighting").GlobalShadows = false
+        game:GetService("Lighting").FogEnd = 9e9
+        settings().Rendering.QualityLevel = 1
+        for i,v in pairs(game:GetDescendants()) do
+            if v:IsA("Part") or v:IsA("UnionOperation") or v:IsA("MeshPart") or v:IsA("CornerWedgePart") or v:IsA("TrussPart") then
+                v.Material = "Plastic"
+                v.Reflectance = 0
+            elseif v:IsA("Decal") then
+                v.Transparency = 1
+            elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
+                v.Lifetime = NumberRange.new(0)
+            elseif v:IsA("Explosion") then
+                v.BlastPressure = 1
+                v.BlastRadius = 1
+            end
+        end
+        for i,v in pairs(game:GetService("Lighting"):GetDescendants()) do
+            if v:IsA("BlurEffect") or v:IsA("SunRaysEffect") or v:IsA("ColorCorrectionEffect") or v:IsA("BloomEffect") or v:IsA("DepthOfFieldEffect") then
+                v.Enabled = false
+            end
+        end
+        workspace.DescendantAdded:Connect(function(child)
+            coroutine.wrap(function()
+                if child:IsA('ForceField') then
+                    game:GetService('RunService').Heartbeat:Wait()
+                    child:Destroy()
+                elseif child:IsA('Sparkles') then
+                    game:GetService('RunService').Heartbeat:Wait()
+                    child:Destroy()
+                elseif child:IsA('Smoke') or child:IsA('Fire') then
+                    game:GetService('RunService').Heartbeat:Wait()
+                    child:Destroy()
+                end
+            end)()
+        end)
     end
 )
 
@@ -303,7 +392,6 @@ end)
 
 
 -- The actual script that checks when the player types
-
 ChattedConnection = Player.Chatted:Connect(function(message)
     local StartIndex = message:find(Prefix)
     if StartIndex == 1 then
@@ -324,8 +412,15 @@ ChattedConnection = Player.Chatted:Connect(function(message)
             end
         end
         if CommandToCall then
-            SendNotification("Command Called", "Command "..CommandToCall.Name.." has been called.", 3)
+            if _G.CommandStates.ToggleNotification then
+                SendNotification("Command Called", "Command "..CommandToCall.Name.." has been called.", 3)
+            end
             local success, notsuccess = pcall(CommandToCall.Callback, Args or {})
+            _G.CommandStates.LastCommandUsed = {
+                Name = CommandToCall.Name,
+                Callback = CommandToCall.Callback,
+                Args = Args or {}
+            }
             if notsuccess then
                 SendNotification("An error as occurred", "Error: "..notsuccess, 20)
             end
