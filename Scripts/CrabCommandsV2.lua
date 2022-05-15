@@ -7,7 +7,7 @@
 
 if not game:IsLoaded() then game.Loaded:Wait() end
 
-local NotificationLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Notification%20Library%20Optimization.lua"))()
+local NotificationLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Libraries/Notification%20Library%20Optimization.lua"))()
 
 local SendNotification = NotificationLibrary.CustomNotification
 
@@ -32,7 +32,7 @@ end
 _G.CrabCommand = true
 
 local Player = game:GetService("Players").LocalPlayer
-local InputLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/InputFunctions%20Library.lua"))()
+local InputLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Libraries/InputFunctions%20Library.lua"))()
 local Camera = workspace:FindFirstChildWhichIsA("Camera")
 local RunService = game:GetService("RunService")
 
