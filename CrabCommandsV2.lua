@@ -34,6 +34,7 @@ _G.CrabCommand = true
 local Player = game:GetService("Players").LocalPlayer
 local InputLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/InputFunctions%20Library.lua"))()
 local Camera = workspace:FindFirstChildWhichIsA("Camera")
+local RunService = game:GetService("RunService")
 
 local Commands = {}
 _G.CommandStates = {}
@@ -47,6 +48,15 @@ local function AddCommand(NameArg, AliasesArg, DescriptionArg, CallbackArg)
         Callback = CallbackArg
     })
 end
+local function FindPlayer(PlayerName)
+    for _, v in pairs(game.Players:GetChildren()) do
+        if v.Name:lower():find(PlayerName:lower()) == 1 then
+            if not (v == Player) then
+                return v
+            end
+        end
+    end
+end
 
 local ChattedConnection = nil
 AddCommand(
@@ -59,6 +69,8 @@ AddCommand(
         end
         _G.CrabCommand = false
         _G.CommandStates = {}
+        task.wait()
+        _G.CommandStates = nil
         SendNotification("Unloaded", "The script is now unloaded, thanks for using it")
     end
 )
@@ -67,6 +79,9 @@ AddCommand(
     {"cmdhelp"},
     "A command to see what other commands do",
     function(Args)
+        if not Args[1] then
+            return
+        end
         local word = Args[1]
         for i, v in pairs(Commands) do
             if word:lower() == v.Name:lower() or table.find(v.Aliases, word:lower()) then
@@ -170,7 +185,7 @@ AddCommand(
             Player.Character:FindFirstChildOfClass('Humanoid').PlatformStand = true
             local Head = Player.Character:WaitForChild("Head")
             Head.Anchored = true
-            CFloop = game:GetService("RunService").Heartbeat:Connect(function(deltaTime)
+            CFloop = RunService.Heartbeat:Connect(function(deltaTime)
                 local moveDirection = Player.Character:FindFirstChildOfClass('Humanoid').MoveDirection * ((Args[1] or 20) * deltaTime)
                 local headCFrame = Head.CFrame
                 local cameraCFrame = workspace.CurrentCamera.CFrame
@@ -200,7 +215,7 @@ AddCommand(
     function()
         _G.CommandStates.NoClip = not _G.CommandStates.NoClip
         if _G.CommandStates.NoClip then
-            NoClipConnection = game:GetService("RunService").Stepped:Connect(function() --It has to be Stepped, because it renders before the physic update
+            NoClipConnection = RunService.Stepped:Connect(function() --It has to be Stepped, because it renders before the physic update
                 local Char = Player.Character
                 if Char then
                     for i, v in pairs(Char:GetDescendants()) do
@@ -223,21 +238,15 @@ AddCommand(
     "Teleports you to a player",
     function(Args)
         if Args[1] then
-            for _, v in pairs(game.Players:GetPlayers()) do
-                if v.Name:lower():find(Args[1]:lower()) then
-                    if not (v == Player) then
-                        local PHrp = v.Character:FindFirstChild("HumanoidRootPart")
-                        local Hrp = Player.Character:FindFirstChild("HumanoidRootPart")
-                        if PHrp and Hrp then
-                            Hrp.Anchored = true
-                            local tween = InputLibrary.TweenPart(Hrp, tonumber(Args[2]) or 5, PHrp.CFrame)
-                            tween:Play()
-                            tween.Completed:Wait()
-                            Hrp.Anchored = false
-                        end
-                    end
-                    break
-                end
+            local OtherPlayer = FindPlayer(Args[1])
+            local PHrp = OtherPlayer.Character:FindFirstChild("HumanoidRootPart")
+            local Hrp = Player.Character:FindFirstChild("HumanoidRootPart")
+            if PHrp and Hrp then
+                Hrp.Anchored = true
+                local tween = InputLibrary.TweenPart(Hrp, tonumber(Args[2]) or 5, PHrp.CFrame)
+                tween:Play()
+                tween.Completed:Wait()
+                Hrp.Anchored = false
             end
         end
     end
@@ -245,7 +254,7 @@ AddCommand(
 AddCommand(
     "DarkDex",
     {"dex"},
-    "Opens Dark Dex (not made by me)",
+    "Opens Dark Dex",
     loadstring(game:HttpGet("https://gist.githubusercontent.com/DinosaurXxX/b757fe011e7e600c0873f967fe427dc2/raw/ee5324771f017073fc30e640323ac2a9b3bfc550/dark%2520dex%2520v4"))
 )
 AddCommand(
@@ -364,11 +373,34 @@ AddCommand(
         end)
     end
 )
+local SpectateConnection
+AddCommand(
+    "Spectate",
+    {"view"},
+    "Makes you spectate another player",
+    function(Args)
+        _G.CommandStates.Spectate = not _G.CommandStates.Spectate
+        if not Args[1] then
+            _G.CommandStates.Spectate = false
+        end
+        if _G.CommandStates.Spectate then
+            local OtherPlayer = FindPlayer(Args[1])
+            SpectateConnection = RunService.Heartbeat:Connect(function()
+                if _G.CommandStates.Spectate then
+                    Camera.CameraSubject = OtherPlayer.Character:WaitForChild("Humanoid")
+                else
+                    Camera.CameraSubject = Player.Character:WaitForChild("Humanoid")
+                    SpectateConnection:Disconnect()
+                end
+            end)
+        end
+    end
+)
 
 
 -- Some QOL additions
 
-game:GetService("RunService").Heartbeat:Connect(function()
+RunService.Heartbeat:Connect(function()
     if game:GetService("CoreGui").RobloxPromptGui:FindFirstChild("ErrorPrompt", true) then
         game:GetService("TeleportService"):Teleport(game.PlaceId, Player)
     end
