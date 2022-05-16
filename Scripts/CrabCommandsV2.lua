@@ -8,7 +8,6 @@
 if not game:IsLoaded() then game.Loaded:Wait() end
 
 local NotificationLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Libraries/Notification%20Library%20Optimization.lua"))()
-
 local SendNotification = NotificationLibrary.CustomNotification
 
 local Prefix = "/e"
@@ -251,17 +250,25 @@ AddCommand(
         end
     end
 )
-AddCommand(
+AddCommand( --Made by Moon and Courtney
     "DarkDex",
     {"dex"},
     "Opens Dark Dex",
     loadstring(game:HttpGet("https://gist.githubusercontent.com/DinosaurXxX/b757fe011e7e600c0873f967fe427dc2/raw/ee5324771f017073fc30e640323ac2a9b3bfc550/dark%2520dex%2520v4"))
 )
-AddCommand(
+AddCommand( --Made by Upbolt
     "RemoteSpy",
     {"rspy", "spy"},
-    "Opens MrSpy",
-    loadstring(game:HttpGet("https://pastebin.com/raw/DU2RTZkq"))
+    "Opens Hydroxide",
+    function()
+        local owner = "Upbolt"
+        local branch = "revision"
+        local function webImport(file)
+            return loadstring(game:HttpGetAsync(("https://raw.githubusercontent.com/%s/Hydroxide/%s/%s.lua"):format(owner, branch, file)), file .. '.lua')()
+        end
+        webImport("init")
+        webImport("ui/main")
+    end
 )
 AddCommand(
     "CopyPlaceId",

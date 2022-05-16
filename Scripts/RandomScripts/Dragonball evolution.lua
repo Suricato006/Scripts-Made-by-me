@@ -3,45 +3,8 @@ if not game:IsLoaded() then
 end
 
 _G.AutoFarm = true
-_G.NpcName = "Vegito"
+_G.NpcName = "Shaggy"
 _G.FormName = "mystic"
-_G.Sponsor = true
-
-local a
-if _G.Sponsor then
-
-    local ScreenGui = Instance.new("ScreenGui")
-    local Frame = Instance.new("Frame")
-    local TextLabel = Instance.new("TextLabel")
-    local UIGradient = Instance.new("UIGradient")
-
-    ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-    ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
-    Frame.Parent = ScreenGui
-    Frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    Frame.Position = UDim2.new(0, 0, 0.186289117, 0)
-    Frame.Size = UDim2.new(1, 0, 0.300000012, 0)
-
-    TextLabel.Parent = Frame
-    TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    TextLabel.BackgroundTransparency = 0.350
-    TextLabel.Position = UDim2.new(0, 0, 3.79006195e-08, 0)
-    TextLabel.Size = UDim2.new(1, 0, 1, 0)
-    TextLabel.Font = Enum.Font.SourceSans
-    TextLabel.Text = "Play Maradona Simulator while you farm ".._G.NpcName.." or any npc. Game Link: https://www.roblox.com/games/8095847868/SoccerStar-Simulator"
-    TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-    TextLabel.TextScaled = true
-    TextLabel.TextSize = 14.000
-    TextLabel.TextStrokeTransparency = 0.000
-    TextLabel.TextWrapped = true
-
-    UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 0, 0)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(0, 68, 255))}
-    UIGradient.Rotation = 90
-    UIGradient.Parent = TextLabel
-
-    a = ScreenGui
-end
 
 local Player = game.Players.LocalPlayer
 
@@ -97,8 +60,4 @@ while _G.AutoFarm do task.wait()
             end
         end
     end
-end
-
-if a then
-    a:Destroy()
 end
