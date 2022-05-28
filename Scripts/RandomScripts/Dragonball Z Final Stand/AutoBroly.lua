@@ -1,4 +1,10 @@
-_G.BrolySettings = {
+--[[
+    Hallo ma scripter friend, its dangerous to go alone, take this code.
+    AutoBroly made by CrabGuy#8711 (if you wanna use parts of it just credit me, and make me know so i will give you a kiss)
+]]
+
+
+_G.BrolySettings = _G.BrolySettings or {
     Moves = {
     "Deadly Dance",
     "Blaster Meteor",
