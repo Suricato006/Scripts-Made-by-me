@@ -45,15 +45,17 @@ while not ServerTraits do task.wait()
 end
 
 local Char = Player.Character or Player.CharacterAdded:Wait()
-if _G.BrolySettings.FreezeExp then
-    local TimerLabel = Player:WaitForChild("PlayerGui"):WaitForChild("HUD"):WaitForChild("FullSize"):WaitForChild("Timer")
-    if not (TimerLabel.Text == "") then
-        local TrueLabel = Char:WaitForChild("True", 5)
-        if TrueLabel then
-            TrueLabel:Destroy()
+coroutine.wrap(function()
+    if _G.BrolySettings.FreezeExp then
+        local TimerLabel = Player:WaitForChild("PlayerGui"):WaitForChild("HUD"):WaitForChild("FullSize"):WaitForChild("Timer")
+        if not (TimerLabel.Text == "") then
+            local TrueLabel = Char:WaitForChild("True", 5)
+            if TrueLabel then
+                TrueLabel:Destroy()
+            end
         end
     end
-end
+end)()
 
 if _G.BrolySettings.LowGraphics then --Straight from Infinite Yield, credits to them
     workspace:FindFirstChildOfClass('Terrain').WaterWaveSize = 0
