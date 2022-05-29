@@ -36,15 +36,21 @@ local RunService = game:GetService("RunService")
 local Player = game.Players.LocalPlayer
 local Camera = workspace:WaitForChild("Camera")
 local Backpack = Player:WaitForChild("Backpack")
-local ServerTraits = Backpack:WaitForChild("ServerTraits")
+local ServerTraits = nil
+while not ServerTraits do task.wait()
+    pcall(function()
+        ServerTraits = Player.Backpack.ServerTraits
+    end)
+end
 
+local Char = Player.Character or Player.CharacterAdded:Wait()
 if _G.BrolySettings.FreezeExp then
-    local TimerLabel = Player.PlayerGui:WaitForChild("HUD"):WaitForChild("FullSize"):WaitForChild("Timer")
+    local TimerLabel = Player:WaitForChild("PlayerGui"):WaitForChild("HUD"):WaitForChild("FullSize"):WaitForChild("Timer")
     if not (TimerLabel.Text == "") then
-        Player.CharacterAdded:Connect(function(Char)
-            local TrueValue = Char:WaitForChild("True")
-            TrueValue:Destroy()
-        end)
+        local TrueLabel = Char:WaitForChild("True", 5)
+        if TrueLabel then
+            TrueLabel:Destroy()
+        end
     end
 end
 
@@ -102,7 +108,6 @@ if not (game.PlaceId == MainWorldId) and not WeAreInBroly then
     BackToMainWorld()
 end
 
-local Char = Player.Character or Player.CharacterAdded:Wait()
 local Hrp = Char:WaitForChild("HumanoidRootPart")
 local Hum = Char:WaitForChild("Humanoid")
 
