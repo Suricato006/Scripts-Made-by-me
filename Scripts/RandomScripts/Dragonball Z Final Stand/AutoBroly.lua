@@ -26,7 +26,8 @@ _G.BrolySettings = _G.BrolySettings or {
     ChargeTime = 3.9, -- Time in seconds to charge before going in form (for androids its automatic)
     World = "Earth", -- Either "Queue" or "Earth"
     LowGraphics = true, -- true or false (makes the game look shit but boosts fps)
-    PunchWhenLowKi = true -- true or false (makes you dropkick broly then you have low ki)
+    PunchWhenLowKi = true, -- true or false (makes you dropkick broly then you have low ki)
+    TimeToWaitBeforeRejoin = 0 -- Time in seconds to wait before rejoining if some bug happen (put it to 0 to deactivate it)
 }
 
 if not game:IsLoaded() then
@@ -107,6 +108,17 @@ end
 if not (game.PlaceId == MainWorldId) and not WeAreInBroly then
     BackToMainWorld()
 end
+if _G.BrolySettings.TimeToWaitBeforeRejoin and (_G.BrolySettings.TimeToWaitBeforeRejoin > 0) then
+    coroutine.wrap(function()
+        task.wait(_G.BrolySettings.TimeToWaitBeforeRejoin)
+        BackToMainWorld()
+    end)()
+end
+game:GetService("CoreGui").DescendantAdded:Connect(function(descendant)
+    if descendant.Name == "ErrorTitle" then
+        BackToMainWorld()
+    end
+end)
 
 local Hrp = Char:WaitForChild("HumanoidRootPart")
 local Hum = Char:WaitForChild("Humanoid")
