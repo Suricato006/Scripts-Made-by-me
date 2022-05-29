@@ -2,7 +2,7 @@ if not game:IsLoaded() then
     game.Loaded:Wait()
 end
 
-local Moves = {"TS Molotov",
+_G.Moves = _G.Moves or {"TS Molotov",
     "Wolf Fang Fist",
     "Mach Kick",
     "Flash Skewer",
