@@ -27,7 +27,8 @@ _G.BrolySettings = _G.BrolySettings or {
     World = "Earth", -- Either "Queue" or "Earth"
     LowGraphics = true, -- true or false (makes the game look shit but boosts fps)
     PunchWhenLowKi = true, -- true or false (makes you dropkick broly then you have low ki)
-    TimeToWaitBeforeRejoin = 0 -- Time in seconds to wait before rejoining if some bug happen (put it to 0 to deactivate it)
+    TimeToWaitBeforeRejoin = 0, -- Time in seconds to wait before rejoining if some bug happen (put it to 0 to deactivate it)
+    BrolyTimeLog = true -- true or false (saves the time it takes to do a broly in a log file)
 }
 
 if not game:IsLoaded() then
@@ -228,7 +229,21 @@ Hrp.ChildRemoved:Connect(function(child)
     end
 end)
 
-Player:WaitForChild("PlayerGui"):WaitForChild("HUD"):WaitForChild("FullSize"):WaitForChild("Money3"):GetPropertyChangedSignal("Visible"):Connect(BackToMainWorld)
+Player:WaitForChild("PlayerGui"):WaitForChild("HUD"):WaitForChild("FullSize"):WaitForChild("Money3"):GetPropertyChangedSignal("Visible"):Connect(function()
+    if _G.BrolySettings.BrolyTimeLog then
+        if readfile and isfile and writefile then
+            local newstring
+            if isfile("Broly.CRAB") then
+                local string = readfile("Broly.CRAB")
+                newstring = string.. "\nBrolyTime: "..workspace.DistributedGameTime
+            else
+                newstring = "BrolyTime: "..workspace.DistributedGameTime
+            end
+            writefile(newstring)
+        end
+    end
+    BackToMainWorld()
+end)
 
 while true do --Needs to be a loop because of the wait <3
     if EnoughKi then
