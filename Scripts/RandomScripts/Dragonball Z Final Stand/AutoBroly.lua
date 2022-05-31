@@ -37,13 +37,12 @@ local RunService = game:GetService("RunService")
 local Player = game.Players.LocalPlayer
 local Camera = workspace:WaitForChild("Camera")
 local Backpack = nil
-local ServerTraits = nil
-while (not ServerTraits) or (not Backpack) do task.wait()
+while (not Backpack) do task.wait()
     pcall(function()
         Backpack = Player.Backpack
-        ServerTraits = Backpack.ServerTraits
     end)
 end
+local ServerTraits = Backpack:WaitForChild("ServerTraits")
 
 local Char = Player.Character or Player.CharacterAdded:Wait()
 coroutine.wrap(function()
