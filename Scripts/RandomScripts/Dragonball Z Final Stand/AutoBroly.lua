@@ -36,11 +36,12 @@ end
 local RunService = game:GetService("RunService")
 local Player = game.Players.LocalPlayer
 local Camera = workspace:WaitForChild("Camera")
-local Backpack = Player:WaitForChild("Backpack")
+local Backpack = nil
 local ServerTraits = nil
 while not ServerTraits do task.wait()
     pcall(function()
-        ServerTraits = Player.Backpack.ServerTraits
+        Backpack = Player.Backpack
+        ServerTraits = Backpack.ServerTraits
     end)
 end
 
