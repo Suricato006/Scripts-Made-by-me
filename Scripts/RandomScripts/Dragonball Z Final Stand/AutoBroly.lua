@@ -38,7 +38,7 @@ local Player = game.Players.LocalPlayer
 local Camera = workspace:WaitForChild("Camera")
 local Backpack = nil
 local ServerTraits = nil
-while not ServerTraits do task.wait()
+while (not ServerTraits) or (not Backpack) do task.wait()
     pcall(function()
         Backpack = Player.Backpack
         ServerTraits = Backpack.ServerTraits
