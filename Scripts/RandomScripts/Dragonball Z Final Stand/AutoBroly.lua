@@ -239,7 +239,7 @@ Player:WaitForChild("PlayerGui"):WaitForChild("HUD"):WaitForChild("FullSize"):Wa
             else
                 newstring = "BrolyTime: "..workspace.DistributedGameTime
             end
-            writefile(newstring)
+            writefile("Broly.CRAB", newstring)
         end
     end
     BackToMainWorld()
