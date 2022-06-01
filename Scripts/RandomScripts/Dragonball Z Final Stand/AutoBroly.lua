@@ -260,7 +260,9 @@ while true do --Needs to be a loop because of the wait <3
             end
         end
     else
-        InputEvent:FireServer({"m2"}, CFrame.new(), nil, false)
+        if _G.BrolySettings.PunchWhenLowKi then
+            InputEvent:FireServer({"m2"}, CFrame.new(), nil, false)
+        end
         task.wait()
     end
 end
