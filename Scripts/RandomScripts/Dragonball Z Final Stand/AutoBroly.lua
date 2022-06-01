@@ -38,12 +38,13 @@ local RunService = game:GetService("RunService")
 local Player = game.Players.LocalPlayer
 local Camera = workspace:WaitForChild("Camera")
 local Backpack = nil
-while (not Backpack) do task.wait()
+local ServerTraits = nil
+while (not Backpack) or (not ServerTraits) do task.wait()
     pcall(function()
         Backpack = Player.Backpack
+        ServerTraits = Backpack.ServerTraits
     end)
 end
-local ServerTraits = Backpack:WaitForChild("ServerTraits")
 
 local Char = Player.Character or Player.CharacterAdded:Wait()
 coroutine.wrap(function()
@@ -229,21 +230,24 @@ Hrp.ChildRemoved:Connect(function(child)
     end
 end)
 
-Player:WaitForChild("PlayerGui"):WaitForChild("HUD"):WaitForChild("FullSize"):WaitForChild("Money3"):GetPropertyChangedSignal("Visible"):Connect(function()
-    if _G.BrolySettings.BrolyTimeLog then
-        if readfile and isfile and writefile then
-            local newstring
-            if isfile("Broly.CRAB") then
-                local string = readfile("Broly.CRAB")
-                newstring = string.. "\nBrolyTime: "..workspace.DistributedGameTime
-            else
-                newstring = "BrolyTime: "..workspace.DistributedGameTime
+if _G.BrolySettings.BrolyTimeLog then
+    game.Players.PlayerRemoving:Connect(function(PlayerLeaving)
+        if PlayerLeaving == Player then
+            if readfile and isfile and writefile then
+                local newstring
+                if isfile("Broly.CRAB") then
+                    local string = readfile("Broly.CRAB")
+                    newstring = string.. "\nBrolyTime: "..workspace.DistributedGameTime
+                else
+                    newstring = "BrolyTime: "..workspace.DistributedGameTime
+                end
+                writefile("Broly.CRAB", newstring)
             end
-            writefile("Broly.CRAB", newstring)
         end
-    end
-    BackToMainWorld()
-end)
+    end)
+end
+
+Player:WaitForChild("PlayerGui"):WaitForChild("HUD"):WaitForChild("FullSize"):WaitForChild("Money3"):GetPropertyChangedSignal("Visible"):Connect(BackToMainWorld)
 
 while true do --Needs to be a loop because of the wait <3
     if EnoughKi then
