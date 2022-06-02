@@ -30,22 +30,31 @@ if _G.CrabCommand then
 end
 _G.CrabCommand = true
 
+local Version = 1.0--loadstring(game:HttpGet(''))()
+local LastVersion = 1.0
+if not (Version == LastVersion) then
+    SendNotification("OutDated", "The script is outdated\nplease use the loadstring to get the new version", 30)
+end
+
 local Player = game:GetService("Players").LocalPlayer
-local InputLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Libraries/InputFunctions%20Library.lua"))()
 local Camera = workspace:FindFirstChildWhichIsA("Camera")
 local RunService = game:GetService("RunService")
+local TweenService = loadstring(game:HttpGet("https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Libraries/OptimizedTweenLibrary.lua"))()
 
 local Commands = {}
-_G.CommandStates = {}
-SendNotification("CrabCommands", 'Thanks for using the script.\nType '..Prefix.." and then a command name or aliases", 10)
-SendNotification("Documentation", 'Type "'..Prefix..' cmds" to get a list of all the commands', 10)
-local function AddCommand(NameArg, AliasesArg, DescriptionArg, CallbackArg)
-    table.insert(Commands, {
-        Name = NameArg,
-        Aliases = AliasesArg,
-        Description = DescriptionArg,
-        Callback = CallbackArg
-    })
+local CommandStates = {}
+local GamesSupported = {
+    FinalStand = {536102540, 882399924, 478132461, 569994010, 2046990924, 3565304751, 2651456105, 3552157537, 2050207304, 535527772, 3552158750, 3618359401, 489979581, 566006798, 882375367}
+}
+SendNotification("CrabCommands", 'Thanks for using the script.\nType "'..Prefix..' cmds" to get a list of all the commands', 10)
+local GameDetected = nil
+for i, v in pairs(GamesSupported) do
+    if table.find(v, game.PlaceId) then
+        GameDetected = tostring(i)
+    end
+end
+if GameDetected then
+    SendNotification("Gamde Supported", "Detected: "..game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name)
 end
 local function FindPlayer(PlayerName)
     for _, v in pairs(game.Players:GetChildren()) do
@@ -56,48 +65,70 @@ local function FindPlayer(PlayerName)
         end
     end
 end
-
+local function AddCommand(CommandName, CommandAliases, CommandDescription, CommandCallback, CommandArguments)
+    table.insert(Commands, {
+        Name = CommandName,
+        Aliases = CommandAliases,
+        Description = CommandDescription,
+        Callback = CommandCallback,
+        Arguments = CommandArguments
+    })
+end
 local ChattedConnection = nil
+
 AddCommand(
     "Unload",
     {"disconnect"},
-    "A command to unload the script, wont work anymore",
-    function(Args)
-        if ChattedConnection then
-            ChattedConnection:Disconnect()
-        end
+    "Unloads the script",
+    function()
+        CommandStates = {}
         _G.CrabCommand = false
-        _G.CommandStates = {}
-        task.wait()
-        _G.CommandStates = nil
-        SendNotification("Unloaded", "The script is now unloaded, thanks for using it")
-    end
+        SendNotification("Thanks For Using The Script", "It really means a lot to me <3")
+        ChattedConnection:Disconnect()
+    end,
+    {}
 )
 AddCommand(
     "CommandHelp",
-    {"cmdhelp"},
-    "A command to see what other commands do",
-    function(Args)
-        if not Args[1] then
-            return
-        end
-        local word = Args[1]
+    {"help", "cmds", "commands"},
+    "Prints the list of all the commands",
+    function()
         for i, v in pairs(Commands) do
-            if word:lower() == v.Name:lower() or table.find(v.Aliases, word:lower()) then
-                SendNotification("CommandHelp", "CommandName: "..v.Name.."\nCommandDescription: "..v.Description, 10)
+            print("======================")
+            print("Command Name: "..v.Name)
+            local CommandAliasesString = ""
+            for i1, v1 in pairs(v.Aliases) do
+                if CommandAliasesString == "" then
+                    CommandAliasesString = v1
+                else
+                    CommandAliasesString = CommandAliasesString..", "..v1
+                end
             end
+            print("Other ways to call the command: "..CommandAliasesString)
+            local CommandArgumentsString = "none"
+            for i1, v1 in pairs(v.Arguments) do
+                if i1 == 1 then
+                    CommandArgumentsString = v1
+                else
+                    CommandArgumentsString = CommandArgumentsString..", "..v1
+                end
+            end
+            print("Arguments passed: "..CommandArgumentsString)
         end
-    end
+    end,
+    {}
 )
 AddCommand(
     "Discord",
-    {"help", "support"},
-    "Gives the server discord link",
-    function(Args)
-        if syn then
-            syn.write_clipboard("https://discord.gg/5NYqSVwH9Q")
-            SendNotification("Discord Server", "Copied to your clipboard", 5)
+    {"server"},
+    "Gives you the discord server invite",
+    function()
+        local NotificationString = "discord.gg/5NYqSVwH9Q"
+        if setclipboard then
+            setclipboard(NotificationString)
+            NotificationString = NotificationString.."\nCopied to clipboard"
         end
+        SendNotification("Discord Server Link", NotificationString, 20)
         local req = syn and syn.request or game:GetService("HttpService") and game:GetService("HttpService").request or http_request or fluxus and fluxus.request or getgenv().request or request
         if req then --Credits to Infinite Yield
             req({
@@ -114,122 +145,94 @@ AddCommand(
                 })
             })
         end
-        SendNotification("Discord Server", "Server Link: discord.gg/5NYqSVwH9Q", 10)
-    end
-)
-AddCommand(
-    "Merch",
-    {},
-    "A link to the sickest drip of roblox",
-    function()
-        SendNotification("D R I P", "Merch Link: bit.ly/3LcmBoC", 20)
-    end
-)
-AddCommand(
-    "Notify",
-    {"notification"},
-    "Sends a notification with custom text",
-    function(Args)
-        if Args then
-            local TextString = ""
-            for i, v in pairs(Args) do
-                if not (i == 1) then
-                    TextString = TextString.." "..v
-                end
-            end
-            SendNotification(Args[1], TextString)
-        end
-    end
+    end,
+    {}
 )
 AddCommand(
     "Close",
     {"exit"},
     "Just closes the game (i really dont know why whould you need it)",
-    function(Args)
+    function()
         SendNotification("Game Shutdown", "Do you really want to close the game?", 9e9, "option", function(bool)
             if bool then
                 game:Shutdown()
             end
         end)
-    end
+    end,
+    {}
 )
-AddCommand(
-    "AllCommands",
-    {"allcmds", "cmds"},
-    "A list of all the available commands",
-    function()
-        SendNotification("Printed", "All of the commands got printed.\nPress F9 to see them")
-        for i, v in pairs(Commands) do
-            if not (i == 1) then
-                print("----------------")
-            end
-            print("Name: "..v.Name)
-            local AliasesString = ""
-            for i1, v1 in pairs(v.Aliases) do
-               AliasesString = AliasesString..v1..", "
-            end
-            print("Can also type: "..AliasesString)
-            print("Description: "..v.Description)
-        end
-    end
-)
-local CFloop
 AddCommand(
     "Fly",
     {"cframefly"},
     "makes you fly, type the speed you want after",
     function(Args) --Full credit to peyton#9148 and Infinite Yield
         _G.CommandStates.Fly = not _G.CommandStates.Fly
-        if _G.CommandStates.Fly then
-            Player.Character:FindFirstChildOfClass('Humanoid').PlatformStand = true
-            local Head = Player.Character:WaitForChild("Head")
-            Head.Anchored = true
-            CFloop = RunService.Heartbeat:Connect(function(deltaTime)
-                local moveDirection = Player.Character:FindFirstChildOfClass('Humanoid').MoveDirection * ((Args[1] or 20) * deltaTime)
-                local headCFrame = Head.CFrame
-                local cameraCFrame = workspace.CurrentCamera.CFrame
-                local cameraOffset = headCFrame:ToObjectSpace(cameraCFrame).Position
-                cameraCFrame = cameraCFrame * CFrame.new(-cameraOffset.X, -cameraOffset.Y, -cameraOffset.Z + 1)
-                local cameraPosition = cameraCFrame.Position
-                local headPosition = headCFrame.Position
-
-                local objectSpaceVelocity = CFrame.new(cameraPosition, Vector3.new(headPosition.X, cameraPosition.Y, headPosition.Z)):VectorToObjectSpace(moveDirection)
-                Head.CFrame = CFrame.new(headPosition) * (cameraCFrame - cameraPosition) * CFrame.new(objectSpaceVelocity)
-            end)
-        else
-            if CFloop then
-                CFloop:Disconnect()
+        local CFrameConnection = nil
+        CFrameConnection = RunService.Heartbeat:Connect(function(deltaTime)
+            if not _G.CrabCommand.Fly then
+                CFrameConnection:Disconnect()
                 Player.Character:FindFirstChildOfClass('Humanoid').PlatformStand = false
                 local Head = Player.Character:WaitForChild("Head")
                 Head.Anchored = false
+                return
             end
-        end
-    end
+            Player.Character:FindFirstChildOfClass('Humanoid').PlatformStand = true
+            local Head = Player.Character:WaitForChild("Head")
+            local moveDirection = Player.Character:FindFirstChildOfClass('Humanoid').MoveDirection * ((Args[1] or 20) * deltaTime)
+            local headCFrame = Head.CFrame
+            local cameraCFrame = workspace.CurrentCamera.CFrame
+            local cameraOffset = headCFrame:ToObjectSpace(cameraCFrame).Position
+            cameraCFrame = cameraCFrame * CFrame.new(-cameraOffset.X, -cameraOffset.Y, -cameraOffset.Z + 1)
+            local cameraPosition = cameraCFrame.Position
+            local headPosition = headCFrame.Position
+            local objectSpaceVelocity = CFrame.new(cameraPosition, Vector3.new(headPosition.X, cameraPosition.Y, headPosition.Z)):VectorToObjectSpace(moveDirection)
+            Head.CFrame = CFrame.new(headPosition) * (cameraCFrame - cameraPosition) * CFrame.new(objectSpaceVelocity)
+        end)
+    end,
+    {"[Speed]"}
 )
-local NoClipConnection
+AddCommand(
+    "AutoRejoin",
+    {"arejoin", "autorj"},
+    "Automatically rejoins you if the game kicks you",
+    function()
+        _G.CrabCommand.AutoRejoin = not _G.CrabCommand.AutoRejoin
+        local RejoinConnection = nil
+        RejoinConnection = game:GetService("CoreGui").DescendantAdded:Connect(function(Descendant)
+            if not _G.CrabCommand.AutoRejoin then
+                RejoinConnection:Disconnect()
+                return
+            end
+            if Descendant.Name == "ErrorPrompt" then
+                game:GetService("TeleportService"):Teleport(game.PlaceId, Player)
+            end
+        end)
+    end,
+    {}
+)
 AddCommand(
     "NoClip",
     {"clip"},
-    "Makes you go through solid objects",
+    "Makes you go through solid parts",
     function()
-        _G.CommandStates.NoClip = not _G.CommandStates.NoClip
-        if _G.CommandStates.NoClip then
-            NoClipConnection = RunService.Stepped:Connect(function() --It has to be Stepped, because it renders before the physic update
-                local Char = Player.Character
-                if Char then
-                    for i, v in pairs(Char:GetDescendants()) do
-                        if v:IsA("BasePart") and (v.CanCollide == true) then
-                            v.CanCollide = false
-                        end
+        CommandStates.NoClip = not CommandStates.NoClip
+        local ClipConnection = nil
+        ClipConnection = RunService.Stepped:Connect(function() --It has to be Stepped, because it renders before the physic update
+            if not CommandStates.NoClip then
+                ClipConnection:Disconnect()
+                return
+            end
+            local Char = Player.Character
+            if Char then
+                for i, v in pairs(Char:GetDescendants()) do
+                    if v:IsA("BasePart") and (v.CanCollide == true) then
+                        v.CanCollide = false
                     end
                 end
-            end)
-        else
-            if NoClipConnection then
-                NoClipConnection:Disconnect()
             end
-        end
-    end
+        end)
+    end,
+    {}
 )
 AddCommand(
     "Teleport",
@@ -241,20 +244,21 @@ AddCommand(
             local PHrp = OtherPlayer.Character:FindFirstChild("HumanoidRootPart")
             local Hrp = Player.Character:FindFirstChild("HumanoidRootPart")
             if PHrp and Hrp then
-                Hrp.Anchored = true
-                local tween = InputLibrary.TweenPart(Hrp, tonumber(Args[2]) or 5, PHrp.CFrame)
+                local Time = tonumber(Args[2]) or 5
+                local tween = TweenService:Create(Hrp, Time, {CFrame = PHrp.CFrame})
                 tween:Play()
-                tween.Completed:Wait()
-                Hrp.Anchored = false
+                task.wait(Time)
             end
         end
-    end
+    end,
+    {"[PlayerName]"}
 )
 AddCommand( --Made by Moon and Courtney
     "DarkDex",
     {"dex"},
     "Opens Dark Dex",
-    loadstring(game:HttpGet("https://gist.githubusercontent.com/DinosaurXxX/b757fe011e7e600c0873f967fe427dc2/raw/ee5324771f017073fc30e640323ac2a9b3bfc550/dark%2520dex%2520v4"))
+    loadstring(game:HttpGet("https://gist.githubusercontent.com/DinosaurXxX/b757fe011e7e600c0873f967fe427dc2/raw/ee5324771f017073fc30e640323ac2a9b3bfc550/dark%2520dex%2520v4")),
+    {}
 )
 AddCommand( --Made by Upbolt
     "RemoteSpy",
@@ -268,7 +272,8 @@ AddCommand( --Made by Upbolt
         end
         webImport("init")
         webImport("ui/main")
-    end
+    end,
+    {}
 )
 AddCommand(
     "CopyPlaceId",
@@ -281,7 +286,8 @@ AddCommand(
         else
             SendNotification("Injector not supported", 'the function "setclipboard" does not exist')
         end
-    end
+    end,
+    {}
 )
 AddCommand(
     "Rejoin",
@@ -294,7 +300,8 @@ AddCommand(
         else
             game:GetService('TeleportService'):TeleportToPlaceInstance(game.PlaceId, game.JobId, Player)
         end
-    end
+    end,
+    {}
 )
 AddCommand(
     "ServerHop",
@@ -312,33 +319,15 @@ AddCommand(
         else
             SendNotification("Error", "Couldn't find any server to join")
         end
-    end
-)
-AddCommand(
-    "ToggleNotification",
-    {"tnotify", "togglenotify"},
-    "Chooses if commands send a notification on execution",
-    function(Args)
-        _G.CommandStates.ToggleNotification = not _G.CommandStates.ToggleNotification
-    end
-)
-_G.CommandStates.LastCommandUsed = {}
-AddCommand(
-    "LastCommand",
-    {"last", "l"},
-    "Executes the last command",
-    function()
-        if (type(_G.CommandStates.LastCommandUsed.Callback) == "function") and not (_G.CommandStates.LastCommandUsed.Name == "LastCommand") then
-            _G.CommandStates.LastCommandUsed.Callback(_G.CommandStates.LastCommandUsed.Args)
-        end
-    end
+    end,
+    {}
 )
 AddCommand(
     "FpsBoost",
     {"fps", "potato", "badpc"},
     "Makes the game look really bad",
     function() --Straight from Infinite Yield (its the best optimization)
-        SendNotification("U noob", "Potato pc", 5)
+        SendNotification("Big F", "Potato pc", 5)
         workspace:FindFirstChildOfClass('Terrain').WaterWaveSize = 0
         workspace:FindFirstChildOfClass('Terrain').WaterWaveSpeed = 0
         workspace:FindFirstChildOfClass('Terrain').WaterReflectance = 0
@@ -378,9 +367,9 @@ AddCommand(
                 end
             end)()
         end)
-    end
+    end,
+    {}
 )
-local SpectateConnection
 AddCommand(
     "Spectate",
     {"view"},
@@ -390,29 +379,25 @@ AddCommand(
         if not Args[1] then
             _G.CommandStates.Spectate = false
         end
-        if _G.CommandStates.Spectate then
+        local SpectateConnection = nil
+        SpectateConnection = RunService.Heartbeat:Connect(function()
             local OtherPlayer = FindPlayer(Args[1])
-            SpectateConnection = RunService.Heartbeat:Connect(function()
-                if _G.CommandStates.Spectate then
-                    Camera.CameraSubject = OtherPlayer.Character:WaitForChild("Humanoid")
-                else
-                    Camera.CameraSubject = Player.Character:WaitForChild("Humanoid")
-                    SpectateConnection:Disconnect()
-                end
-            end)
-        end
-    end
+            if _G.CommandStates.Spectate then
+                Camera.CameraSubject = OtherPlayer.Character:WaitForChild("Humanoid")
+            else
+                Camera.CameraSubject = Player.Character:WaitForChild("Humanoid")
+                SpectateConnection:Disconnect()
+            end
+        end)
+    end,
+    {}
 )
+
 
 
 -- Some QOL additions
 
-RunService.Heartbeat:Connect(function()
-    if game:GetService("CoreGui").RobloxPromptGui:FindFirstChild("ErrorPrompt", true) then
-        game:GetService("TeleportService"):Teleport(game.PlaceId, Player)
-    end
-end)
-if syn then
+if hookmetamethod and getnamecallmethod and checkcaller then
     local OldNameCall = nil
     OldNameCall = hookmetamethod(game, "__namecall", function(Self, ...)
         local NamecallMethod = getnamecallmethod()
@@ -422,13 +407,11 @@ if syn then
         return OldNameCall(Self, ...)
     end)
 end
-
 local VirtualUser = game:GetService("VirtualUser")
 Player.Idled:Connect(function()
     VirtualUser:CaptureController()
     VirtualUser:ClickButton2(Vector2.new())
 end)
-
 
 -- The actual script that checks when the player types
 ChattedConnection = Player.Chatted:Connect(function(message)
@@ -451,18 +434,7 @@ ChattedConnection = Player.Chatted:Connect(function(message)
             end
         end
         if CommandToCall then
-            if _G.CommandStates.ToggleNotification then
-                SendNotification("Command Called", "Command "..CommandToCall.Name.." has been called.", 3)
-            end
-            local success, notsuccess = pcall(CommandToCall.Callback, Args or {})
-            _G.CommandStates.LastCommandUsed = {
-                Name = CommandToCall.Name,
-                Callback = CommandToCall.Callback,
-                Args = Args or {}
-            }
-            if notsuccess then
-                SendNotification("An error as occurred", "Error: "..notsuccess, 20)
-            end
+            CommandToCall.Callback(Args or {})
         end
     end
 end)
