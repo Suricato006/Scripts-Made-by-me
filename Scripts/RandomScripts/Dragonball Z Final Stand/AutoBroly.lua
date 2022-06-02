@@ -199,7 +199,7 @@ BrolyHum.HealthChanged:Connect(function(health)
     Broly.Name = tostring(math.ceil(health)).."/"..BrolyHum.MaxHealth
 end)
 
-Hum:ChangeState(Enum.HumanoidStateType.StrafingNoPhysics) -- Might as well ¯\_(ツ)_/¯
+Hum:ChangeState(Enum.HumanoidStateType.RunningNoPhysics) -- Might as well ¯\_(ツ)_/¯
 
 RunService.Heartbeat:Connect(function()
     local BrolyPosition = BrolyHrp.CFrame.Position
