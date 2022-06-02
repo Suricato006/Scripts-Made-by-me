@@ -1,4 +1,3 @@
-local Workspace = game:GetService("Workspace")
 if not game:IsLoaded() then
     game.Loaded:Wait()
 end
