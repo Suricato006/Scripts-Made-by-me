@@ -180,10 +180,11 @@ if (Senzu.Image == "rbxassetid://1228105406") or Senzu.Image == ("rbxassetid://1
     Hrp.ChildRemoved:Connect(function(child)
         if child.Name == "Inf" then
             SenzuEvent:FireServer(true)
-            task.wait()
-            if not Hrp:FindFirstChild("Inf") then
-                SenzuEvent:FireServer(true)
+            local a = Hrp:WaitForChild("Inf", 2)
+            if a then
+                return
             end
+            SenzuEvent:FireServer(true)
         end
     end)
 end
