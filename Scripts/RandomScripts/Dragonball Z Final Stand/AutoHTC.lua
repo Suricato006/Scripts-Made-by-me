@@ -116,7 +116,8 @@ workspace.ChildAdded:Connect(function(child)
     end
 end)
 
-local Slows = {"KnockBacked",
+local Slows = {
+    "KnockBacked",
     "creator",
     "Action",
     "Slow",
@@ -129,7 +130,8 @@ local Slows = {"KnockBacked",
     "hyper",
     "Throw",
     "Flip",
-    "RightGrip"}
+    "RightGrip"
+}
 Char.DescendantAdded:Connect(function(child)
     if table.find(Slows, child.Name) then
         game:GetService("RunService").Stepped:Wait()
@@ -177,6 +179,7 @@ if (Senzu.Image == "rbxassetid://1228105406") or Senzu.Image == ("rbxassetid://1
     SenzuEvent:FireServer(true)
     Hrp.ChildRemoved:Connect(function(child)
         if child.Name == "Inf" then
+            task.wait()
             SenzuEvent:FireServer(true)
         end
     end)
