@@ -11,7 +11,7 @@ _G.Moves = _G.Moves or {"TS Molotov",
     "Neo Wolf Fang Fist",
     "GOD Hakai",
     "GOD Wrath",
-    "Trash",
+    "Trash?",
     "Strong Kick",
     "Combo Barrage",
     "Aerial Breaker"

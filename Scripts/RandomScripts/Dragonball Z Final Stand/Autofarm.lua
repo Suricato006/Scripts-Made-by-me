@@ -74,7 +74,7 @@ local AutoFarmToggle = AutoFarmTab.Toggle({
 	Enabled = false
 })
 
-local DefaultSpeed = 10000
+local DefaultSpeed = 5000
 _G.Speed = DefaultSpeed
 
 AutoFarmTab.Slider({
@@ -108,7 +108,7 @@ AutoFarmTab.Dropdown({
 	Options = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 })
 
-local DefaultNpc = {"Saiba", "Saiyan", "Chi Expert", "Kick Boxer"}
+local DefaultNpc = {"Saiba", "Evil", "Chi Expert", "Kick Boxer"}
 AutoFarmTab.Button({
 	Text = "Load Default Settings",
 	Callback = function()
