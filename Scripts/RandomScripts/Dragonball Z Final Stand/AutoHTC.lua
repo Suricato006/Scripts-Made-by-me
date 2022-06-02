@@ -194,7 +194,7 @@ local InputEvent = ServerTraits:WaitForChild("Input")
 while true do --Needs to be a loop because of the wait <3
     if EnoughKi then
         for i, Move in pairs(Backpack:GetChildren()) do
-            if table.find(Moves, Move.Name) then
+            if table.find(_G.Moves, Move.Name) then
                 Move.Parent = Char
                 Move:Activate()
                 task.wait()
