@@ -4,6 +4,7 @@ end
 local Player = game.Players.LocalPlayer
 local Char = Player.Character or Player.CharacterAdded:Wait()
 local TimerLabel = Player:WaitForChild("PlayerGui"):WaitForChild("HUD"):WaitForChild("FullSize"):WaitForChild("Timer")
+TimerLabel:GetPropertyChangedSignal("Text"):Wait()
 if not (TimerLabel.Text == "") then
     local TrueLabel = Char:WaitForChild("True", 5)
     if TrueLabel then
