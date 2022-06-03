@@ -417,6 +417,32 @@ AddCommand(
     end,
     {}
 )
+AddCommand(
+    "GodMode",
+    {"gm", "god"},
+    "Makes you invincible in most games", --Basically the god command from IY
+    function()
+        local Cam = workspace.CurrentCamera
+        local Pos, Char = Cam.CFrame, Player.Character
+        local Human = Char and Char.FindFirstChildWhichIsA(Char, "Humanoid")
+        local nHuman = Human.Clone(Human)
+        nHuman.Parent, Player.Character = Char, nil
+        nHuman.SetStateEnabled(nHuman, 15, false)
+        nHuman.SetStateEnabled(nHuman, 1, false)
+        nHuman.SetStateEnabled(nHuman, 0, false)
+        nHuman.BreakJointsOnDeath, Human = true, Human.Destroy(Human)
+        Player.Character, Cam.CameraSubject, Cam.CFrame = Char, nHuman, wait() and Pos
+        nHuman.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
+        local Script = Char.FindFirstChild(Char, "Animate")
+        if Script then
+            Script.Disabled = true
+            wait()
+            Script.Disabled = false
+        end
+        nHuman.Health = nHuman.MaxHealth
+    end,
+    {}
+)
 if GameDetected == "FinalStand" then
     local NoSlowTable = {"Action", "Attacking", "Using", "hyper", "Hyper", "heavy", "KiBlasted", "Tele", "tele", "Killed", "Slow", "MoveStart", "Look", "Activity"}
     AddCommand(
@@ -477,8 +503,8 @@ if GameDetected == "FinalStand" then
         {}
     )
     AddCommand(
-        "GodMode",
-        {"gm", "unigm"},
+        "GodModeFinalStand",
+        {"gmfs", "unigm"},
         "Makes you invincible (but you can't hurt others)",
         function()
             local Char = Player.Character
