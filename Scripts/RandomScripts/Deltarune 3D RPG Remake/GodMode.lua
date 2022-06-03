@@ -1,4 +1,5 @@
 local NotificationLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Libraries/Notification%20Library%20Optimization.lua"))()
+local Player = game.Players.LocalPlayer
 if hookmetamethod and getnamecallmethod and checkcaller then
     local OldNameCall = nil
     OldNameCall = hookmetamethod(game, "__namecall", function(Self, ...)
@@ -12,7 +13,6 @@ else
     NotificationLibrary.CustomNotification("Injector not supported", "Buy synapse")
     return
 end
-local Player = game.Players.LocalPlayer
 local Cam = workspace.CurrentCamera
 local Pos, Char = Cam.CFrame, Player.Character
 local Human = Char and Char.FindFirstChildWhichIsA(Char, "Humanoid")
