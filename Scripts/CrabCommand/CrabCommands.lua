@@ -30,7 +30,7 @@ if _G.CrabCommand then
 end
 _G.CrabCommand = true
 
-local Version = 1.0--loadstring(game:HttpGet(''))()
+local Version = loadstring(game:HttpGet('https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Scripts/CrabCommand/CommandVersion.lua'))()
 local LastVersion = 1.0
 if not (Version == LastVersion) then
     SendNotification("OutDated", "The script is outdated\nplease use the loadstring to get the new version", 30)
@@ -106,7 +106,7 @@ AddCommand(
             end
             print("Other ways to call the command: "..CommandAliasesString)
             local CommandArgumentsString = "none"
-            for i1, v1 in pairs(v.Arguments) do
+            for i1, v1 in pairs(v.Arguments or {}) do
                 if i1 == 1 then
                     CommandArgumentsString = v1
                 else
@@ -392,6 +392,31 @@ AddCommand(
     end,
     {}
 )
+AddCommand(
+    "Reset",
+    {"rs"},
+    "Breaks the joints of your character so you respawn",
+    function()
+        local Char = Player.Character or Player.CharacterAdded:Wait()
+        Char:BreakJoints()
+    end,
+    {}
+)
+AddCommand(
+    "MultiCommand",
+    {"multicm"},
+    "Makes you call more than one command at one time",
+    function(Args)
+        for i, v in pairs(Args) do
+            for i, v1 in pairs(Commands) do
+                if (v:lower() == v1.Name:lower()) or table.find(v1.Aliases, v:lower()) then
+                    v1.Callback({})
+                end
+            end
+        end
+    end,
+    {}
+)
 if GameDetected == "FinalStand" then
     local NoSlowTable = {"Action", "Attacking", "Using", "hyper", "Hyper", "heavy", "KiBlasted", "Tele", "tele", "Killed", "Slow", "MoveStart", "Look", "Activity"}
     AddCommand(
@@ -414,7 +439,8 @@ if GameDetected == "FinalStand" then
                     end
                 end
             end)
-        end
+        end,
+        {}
     )
     AddCommand(
         "AutoFire",
@@ -435,9 +461,60 @@ if GameDetected == "FinalStand" then
                     end)
                 end
             end)
-        end
+        end,
+        {}
     )
-    AddCommand
+    AddCommand(
+        "ChangeSlot",
+        {"slot"},
+        "Lets you change your slot from anywhere",
+        function()
+            local Npc = workspace:FindFirstChild("Character Slot Changer", true)
+            pcall(function()
+                Player.Backpack.ServerTraits.ChatStart:FireServer(Npc)
+            end)
+        end,
+        {}
+    )
+    AddCommand(
+        "GodMode",
+        {"gm", "unigm"},
+        "Makes you invincible (but you can't hurt others)",
+        function()
+            local Char = Player.Character
+            local StatsFolder = Char:FindFirstChild("Stats")
+            if StatsFolder then
+                local a, b = StatsFolder:WaitForChild("Phys-Resist"), StatsFolder:WaitForChild("Ki-Resist")
+                a:Destroy()
+                b:Destroy()
+            end
+        end,
+        {}
+    )
+    local KbTable = {"BodyVelocity", "KnockBacked", "NotHardBack", "creator", "Throw", "Flip"}
+    AddCommand(
+        "AntiKnockback",
+        {"antikb", "kb"},
+        "You can't be moved (exept for energy waves)",
+        function()
+            CommandStates.AntiKnockbackFinalStand = not CommandStates.AntiKnockbackFinalStand
+            local KbConnection = nil
+            KbConnection = RunService.Heartbeat:Connect(function()
+                if not CommandStates.AntiKnockbackFinalStand then
+                    KbConnection:Disconnect()
+                    return
+                end
+                local Char = Player.Character
+                for i, v in pairs(KbTable) do
+                    local a = Char:FindFirstChild(v, true)
+                    if a then
+                        a:Destroy()
+                    end
+                end
+            end)
+        end,
+        {}
+    )
 end
 
 -- Some QOL additions
