@@ -166,10 +166,10 @@ AddCommand(
     {"cframefly"},
     "makes you fly, type the speed you want after",
     function(Args) --Full credit to peyton#9148 and Infinite Yield
-        _G.CommandStates.Fly = not _G.CommandStates.Fly
+        CommandStates.Fly = not CommandStates.Fly
         local CFrameConnection = nil
         CFrameConnection = RunService.Heartbeat:Connect(function(deltaTime)
-            if not _G.CrabCommand.Fly then
+            if not CommandStates.Fly then
                 CFrameConnection:Disconnect()
                 Player.Character:FindFirstChildOfClass('Humanoid').PlatformStand = false
                 local Head = Player.Character:WaitForChild("Head")
@@ -196,10 +196,10 @@ AddCommand(
     {"arejoin", "autorj"},
     "Automatically rejoins you if the game kicks you",
     function()
-        _G.CrabCommand.AutoRejoin = not _G.CrabCommand.AutoRejoin
+        CommandStates.AutoRejoin = not CommandStates.AutoRejoin
         local RejoinConnection = nil
         RejoinConnection = game:GetService("CoreGui").DescendantAdded:Connect(function(Descendant)
-            if not _G.CrabCommand.AutoRejoin then
+            if not CommandStates.AutoRejoin then
                 RejoinConnection:Disconnect()
                 return
             end
@@ -375,14 +375,14 @@ AddCommand(
     {"view"},
     "Makes you spectate another player",
     function(Args)
-        _G.CommandStates.Spectate = not _G.CommandStates.Spectate
+        CommandStates.Spectate = not CommandStates.Spectate
         if not Args[1] then
-            _G.CommandStates.Spectate = false
+            CommandStates.Spectate = false
         end
         local SpectateConnection = nil
-        SpectateConnection = RunService.Heartbeat:Connect(function()
+        SpectateConnection = RunService.Stepped:Connect(function()
             local OtherPlayer = FindPlayer(Args[1])
-            if _G.CommandStates.Spectate then
+            if CommandStates.Spectate then
                 Camera.CameraSubject = OtherPlayer.Character:WaitForChild("Humanoid")
             else
                 Camera.CameraSubject = Player.Character:WaitForChild("Humanoid")
@@ -392,24 +392,53 @@ AddCommand(
     end,
     {}
 )
-if GameDetected == "Final Stand" then
-    local NoSlowTable = {}
+if GameDetected == "FinalStand" then
+    local NoSlowTable = {"Action", "Attacking", "Using", "hyper", "Hyper", "heavy", "KiBlasted", "Tele", "tele", "Killed", "Slow", "MoveStart", "Look", "Activity"}
     AddCommand(
         "NoSlow",
         {"ns"},
         "Lets you make more than one attack at once",
         function()
-            _G.CrabCommand.NoSlowFinalStand = not _G.CrabCommand.NoSlowFinalStand
+            CommandStates.NoSlowFinalStand = not CommandStates.NoSlowFinalStand
             local NoSlowConnection = nil
-            NoSlowConnection = assert
-            for i, v in pairs(game.Players.LocalPlayer.Character.Humanoid:GetPlayingAnimationTracks()) do
-                print(i,v)
-            end
+            NoSlowConnection = RunService.Stepped:Connect(function()
+                if not CommandStates.NoSlowFinalStand then
+                    NoSlowConnection:Disconnect()
+                    return
+                end
+                local Char = Player.Character
+                for i, v in pairs(NoSlowTable) do
+                    local a = Char:FindFirstChild(v)
+                    if a then
+                        a:Destroy()
+                    end
+                end
+            end)
         end
     )
+    AddCommand(
+        "AutoFire",
+        {"af"},
+        "Makes every slot an autofire slot",
+        function()
+            CommandStates.AutoFireFinalStand = not CommandStates.AutoFireFinalStand
+            local AutoFireConnection = nil
+            AutoFireConnection = RunService.Heartbeat:Connect(function()
+                if not CommandStates.AutoFireFinalStand then
+                    AutoFireConnection:Disconnect()
+                    return
+                end
+                local Char = Player.Character
+                if Char:FindFirstChildWhichIsA("Tool") then
+                    pcall(function()
+                        Player.Backpack.ServerTraits.AutoFire:FireServer()
+                    end)
+                end
+            end)
+        end
+    )
+    AddCommand
 end
-
-
 
 -- Some QOL additions
 

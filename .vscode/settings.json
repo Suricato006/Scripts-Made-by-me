@@ -15,6 +15,7 @@
         "fireclickdetector",
         "firetouchinterest",
         "fireproximityprompt",
-        "setclipboard"
+        "setclipboard",
+        "firesignal"
     ]
 }
