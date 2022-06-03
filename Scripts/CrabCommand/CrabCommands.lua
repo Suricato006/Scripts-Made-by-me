@@ -93,6 +93,7 @@ AddCommand(
     {"help", "cmds", "commands"},
     "Prints the list of all the commands",
     function()
+        SendNotification("Commands Printed", "Press F9 and scroll down to see all the commands\nHope it helps")
         for i, v in pairs(Commands) do
             print("======================")
             print("Command Name: "..v.Name)
