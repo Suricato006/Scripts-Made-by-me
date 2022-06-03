@@ -16,6 +16,7 @@
         "firetouchinterest",
         "fireproximityprompt",
         "setclipboard",
-        "firesignal"
+        "firesignal",
+        "isnetworkowner"
     ]
 }
