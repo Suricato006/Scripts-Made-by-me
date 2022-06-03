@@ -392,6 +392,22 @@ AddCommand(
     end,
     {}
 )
+if GameDetected == "Final Stand" then
+    local NoSlowTable = {}
+    AddCommand(
+        "NoSlow",
+        {"ns"},
+        "Lets you make more than one attack at once",
+        function()
+            _G.CrabCommand.NoSlowFinalStand = not _G.CrabCommand.NoSlowFinalStand
+            local NoSlowConnection = nil
+            NoSlowConnection = assert
+            for i, v in pairs(game.Players.LocalPlayer.Character.Humanoid:GetPlayingAnimationTracks()) do
+                print(i,v)
+            end
+        end
+    )
+end
 
 
 
