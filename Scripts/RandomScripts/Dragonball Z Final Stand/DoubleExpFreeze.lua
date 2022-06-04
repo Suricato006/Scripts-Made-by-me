@@ -11,7 +11,6 @@ if not (TimerLabel.Text == "") then
         TrueLabel:Destroy()
     end
     Player.CharacterAdded:Connect(function(Character)
-        TimerLabel:GetPropertyChangedSignal("Text"):Wait()
         Character:WaitForChild("HumanoidRootPart")
         local TrueLabel2 = Character:WaitForChild("True")
         if TrueLabel2 then
