@@ -10,15 +10,15 @@ if not (TimerLabel.Text == "") then
     if TrueLabel then
         TrueLabel:Destroy()
     end
-    Player.CharacterAdded:Connect(function(Character)
-        local TimerLabel2 = Player:WaitForChild("PlayerGui"):WaitForChild("HUD"):WaitForChild("FullSize"):WaitForChild("Timer")
-        TimerLabel2:GetPropertyChangedSignal("Text"):Wait()
-        if not (TimerLabel2.Text == "") then
-            Character:WaitForChild("HumanoidRootPart")
-            local TrueLabel2 = Character:WaitForChild("True")
-            if TrueLabel2 then
-                TrueLabel2:Destroy()
-            end
-        end
-    end)
 end
+Player.CharacterAdded:Connect(function(Character)
+    local TimerLabel2 = Player:WaitForChild("PlayerGui"):WaitForChild("HUD"):WaitForChild("FullSize"):WaitForChild("Timer")
+    TimerLabel2:GetPropertyChangedSignal("Text"):Wait()
+    if not (TimerLabel2.Text == "") then
+        Character:WaitForChild("HumanoidRootPart")
+        local TrueLabel2 = Character:WaitForChild("True")
+        if TrueLabel2 then
+            TrueLabel2:Destroy()
+        end
+    end
+end)
