@@ -22,8 +22,6 @@ if _G.CrabCommand then
                     SendNotification("( ˘͈ ᵕ ˘͈♡)", "Good Job sweethearth")
                 end
             end)
-        else
-
         end
     end)
     return
