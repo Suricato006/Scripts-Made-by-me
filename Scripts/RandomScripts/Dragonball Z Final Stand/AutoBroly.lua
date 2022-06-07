@@ -28,7 +28,7 @@ _G.BrolySettings = _G.BrolySettings or {
     LowGraphics = true, -- true or false (makes the game look shit but boosts fps)
     PunchWhenLowKi = true, -- true or false (makes you dropkick broly then you have low ki)
     TimeToWaitBeforeRejoin = 0, -- Time in seconds to wait before rejoining if some bug happen (put it to 0 to deactivate it)
-    BrolyTimeLog = true -- true or false (saves the time it takes to do a broly in a log file)
+    BrolyTimeLog = false -- true or false (saves the time it takes to do a broly in a log file)
 }
 
 if not game:IsLoaded() then
@@ -200,7 +200,6 @@ BrolyHum.HealthChanged:Connect(function(health)
 end)
 
 Hum:ChangeState(Enum.HumanoidStateType.RunningNoPhysics) -- Might as well ¯\_(ツ)_/¯
-
 RunService.Heartbeat:Connect(function()
     local BrolyPosition = BrolyHrp.CFrame.Position
     Hrp.CFrame = CFrame.new(BrolyPosition + Vector3.new(2, 0, 0), BrolyPosition)
@@ -218,7 +217,7 @@ while not Broly:FindFirstChild("MoveStart") do
     end
     wait()
     ThrowMove:Activate()
-    task.wait()
+    wait()
     ThrowMove.Parent = Backpack
 end
 
