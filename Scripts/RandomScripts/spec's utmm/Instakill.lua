@@ -1,12 +1,11 @@
 _G.InstaKill = true
 
-while _G.InstaKill do task.wait()
-    for i, v in pairs(workspace:GetChildren()) do
-        if v.Name == "Stuff" then
-            local a = v:FindFirstChildWhichIsA("Humanoid", true)
-            if a then
-                a.Health = 0
-            end
-        end
+local KillConnection = nil
+KillConnection = workspace.DescendantAdded:Connect(function(Descendant)
+    if not _G.InstaKill then
+        KillConnection:Disconnect()
     end
-end
+    if Descendant:IsA("Humanoid") and not Descendant:FindFirstAncestor(game.Players.LocalPlayer.Name) then
+        Descendant.Health = 0
+    end
+end)
