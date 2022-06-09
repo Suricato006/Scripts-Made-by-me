@@ -225,7 +225,7 @@ local SenzuEvent = ServerTraits:WaitForChild("EatSenzu")
 SenzuEvent:FireServer(true)
 Hrp.ChildRemoved:Connect(function(child)
     if (child.Name == "Critz") or (child.Name == "Inf") then
-        task.wait()
+        wait()
         SenzuEvent:FireServer(true)
     end
 end)
