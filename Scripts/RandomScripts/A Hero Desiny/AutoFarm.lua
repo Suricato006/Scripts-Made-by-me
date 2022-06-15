@@ -1,7 +1,5 @@
 local Material = loadstring(game:HttpGet("https://raw.githubusercontent.com/Kinlei/MaterialLua/master/Module.lua"))()
 local Player = game.Players.LocalPlayer
-local Camera = workspace:FindFirstChildWhichIsA("Camera")
-local InputLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Libraries/InputFunctions%20Library.lua"))()
 
 local CrabHub = Material.Load({
 	Title = "CrabHub",

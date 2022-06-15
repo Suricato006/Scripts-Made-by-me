@@ -22,6 +22,7 @@ _G.BrolySettings = _G.BrolySettings or {
     "Sweep Kick",
     "Strong Kick",
     },
+    ForeverAlone = false, -- true or false (if other people join with you it rejoins)
     FreezeExp = true, -- true or false (makes the double exp gamepass be infinite)
     ChargeTime = 3.9, -- Time in seconds to charge before going in form (for androids its automatic)
     World = "Earth", -- Either "Queue" or "Earth"
@@ -123,6 +124,13 @@ game:GetService("CoreGui").DescendantAdded:Connect(function(descendant)
         BackToMainWorld()
     end
 end)
+if _G.BrolySettings.ForeverAlone then
+    game.Players.PlayerAdded:Connect(function(JoiningPlayer)
+        if not (JoiningPlayer == Player) then
+            BackToMainWorld()
+        end
+    end)
+end
 
 local Hrp = Char:WaitForChild("HumanoidRootPart")
 local Hum = Char:WaitForChild("Humanoid")
