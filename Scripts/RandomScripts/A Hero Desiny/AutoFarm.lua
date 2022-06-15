@@ -15,12 +15,14 @@ local AutoFarmTab = CrabHub.New({
 	Title = "AutoFarm"
 })
 
-local Keys = {
-    Enum.KeyCode.E,
-    Enum.KeyCode.R,
-    Enum.KeyCode.C,
-    Enum.KeyCode.F
-}
+local function RemoteAttack(Number, AttackPosition)
+    if Player.Stats.Class.Value == "Angel" then
+        Player.Stats.Class.Value = "Puri Puri"
+    end
+    local ClassString = string.gsub(Player.Stats.Class.Value, " ", "")
+    local AttackArg = ClassString.."Attack"..tostring(Number)
+    game:GetService("ReplicatedStorage").RemoteEvent:FireServer(AttackArg, AttackPosition)
+end
 
 local BossTable = {}
 AutoFarmTab.Toggle({
@@ -52,21 +54,16 @@ AutoFarmTab.Toggle({
                             if EHum.Health == 0 then
                                 break
                             end
-                            Camera.CameraType = Enum.CameraType.Scriptable
                             Hrp.CFrame = CFrame.new(EHrp.Position - EHrp.CFrame.LookVector * 3, EHrp.Position)
-                            Camera.CFrame = CFrame.new(Hrp.Position - Hrp.CFrame.LookVector * 5 + Vector3.new(0, 10, 0), EHrp.Position)
-                            InputLibrary.MoveMouse(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
                             game:GetService("ReplicatedStorage").RemoteEvent:FireServer("Punch", "Right")
-                            for _, Key in pairs(Keys) do
-                                InputLibrary.PressKey(Key)
+                            for Number=1, 5 do
+                                RemoteAttack(Number, EHrp.Position)
                             end
                         end
-                        Camera.CameraType = Enum.CameraType.Custom
                     end
                 end
             end
         end
-        Camera.CameraType = Enum.CameraType.Custom
 	end,
 	Enabled = false
 })
