@@ -17,10 +17,18 @@ local function RemoteAttack(Number, AttackPosition)
     if Player.Stats.Class.Value == "Angel" then
         Player.Stats.Class.Value = "Puri Puri"
     end
+    if Player.Stats.Class.Value == "Broly" then
+        Player.Stats.Class.Value = "Toxin"
+    end 
     local ClassString = string.gsub(Player.Stats.Class.Value, " ", "")
     local AttackArg = ClassString.."Attack"..tostring(Number)
     game:GetService("ReplicatedStorage").RemoteEvent:FireServer(AttackArg, AttackPosition)
 end
+
+Player.CharacterAdded:Connect(function()
+    task.wait(2)
+    RemoteAttack(6)
+end)
 
 local BossTable = {}
 AutoFarmTab.Toggle({
