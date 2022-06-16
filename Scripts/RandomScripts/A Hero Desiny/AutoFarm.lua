@@ -17,8 +17,8 @@ local function RemoteAttack(Number, AttackPosition)
     if Player.Stats.Class.Value == "Angel" then
         Player.Stats.Class.Value = "Puri Puri"
     end
-    if Player.Stats.Class.Value == "Broly" then
-        Player.Stats.Class.Value = "Toxin"
+    if Player.Stats.Class.Value == "Toxin" then
+        Player.Stats.Class.Value = "Broly"
     end 
     local ClassString = string.gsub(Player.Stats.Class.Value, " ", "")
     local AttackArg = ClassString.."Attack"..tostring(Number)
@@ -35,6 +35,9 @@ AutoFarmTab.Toggle({
 	Text = "Autofarm",
 	Callback = function(Value)
 		_G.AutoFarm = Value
+        if Player.Character:FindFirstChild("Form") and (Player.Character.Form.Value == "") then
+            RemoteAttack(6)
+        end
         while _G.AutoFarm do task.wait()
             for i, v in pairs(BossTable) do
                 if v and _G.AutoFarm then
