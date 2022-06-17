@@ -7,6 +7,10 @@ local NpcName = "Auroris"
 local Player = game.Players.LocalPlayer
 local NotificationLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Libraries/Notification%20Library%20Optimization.lua"))()
 
+if syn then
+    syn.queue_on_teleport(game:HttpGet("https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Scripts/RandomScripts/A%20Hero%20Desiny/SpamKillBoss.lua"))
+end
+
 local function RemoteAttack(Number, AttackPosition)
     local ClassLabel = Player:WaitForChild("Stats"):WaitForChild("Class")
     if ClassLabel.Value == "Angel" then

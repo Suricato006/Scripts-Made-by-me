@@ -19,7 +19,7 @@ local function RemoteAttack(Number, AttackPosition)
     end
     if Player.Stats.Class.Value == "Toxin" then
         Player.Stats.Class.Value = "Broly"
-    end 
+    end
     local ClassString = string.gsub(Player.Stats.Class.Value, " ", "")
     local AttackArg = ClassString.."Attack"..tostring(Number)
     game:GetService("ReplicatedStorage").RemoteEvent:FireServer(AttackArg, AttackPosition)
