@@ -21,6 +21,10 @@ local function RemoteAttack(Number, AttackPosition)
     game:GetService("ReplicatedStorage").RemoteEvent:FireServer(AttackArg, AttackPosition)
 end
 
+if Player.Character:FindFirstChild("Form") and (Player.Character.Form.Value == "") then
+    RemoteAttack(6)
+end
+
 Player.CharacterAdded:Connect(function()
     task.wait(2)
     RemoteAttack(6)
