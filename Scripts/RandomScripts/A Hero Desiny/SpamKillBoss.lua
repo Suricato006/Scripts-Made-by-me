@@ -82,6 +82,7 @@ end
 local Npc = SpawnPart:WaitForChild(NpcName, 10)
 if not Npc then
     ServerHop()
+    return
 end
 TakeQuest(NpcName)
 KillNpc(Npc)
