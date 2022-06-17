@@ -21,6 +21,11 @@ local function RemoteAttack(Number, AttackPosition)
     game:GetService("ReplicatedStorage").RemoteEvent:FireServer(AttackArg, AttackPosition)
 end
 
+Player.CharacterAdded:Connect(function()
+    task.wait(2)
+    RemoteAttack(6)
+end)
+
 local function KillNpc(Npc)
     local EHum = Npc:WaitForChild("Humanoid")
     local EHrp = Npc:WaitForChild("HumanoidRootPart")
