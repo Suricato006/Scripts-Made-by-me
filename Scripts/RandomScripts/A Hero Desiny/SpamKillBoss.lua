@@ -80,7 +80,7 @@ for i, NpcName in pairs(NpcNames) do
         NotificationLibrary.CustomNotification("Enemy not found", "Incorrect NpcName probably", 9e9)
         return
     end
-    local Npc = SpawnPart:WaitForChild(NpcName, 5)
+    local Npc = SpawnPart:WaitForChild(NpcName, 2)
     if Npc then
         TakeQuest(NpcName)
         KillNpc(Npc)
