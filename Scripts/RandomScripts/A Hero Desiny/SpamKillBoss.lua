@@ -45,18 +45,20 @@ end
 
 local function ServerHop()
     while true do
-        local x = {}
-        for _, v in ipairs(game:GetService("HttpService"):JSONDecode(game:HttpGetAsync("https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?sortOrder=Asc&limit=100")).data) do
-            if type(v) == "table" and v.maxPlayers > v.playing and v.id ~= game.JobId then
-                x[#x + 1] = v.id
+        pcall(function()
+            local x = {}
+            for _, v in ipairs(game:GetService("HttpService"):JSONDecode(game:HttpGetAsync("https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?sortOrder=Asc&limit=100")).data) do
+                if type(v) == "table" and v.maxPlayers > v.playing and v.id ~= game.JobId then
+                    x[#x + 1] = v.id
+                end
             end
-        end
-        if #x > 0 then
-            game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, x[math.random(1, #x)])
-            return
-        else
-            NotificationLibrary.CustomNotification("Error", "Couldn't find any server to join")
-        end
+            if #x > 0 then
+                game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, x[math.random(1, #x)])
+                return
+            else
+                NotificationLibrary.CustomNotification("Error", "Couldn't find any server to join")
+            end
+        end)
         task.wait(1)
     end
 end
