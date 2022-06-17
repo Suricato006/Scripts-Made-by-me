@@ -2,7 +2,7 @@ if not game:IsLoaded() then
     game.Loaded:Wait()
 end
 
-local NpcName = "Auroris"
+local NpcNames = {"Auroris", "Rock", "AwakenedHumanMonster"}
 
 local Player = game.Players.LocalPlayer
 local NotificationLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Libraries/Notification%20Library%20Optimization.lua"))()
@@ -74,16 +74,16 @@ end
 
 NotificationLibrary.CustomNotification("Brought to you by CrabGuy", "Thanks for using the script <3\nDiscord Server Invite: https://discord.gg/5NYqSVwH9Q", 9e9)
 
-local SpawnPart = workspace:WaitForChild("Spawns"):WaitForChild(NpcName, 5)
-if not SpawnPart then
-    NotificationLibrary.CustomNotification("Enemy not found", "Incorrect NpcName probably", 9e9)
-    return
+for i, NpcName in pairs(NpcNames) do
+    local SpawnPart = workspace:WaitForChild("Spawns"):WaitForChild(NpcName, 5)
+    if not SpawnPart then
+        NotificationLibrary.CustomNotification("Enemy not found", "Incorrect NpcName probably", 9e9)
+        return
+    end
+    local Npc = SpawnPart:WaitForChild(NpcName, 5)
+    if Npc then
+        TakeQuest(NpcName)
+        KillNpc(Npc)
+    end
 end
-local Npc = SpawnPart:WaitForChild(NpcName, 10)
-if not Npc then
-    ServerHop()
-    return
-end
-TakeQuest(NpcName)
-KillNpc(Npc)
 ServerHop()
