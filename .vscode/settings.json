@@ -17,6 +17,7 @@
         "fireproximityprompt",
         "setclipboard",
         "firesignal",
-        "isnetworkowner"
+        "isnetworkowner",
+        "getconnections"
     ]
 }

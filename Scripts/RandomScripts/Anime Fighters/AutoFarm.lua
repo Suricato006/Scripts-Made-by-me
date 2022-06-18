@@ -1,8 +1,14 @@
-_G.AutoFarm = true
+_G.AutoFarm = not _G.AutoFarm
+_G.AutoCollect = not _G.AutoCollect
 local Player = game.Players.LocalPlayer
 
 local Collectables = {"Yen", "GenericItem"}
-game:GetService("Workspace").Effects.ChildAdded:Connect(function(Child)
+local Connection = nil
+Connection = game:GetService("Workspace").Effects.ChildAdded:Connect(function(Child)
+    if not _G.AutoCollect then
+        Connection:Disconnect()
+        return
+    end
     if table.find(Collectables, Child.Name) then
         while true do task.wait()
             Child:WaitForChild("Base").CFrame = Player.Character.HumanoidRootPart.CFrame

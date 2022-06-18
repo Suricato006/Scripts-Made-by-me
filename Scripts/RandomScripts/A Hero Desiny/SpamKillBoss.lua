@@ -12,11 +12,13 @@ if syn then
 end
 
 local function RemoteAttack(Number, AttackPosition)
-    local ClassLabel = Player:WaitForChild("Stats"):WaitForChild("Class")
-    if ClassLabel.Value == "Angel" then
-        ClassLabel.Value = "Puri Puri"
+    if Player.Stats.Class.Value == "Angel" then
+        Player.Stats.Class.Value = "Puri Puri"
     end
-    local ClassString = string.gsub(ClassLabel.Value, " ", "")
+    if Player.Stats.Class.Value == "Toxin" then
+        Player.Stats.Class.Value = "Broly"
+    end
+    local ClassString = string.gsub(Player.Stats.Class.Value, " ", "")
     local AttackArg = ClassString.."Attack"..tostring(Number)
     game:GetService("ReplicatedStorage").RemoteEvent:FireServer(AttackArg, AttackPosition)
 end
@@ -29,7 +31,6 @@ Player.CharacterAdded:Connect(function()
     task.wait(2)
     RemoteAttack(6)
 end)
-
 local function KillNpc(Npc)
     local EHum = Npc:WaitForChild("Humanoid")
     local EHrp = Npc:WaitForChild("HumanoidRootPart")
