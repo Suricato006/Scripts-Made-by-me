@@ -73,4 +73,3 @@ for i, v in pairs(BossTable) do
     local Npc = game:GetService("Workspace").Spawns:WaitForChild(v):WaitForChild(v)
     KillNpc(Npc)
 end
-

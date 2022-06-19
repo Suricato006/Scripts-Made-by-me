@@ -2,7 +2,19 @@ if not game:IsLoaded() then
     game.Loaded:Wait()
 end
 
-local NpcNames = {"Auroris", "Rock", "AwakenedHumanMonster"}
+local QuestModule = require(game:GetService("ReplicatedStorage").Modules.Quests)
+
+local BossTable = {}
+for i, v in pairs(QuestModule) do
+    if v.Amount == 1 then
+        table.insert(BossTable, v.Target)
+    end
+end
+
+local NpcNames = {}
+for i = 0, 2 do
+   table.insert(NpcNames, BossTable[#BossTable - i])
+end
 
 local Player = game.Players.LocalPlayer
 local NotificationLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Libraries/Notification%20Library%20Optimization.lua"))()
