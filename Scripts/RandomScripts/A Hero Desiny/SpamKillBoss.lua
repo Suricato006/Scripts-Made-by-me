@@ -4,6 +4,8 @@ end
 
 task.wait(5)
 
+_G.AutoRejoin = true
+
 local QuestModule = require(game:GetService("ReplicatedStorage").Modules.Quests)
 
 local BossTable = {}
@@ -21,7 +23,7 @@ end
 local Player = game.Players.LocalPlayer
 local NotificationLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Libraries/Notification%20Library%20Optimization.lua"))()
 
-if syn then
+if syn and _G.AutoRejoin then
     syn.queue_on_teleport(game:HttpGet("https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Scripts/RandomScripts/A%20Hero%20Desiny/SpamKillBoss.lua"))
 end
 
@@ -99,16 +101,20 @@ end
 
 NotificationLibrary.CustomNotification("Brought to you by CrabGuy", "Thanks for using the script <3\nDiscord Server Invite: https://discord.gg/5NYqSVwH9Q", 9e9)
 
-for i, NpcName in pairs(NpcNames) do
-    local SpawnPart = workspace:WaitForChild("Spawns"):WaitForChild(NpcName, 5)
-    if not SpawnPart then
-        NotificationLibrary.CustomNotification("Enemy not found", "Incorrect NpcName probably", 9e9)
-        return
+while true do task.wait()
+    for i, NpcName in pairs(NpcNames) do
+        local SpawnPart = workspace:WaitForChild("Spawns"):WaitForChild(NpcName, 5)
+        if not SpawnPart then
+            NotificationLibrary.CustomNotification("Enemy not found", "Incorrect NpcName probably", 9e9)
+            return
+        end
+        local Npc = SpawnPart:WaitForChild(NpcName, 2)
+        if Npc then
+            TakeQuest(NpcName)
+            KillNpc(Npc)
+        end
     end
-    local Npc = SpawnPart:WaitForChild(NpcName, 2)
-    if Npc then
-        TakeQuest(NpcName)
-        KillNpc(Npc)
+    if _G.AutoRejoin then
+        ServerHop()
     end
 end
-ServerHop()

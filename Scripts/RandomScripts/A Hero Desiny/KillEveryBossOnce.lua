@@ -2,6 +2,14 @@ if not game:IsLoaded() then
     game.Loaded:Wait()
 end
 
+_G.AutoSpin = true
+
+coroutine.wrap(function()
+    while _G.AutoSpin do task.wait()
+        game:GetService("ReplicatedStorage").RemoteFunction:InvokeServer()
+    end
+end)()
+
 local Player = game.Players.LocalPlayer
 local NotificationLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Libraries/Notification%20Library%20Optimization.lua"))()
 

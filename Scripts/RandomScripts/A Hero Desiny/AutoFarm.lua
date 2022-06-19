@@ -130,7 +130,7 @@ SpinToggle = SpinTab.Toggle({
             end
         end
 	end,
-	Enabled = false
+	Enabled = SettingsTable.AutoSpin
 })
 
 for i, v in pairs(require(game:GetService("ReplicatedStorage").Modules.Classes).Lucky) do
