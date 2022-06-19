@@ -2,6 +2,8 @@ if not game:IsLoaded() then
     game.Loaded:Wait()
 end
 
+task.wait(5)
+
 local QuestModule = require(game:GetService("ReplicatedStorage").Modules.Quests)
 
 local BossTable = {}
@@ -80,7 +82,6 @@ local function ServerHop()
     end
 end
 
-local QuestModule = require(game:GetService("ReplicatedStorage").Modules.Quests)
 local function TakeQuest(QuestNpcName)
     for i, v in pairs(QuestModule) do
         if v.Target == QuestNpcName then
