@@ -68,7 +68,7 @@ local function KillNpc(Npc)
     end
 end
 
-NotificationLibrary.CustomNotification("Brought to you by CrabGuy", "Thanks for using the script <3\nDiscord Server Invite: https://discord.gg/5NYqSVwH9Q", 20)
+NotificationLibrary.CustomNotification("Brought to you by CrabGuy", "Thanks for using the script <3\nDiscord Server Invite: https://discord.gg/5NYqSVwH9Q", 9e9)
 
 local BossTable = {}
 for i, v in pairs(QuestModule) do

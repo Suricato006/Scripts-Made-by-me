@@ -1,5 +1,6 @@
 local Material = loadstring(game:HttpGet("https://raw.githubusercontent.com/Kinlei/MaterialLua/master/Module.lua"))()
 local SettingsLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Libraries/SaveSettingsLibrary.lua"))()
+local InputLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Libraries/InputFunctions%20Library.lua"))()
 local Player = game.Players.LocalPlayer
 
 local FileName = "AHeroDestiny.CRAB"
@@ -69,7 +70,7 @@ AutoFarmTab.Toggle({
                                     break
                                 end
                                 Hrp.CFrame = CFrame.new(EHrp.Position - EHrp.CFrame.LookVector * 3, EHrp.Position)
-                                game:GetService("ReplicatedStorage").RemoteEvent:FireServer("Punch", "Right")
+                                InputLibrary.CenterMouseClick()
                                 for Number=1, 5 do
                                     RemoteAttack(Number, EHrp.Position)
                                 end

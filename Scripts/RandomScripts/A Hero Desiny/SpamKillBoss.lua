@@ -22,6 +22,7 @@ end
 
 local Player = game.Players.LocalPlayer
 local NotificationLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Libraries/Notification%20Library%20Optimization.lua"))()
+local InputLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Libraries/InputFunctions%20Library.lua"))()
 
 if syn and _G.AutoRejoin then
     syn.queue_on_teleport(game:HttpGet("https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Scripts/RandomScripts/A%20Hero%20Desiny/SpamKillBoss.lua"))
@@ -57,7 +58,7 @@ local function KillNpc(Npc)
             break
         end
         Hrp.CFrame = CFrame.new(EHrp.Position - EHrp.CFrame.LookVector * 3, EHrp.Position)
-        game:GetService("ReplicatedStorage").RemoteEvent:FireServer("Punch", "Right")
+        InputLibrary.CenterMouseClick()
         for Number=1, 5 do
             RemoteAttack(Number, EHrp.Position)
         end
@@ -115,6 +116,7 @@ while true do task.wait()
         end
     end
     if _G.AutoRejoin then
-        ServerHop()
+        break
     end
 end
+ServerHop()
