@@ -24,7 +24,7 @@ if syn then
 end
 
 local function RemoteAttack(Number, AttackPosition)
-    if Player.Stats.Class.Value == "Angel" then
+    if Player:WaitForChild("Stats"):WaitForChild("Class").Value == "Angel" then
         Player.Stats.Class.Value = "Puri Puri"
     end
     if Player.Stats.Class.Value == "Toxin" then
@@ -32,7 +32,7 @@ local function RemoteAttack(Number, AttackPosition)
     end
     local ClassString = string.gsub(Player.Stats.Class.Value, " ", "")
     local AttackArg = ClassString.."Attack"..tostring(Number)
-    game:GetService("ReplicatedStorage").RemoteEvent:FireServer(AttackArg, AttackPosition)
+    game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer(AttackArg, AttackPosition)
 end
 
 if Player.Character:FindFirstChild("Form") and (Player.Character.Form.Value == "") then
