@@ -121,15 +121,17 @@ SpinToggle = SpinTab.Toggle({
 	Text = "AutoSpin",
 	Callback = function(Value)
 		SettingsTable.AutoSpin = Value
-        while SettingsTable.AutoSpin do task.wait()
-            game:GetService("ReplicatedStorage").RemoteFunction:InvokeServer()
-            for i, v in pairs(SpinTable) do
-                if SpinTable[Player.Stats.Class.Value] then
-                    SpinToggle:SetState(false)
-                    break
+        coroutine.wrap(function()
+            while SettingsTable.AutoSpin do task.wait()
+                game:GetService("ReplicatedStorage").RemoteFunction:InvokeServer()
+                for i, v in pairs(SpinTable) do
+                    if SpinTable[Player.Stats.Class.Value] then
+                        SpinToggle:SetState(false)
+                        break
+                    end
                 end
             end
-        end
+        end)()
 	end,
 	Enabled = SettingsTable.AutoSpin
 })
