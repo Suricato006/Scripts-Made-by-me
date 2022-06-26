@@ -1,6 +1,9 @@
-local Slot = "Slot1" --Slot that will get the stats
-local ResetSlot = "Slot3" --Slot that will get resetted
-local PrivateServer = true -- true or false if you wanna use a private server
+---@diagnostic disable-next-line: undefined-global
+local Slot = Slot or "Slot1" --Slot that will get the stats
+---@diagnostic disable-next-line: undefined-global
+local ResetSlot = ResetSlot or "Slot3" --Slot that will get resetted
+---@diagnostic disable-next-line: undefined-global
+local PrivateServer = PrivateServer or true -- true or false if you wanna use a private server
 
 --Shuko should learn lua and not script in python fr fr
 
@@ -185,7 +188,7 @@ local function KillNpc(NpcName)
     local Hrp = Player.Character:WaitForChild("HumanoidRootPart")
     Player.Character:WaitForChild("Humanoid"):ChangeState(Enum.HumanoidStateType.RunningNoPhysics)
     local Distance = (Hrp.Position - NpcHrp.Position).Magnitude
-    local TimeItTakes = Distance/3000
+    local TimeItTakes = Distance/1000
     local Tween = TweenService:Create(Hrp, TimeItTakes, {CFrame = NpcHrp.CFrame})
     Tween:Play()
     task.wait(TimeItTakes + 0.2)

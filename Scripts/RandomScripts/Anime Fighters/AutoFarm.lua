@@ -1,5 +1,4 @@
 _G.AutoFarm = not _G.AutoFarm
-_G.AutoCollect = not _G.AutoCollect
 
 local Player = game.Players.LocalPlayer
 

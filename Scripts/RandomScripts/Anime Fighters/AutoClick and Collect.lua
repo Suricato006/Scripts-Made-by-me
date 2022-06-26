@@ -5,7 +5,7 @@ if _G.AutoClick then
 end
 _G.AutoClick = true
 
-local Collectables = {"Yen", "GenericItem"}
+local Collectables = {"Yen", "GenericItem", "MultiOpen"}
 game:GetService("Workspace").Effects.ChildAdded:Connect(function(Child)
     if table.find(Collectables, Child.Name) or string.find(Child.Name, "Shard") then
         while true do task.wait()
