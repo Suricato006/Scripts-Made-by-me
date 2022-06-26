@@ -1,5 +1,10 @@
 local Player = game.Players.LocalPlayer
 
+if _G.AutoClick then
+    return
+end
+_G.AutoClick = true
+
 local Collectables = {"Yen", "GenericItem"}
 game:GetService("Workspace").Effects.ChildAdded:Connect(function(Child)
     if table.find(Collectables, Child.Name) or string.find(Child.Name, "Shard") then
