@@ -2,8 +2,6 @@
 local Slot = Slot or "Slot1" --Slot that will get the stats
 ---@diagnostic disable-next-line: undefined-global
 local ResetSlot = ResetSlot or "Slot3" --Slot that will get resetted
----@diagnostic disable-next-line: undefined-global
-local PrivateServer = PrivateServer -- true or false if you wanna use a private server
 
 --Shuko should learn lua and not script in python fr fr
 
@@ -104,12 +102,10 @@ if (tonumber(Player:WaitForChild("PlayerGui"):WaitForChild("HUD"):WaitForChild("
     return
 end
 
-if PrivateServer then
-    if #game.Players:GetChildren() > 1 then
-        game:shutdown()
-        print("Game Should Close")
-        return
-    end
+if #game.Players:GetChildren() > 1 then
+    game:shutdown()
+    print("Game Should Close")
+    return
 end
 
 local function TakeQuest(QuestName)
