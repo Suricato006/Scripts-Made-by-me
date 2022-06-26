@@ -94,6 +94,7 @@ local function GetTheStats()
 end
 
 if not (Player.Character:WaitForChild("Race").Value == "Namekian") then
+    task.wait(1.5)
     SlotChange(ResetSlot)
 end
 
