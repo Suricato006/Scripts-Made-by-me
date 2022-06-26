@@ -3,7 +3,7 @@ local Slot = Slot or "Slot1" --Slot that will get the stats
 ---@diagnostic disable-next-line: undefined-global
 local ResetSlot = ResetSlot or "Slot3" --Slot that will get resetted
 ---@diagnostic disable-next-line: undefined-global
-local PrivateServer = PrivateServer or true -- true or false if you wanna use a private server
+local PrivateServer = PrivateServer -- true or false if you wanna use a private server
 
 --Shuko should learn lua and not script in python fr fr
 
