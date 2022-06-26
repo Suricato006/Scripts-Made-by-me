@@ -1,10 +1,10 @@
-local UI = loadstring(game:HttpGetAsync("https://projectevo.xyz/script/utils/libraryv3.lua"))()
+local UI = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Libraries/Ui%20Library/Source.lua"))()
 local Library = UI.library
 local Main = Library.new("Main")
 
 Main:AddSettings()
 
-local Tab = Main:AddTab("Name", "Description", "https://cdn.discordapp.com/attachments/781200320184320002/990577395855687741/avatar.jpg") -- Put a image link where the 0 is if you want a icon.
+local Tab = Main:AddTab("Name", "Description", 0) -- Put a image link where the 0 is if you want a icon.
 Main:AddProfile()
 local Panel = Tab:AddPanel("Panel")
 local Status = false
