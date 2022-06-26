@@ -4,7 +4,7 @@ local PrivateServer = true -- true or false if you wanna use a private server
 
 --Shuko should learn lua and not script in python fr fr
 
---Fixa che si blocca quando deve killare cell e fai che ti cambia la razza
+--Fixa che si blocca quando deve killare cell
 
 if not game:IsLoaded() then
     game.Loaded:Wait()

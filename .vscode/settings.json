@@ -18,6 +18,10 @@
         "setclipboard",
         "firesignal",
         "isnetworkowner",
-        "getconnections"
+        "getconnections",
+        "isfolder",
+        "makefolder",
+        "listfiles",
+        "identifyexecutor"
     ]
 }

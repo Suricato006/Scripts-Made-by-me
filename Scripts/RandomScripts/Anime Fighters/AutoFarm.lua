@@ -1,5 +1,6 @@
 _G.AutoFarm = not _G.AutoFarm
 _G.AutoCollect = not _G.AutoCollect
+
 local Player = game.Players.LocalPlayer
 
 local Collectables = {"Yen", "GenericItem"}
@@ -9,7 +10,7 @@ Connection = game:GetService("Workspace").Effects.ChildAdded:Connect(function(Ch
         Connection:Disconnect()
         return
     end
-    if table.find(Collectables, Child.Name) then
+    if table.find(Collectables, Child.Name) or string.find(Child.Name, "Shard") then
         while true do task.wait()
             Child:WaitForChild("Base").CFrame = Player.Character.HumanoidRootPart.CFrame
         end
