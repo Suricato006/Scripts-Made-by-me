@@ -5,8 +5,10 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Suricato006/Scripts-M
 
 _G.AutoTimeTrial = not _G.AutoTimeTrial
 
+local TimeTrialWorld = workspace.Worlds.Tower
+
 while _G.AutoTimeTrial do task.wait()
-    for i, v in pairs(workspace.Worlds[Player.World.Value].Map:GetChildren()) do
+    for i, v in pairs(TimeTrialWorld.Map:GetChildren()) do
         if v.Name == "RestRoom" then
             local ConfirmPart = v:FindFirstChild("ConfirmPart")
             if ConfirmPart and ConfirmPart:FindFirstChildWhichIsA("ProximityPrompt") then
@@ -17,7 +19,7 @@ while _G.AutoTimeTrial do task.wait()
             end
         end
     end
-    for i, v in pairs(workspace.Worlds[Player.World.Value].Enemies:GetChildren()) do
+    for i, v in pairs(TimeTrialWorld.Enemies:GetChildren()) do
         Player.Character.HumanoidRootPart.CFrame = v:WaitForChild("HumanoidRootPart").CFrame
         game:GetService("ReplicatedStorage").Bindable.SendPet:Fire(v, true, true)
         while v:FindFirstAncestor("Worlds") and _G.AutoTimeTrial do task.wait()
