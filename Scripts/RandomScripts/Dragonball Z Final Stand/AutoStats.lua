@@ -1,11 +1,7 @@
----@diagnostic disable-next-line: undefined-global
-local Slot = Slot or "Slot1" --Slot that will get the stats
----@diagnostic disable-next-line: undefined-global
-local ResetSlot = ResetSlot or "Slot3" --Slot that will get resetted
+_G.ResetSlot = _G.ResetSlot or "Slot3" --Slot that will get resetted
+_G.Slot = _G.Slot or "Slot1" --Slot that will get the stats
 
 --Shuko should learn lua and not script in python fr fr
-
---Fixa che si blocca quando deve killare cell
 
 if not game:IsLoaded() then
     game.Loaded:Wait()
@@ -37,45 +33,50 @@ local function NpcTalk(Npc, CustomOption)
     local ChatGui = Player:WaitForChild("PlayerGui"):WaitForChild("HUD"):WaitForChild("Bottom"):WaitForChild("ChatGui")
     local TextLabel = ChatGui:WaitForChild("TextLabel")
     local Option1 = ChatGui:WaitForChild("Opt1")
-    local TextChanged = false
-    TextLabel:GetPropertyChangedSignal("Text"):Connect(function()
-        TextChanged = true
-    end)
     Player:WaitForChild("Backpack"):WaitForChild("ServerTraits"):WaitForChild("ChatStart"):FireServer(Npc)
     repeat
         task.wait()
     until ChatGui.Visible
+    local Chat = Npc:FindFirstChildWhichIsA("Folder")
+    local NextChat = Chat
+    local ChatAdvance = Player.Backpack.ServerTraits.ChatAdvance
     while ChatGui.Visible do
-        while (not TextChanged) and (ChatGui.Visible) do
+        NextChat = NextChat:FindFirstChildWhichIsA("StringValue")
+        if (NextChat.Name == "Quest") or (NextChat.Name == "ChatEvent") then
+            repeat
+                ChatAdvance:FireServer({"k"})
+                task.wait()
+            until not ChatGui.Visible
+            break
+        end
+        while not (TextLabel.Text == NextChat.Value) and (ChatGui.Visible) do
             local OptionText = Option1.Text
             if OptionText == "Slot1" then
                 OptionText = CustomOption or OptionText
             end
+            local Argument = nil
             if Option1.Visible then
-                Player.Backpack.ServerTraits.ChatAdvance:FireServer({OptionText})
-                print("fire "..OptionText)
+                Argument = OptionText
             else
-                Player.Backpack.ServerTraits.ChatAdvance:FireServer({"k"})
-                print("fire f")
+                Argument = "k"
             end
-            if Npc.Name == "Character Slot Changer" then
-                task.wait(0.1)
-            else
-                task.wait()
-            end
+            ChatAdvance:FireServer({Argument})
+            task.wait()
         end
-        TextChanged = false
+        task.wait(0.15)
     end
 end
 
 local function SlotChange(slot) --Im tired of this shit, i cant get it to work in a different way so i copied it, credits to justroberto
-    Player:WaitForChild("PlayerGui"):WaitForChild("HUD"):WaitForChild("Bottom"):WaitForChild("ChatGui")
+    local ChatGui = Player:WaitForChild("PlayerGui"):WaitForChild("HUD"):WaitForChild("Bottom"):WaitForChild("ChatGui")
+    local TextLabel = ChatGui:WaitForChild("TextLabel")
     Player.Backpack.ServerTraits.ChatStart:FireServer(workspace.FriendlyNPCs["Character Slot Changer"])
-    repeat task.wait() Player.Backpack.ServerTraits.ChatAdvance:FireServer({"Yes"}) until Player:WaitForChild("PlayerGui"):WaitForChild("HUD"):WaitForChild("Bottom"):WaitForChild("ChatGui"):WaitForChild("TextLabel").Text == "Alright"
-    task.wait(.15)
-    repeat task.wait() Player.Backpack.ServerTraits.ChatAdvance:FireServer({"k"}) until Player.PlayerGui.HUD.Bottom.ChatGui.TextLabel.Text == "Which slot would you like to play in?"
-    task.wait(.15)
-    repeat task.wait() Player.Backpack.ServerTraits.ChatAdvance:FireServer({slot}) until Player.PlayerGui.HUD.Bottom.ChatGui.TextLabel.Text == "Loading!"
+    local ChatAdvance = Player.Backpack.ServerTraits.ChatAdvance
+    repeat task.wait() ChatAdvance:FireServer({"Yes"}) until TextLabel.Text == "Alright"
+    task.wait(.1)
+    repeat task.wait() ChatAdvance:FireServer({"k"}) until TextLabel.Text == "Which slot would you like to play in?"
+    task.wait(.1)
+    repeat task.wait() ChatAdvance:FireServer({slot}) until TextLabel.Text == "Loading!"
 end
 
 local Camera = workspace:FindFirstChildWhichIsA("Camera")
@@ -84,18 +85,12 @@ local function GetTheStats()
     task.wait(.75)
     Player.Backpack.ServerTraits.ChatAdvance:FireServer({'k'})
     task.wait(.5)
-    SlotChange(Slot)
-    Player.CharacterAdded:Wait()
-    task.wait(1.5)
-    SlotChange(ResetSlot)
-    Player.CharacterAdded:Wait()
-    task.wait(1.5)
-    NpcTalk(workspace.FriendlyNPCs["Start New Game [Redo Character]"])
+    SlotChange(_G.Slot)
 end
 
 if not (Player.Character:WaitForChild("Race").Value == "Namekian") then
-    task.wait(1.5)
-    SlotChange(ResetSlot)
+    SlotChange(_G.ResetSlot)
+    Player.CharacterAdded:Wait()
 end
 
 if (tonumber(Player:WaitForChild("PlayerGui"):WaitForChild("HUD"):WaitForChild("Bottom"):WaitForChild("Stats"):WaitForChild("LVL"):WaitForChild("Val").Text) > 49) or not workspace.FriendlyNPCs:FindFirstChild("KAMI") then
@@ -188,7 +183,11 @@ local function KillNpc(NpcName)
     local TimeItTakes = Distance/1000
     local Tween = TweenService:Create(Hrp, TimeItTakes, {CFrame = NpcHrp.CFrame})
     Tween:Play()
-    task.wait(TimeItTakes + 0.2)
+    local NewDistance = 9e9
+    repeat
+        NewDistance = (Hrp.Position - NpcHrp.Position).Magnitude
+        task.wait()
+    until NewDistance <= 100
     Camera.CameraType = Enum.CameraType.Scriptable
     while (NpcHum.Health > 0) do
         Hrp.CFrame = CFrame.new(NpcHrp.Position + Vector3.new(0, 0, -3), NpcHrp.Position)
@@ -241,4 +240,18 @@ for i, v in pairs(FindQuests) do
         task.wait(.75)
     end
 end
+while true do
+    local Level = tonumber(Player:WaitForChild("PlayerGui"):WaitForChild("HUD"):WaitForChild("Bottom"):WaitForChild("Stats"):WaitForChild("LVL"):WaitForChild("Val").Text)
+    if Level >= 50 then
+        break
+    end
+    task.wait()
+end
+
 GetTheStats()
+Player.CharacterAdded:Wait()
+SlotChange(_G.ResetSlot)
+Player.CharacterAdded:Wait()
+NpcTalk(workspace.FriendlyNPCs["Start New Game [Redo Character]"])
+task.wait(1)
+game:GetService("TeleportService"):Teleport(552500546)
