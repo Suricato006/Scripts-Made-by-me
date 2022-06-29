@@ -97,7 +97,7 @@ if (tonumber(Player:WaitForChild("PlayerGui"):WaitForChild("HUD"):WaitForChild("
     NpcTalk(workspace.FriendlyNPCs["Start New Game [Redo Character]"])
     return
 end
-
+--The thing that makes the game crash if you are in a public server
 if #game.Players:GetChildren() > 1 then
     game:shutdown()
     print("Game Should Close")
@@ -250,6 +250,11 @@ end
 
 GetTheStats()
 Player.CharacterAdded:Wait()
+local HUD = Player:WaitForChild("PlayerGui"):WaitForChild("HUD")
+local Bottom = HUD:WaitForChild("Bottom")
+Bottom.Visible = true
+local Stats = Bottom:WaitForChild("Stats")
+Stats.Visible = true
 SlotChange(_G.ResetSlot)
 Player.CharacterAdded:Wait()
 NpcTalk(workspace.FriendlyNPCs["Start New Game [Redo Character]"])
