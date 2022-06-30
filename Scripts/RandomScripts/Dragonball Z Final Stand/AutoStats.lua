@@ -91,6 +91,7 @@ end
 if not (Player.Character:WaitForChild("Race").Value == "Namekian") then
     SlotChange(_G.ResetSlot)
     Player.CharacterAdded:Wait()
+    task.wait(3)
 end
 
 if (tonumber(Player:WaitForChild("PlayerGui"):WaitForChild("HUD"):WaitForChild("Bottom"):WaitForChild("Stats"):WaitForChild("LVL"):WaitForChild("Val").Text) > 49) or not workspace.FriendlyNPCs:FindFirstChild("KAMI") then
