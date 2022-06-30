@@ -258,9 +258,6 @@ local Stats = Bottom:WaitForChild("Stats")
 Stats.Visible = true
 SlotChange(_G.ResetSlot)
 Player.CharacterAdded:Wait()
-repeat
-    task.wait()
-until Player:WaitForChild("PlayerGui"):WaitForChild("Setup"):WaitForChild("Frame"):WaitForChild("Side"):WaitForChild("Race"):WaitForChild("Set"):WaitForChild("Texter").Text == "Namekian"
 NpcTalk(workspace.FriendlyNPCs["Start New Game [Redo Character]"])
 task.wait(1)
 game:GetService("TeleportService"):Teleport(552500546)
