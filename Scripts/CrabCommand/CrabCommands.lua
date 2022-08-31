@@ -256,7 +256,49 @@ AddCommand( --Made by Moon and Courtney
     "DarkDex",
     {"dex"},
     "Opens Dark Dex",
-    loadstring(game:HttpGet("https://gist.githubusercontent.com/DinosaurXxX/b757fe011e7e600c0873f967fe427dc2/raw/ee5324771f017073fc30e640323ac2a9b3bfc550/dark%2520dex%2520v4")),
+    function()
+        local getobjects = function(a)
+            local Objects = {}
+            if a then
+                local b = game:GetService("InsertService"):LoadLocalAsset(a)
+                if b then
+                    table.insert(Objects, b)
+                end
+            end
+            return Objects
+        end
+        local Dex = getobjects("rbxassetid://10055842438")[1]
+        Dex.Parent = game:GetService("CoreGui")
+        local function Load(Obj, Url)
+            local function GiveOwnGlobals(Func, Script)
+                local Fenv, RealFenv, FenvMt = {}, {script = Script}, {}
+                FenvMt.__index = function(a,b)
+                    return RealFenv[b] == nil and getgenv()[b] or RealFenv[b]
+                end
+                FenvMt.__newindex = function(a, b, c)
+                    if RealFenv[b] == nil then
+                        getgenv()[b] = c
+                    else
+                        RealFenv[b] = c
+                    end
+                end
+                setmetatable(Fenv, FenvMt)
+                pcall(setfenv, Func, Fenv)
+                return Func
+            end
+            local function LoadScripts(_, Script)
+                if Script:IsA("LocalScript") then
+                    coroutine.wrap(function()
+                        GiveOwnGlobals(loadstring(Script.Source,"="..Script:GetFullName()), Script)()
+                    end)()
+                end
+                table.foreach(Script:GetChildren(), LoadScripts)
+            end
+
+            LoadScripts(nil, Obj)
+        end
+        Load(Dex)
+    end,
     {}
 )
 AddCommand( --Made by Upbolt
