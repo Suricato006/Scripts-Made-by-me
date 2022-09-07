@@ -2,16 +2,22 @@ if not game:IsLoaded() then
     game.Loaded:Wait()
 end
 
-_G.AutoFarm = true
-_G.NpcName = "Kefla"
+_G.AutoFarm = not _G.AutoFarm
+_G.NpcName = "Vegito"
 _G.FormName = "mystic"
 
 local Player = game.Players.LocalPlayer
 
-local function Pugno()
-    pcall(function()
+local function Pugno(Npc)
+    local a, b = pcall(function()
         Player.Backpack.Combat.RemoteEvent:FireServer("comboAttack")
+        if isnetworkowner and Npc:FindFirstChild("HumanoidRootPart") and isnetworkowner(Npc:FindFirstChild("HumanoidRootPart")) then
+            Npc:FindFirstChildWhichIsA("Humanoid", true).Health = 0
+        end
     end)
+    if b then
+        warn(b)
+    end
 end
 
 local ActualNpcName = nil
@@ -76,9 +82,8 @@ while _G.AutoFarm do task.wait()
         if not _G.AutoFarm then
             KillConnection:Disconnect()
         end
-        -- 
         Hrp.CFrame = CFrame.new(EHrp.CFrame.Position + (EHrp.CFrame.LookVector * (math.ceil(EHrp.Size.Z))) * 2, EHrp.CFrame.Position)
-        Pugno()
+        Pugno(Enemy)
         if (Transformation.Value == "off") and not Transformed then
             Transformed = true
             game:GetService("ReplicatedStorage").Transform:FireServer(_G.FormName)
