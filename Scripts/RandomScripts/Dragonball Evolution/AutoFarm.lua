@@ -3,21 +3,13 @@ if not game:IsLoaded() then
 end
 
 _G.AutoFarm = not _G.AutoFarm
-_G.NpcName = "Vegito"
-_G.FormName = "mystic"
+_G.NpcName = "Goku Black"
+_G.FormName = "final form"
 
 local Player = game.Players.LocalPlayer
 
-local function Pugno(Npc)
-    local a, b = pcall(function()
-        Player.Backpack.Combat.RemoteEvent:FireServer("comboAttack")
-        if isnetworkowner and Npc:FindFirstChild("HumanoidRootPart") and isnetworkowner(Npc:FindFirstChild("HumanoidRootPart")) then
-            Npc:FindFirstChildWhichIsA("Humanoid", true).Health = 0
-        end
-    end)
-    if b then
-        warn(b)
-    end
+local function Pugno()
+    game:GetService("ReplicatedStorage").Combat:FireServer("comboAttack")
 end
 
 local ActualNpcName = nil
@@ -51,6 +43,21 @@ repeat
     task.wait()
 until ActualNpcName and ActualParent
 
+local A = nil
+A = game:GetService("UserInputService").InputBegan:Connect(function(input, gameProcessedEvent)
+    if not _G.AutoFarm then
+        A:Disconnect()
+    end
+    if not gameProcessedEvent and input.KeyCode == Enum.KeyCode.C then
+        local Enemy = ActualParent:WaitForChild(ActualNpcName)
+        if isnetworkowner and Enemy:FindFirstChild("HumanoidRootPart") and isnetworkowner(Enemy:FindFirstChild("HumanoidRootPart")) then
+            Enemy:WaitForChild("Humanoid").Health = 0
+        else
+            Enemy:WaitForChild("Humanoid").Health = 0
+        end
+    end
+end)
+
 local Transformed = false
 while _G.AutoFarm do task.wait()
     local Enemy = ActualParent:WaitForChild(ActualNpcName)
@@ -83,7 +90,7 @@ while _G.AutoFarm do task.wait()
             KillConnection:Disconnect()
         end
         Hrp.CFrame = CFrame.new(EHrp.CFrame.Position + (EHrp.CFrame.LookVector * (math.ceil(EHrp.Size.Z))) * 2, EHrp.CFrame.Position)
-        Pugno(Enemy)
+        Pugno()
         if (Transformation.Value == "off") and not Transformed then
             Transformed = true
             game:GetService("ReplicatedStorage").Transform:FireServer(_G.FormName)
