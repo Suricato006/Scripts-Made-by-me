@@ -3,8 +3,7 @@ if not game:IsLoaded() then
 end
 
 _G.AutoFarm = not _G.AutoFarm
-_G.NpcName = "Shaggy"
-_G.FormName = "final form"
+warn(_G.AutoFarm)
 
 local Player = game.Players.LocalPlayer
 
@@ -12,55 +11,20 @@ local function Pugno()
     game:GetService("ReplicatedStorage").Combat:FireServer("comboAttack")
 end
 
-local ActualNpcName = nil
-local ActualParent = nil
-
-local function NpcCheck(Npc)
-    if not Npc:IsA("Model") or not Npc:FindFirstChild("Humanoid") or (Npc.Humanoid.Health <= 0) then
-        return
-    end
-    if string.find(Npc.Name:lower(), _G.NpcName:lower()) == 1 then
-        return Npc.Name, Npc.Parent
-    end
-end
-
-for i, v in pairs(workspace:GetDescendants()) do
-    ActualNpcName, ActualParent = NpcCheck(v)
-    if ActualParent and ActualParent then
-        break
-    end
-end
-if not ActualNpcName or not ActualParent then
-    local Connection = nil
-    Connection = workspace.DescendantAdded:Connect(function(v)
-        ActualNpcName, ActualParent = NpcCheck(v)
-        if ActualNpcName and ActualParent then
-            Connection:Disconnect()
+local function FindEnemy()
+    while true do
+        for i, v in pairs(workspace:GetChildren()) do
+            if string.find(v.Name, "Shaggy") == 1 then
+                return v
+            end
         end
-    end)
+        workspace.ChildAdded:Wait()
+    end
 end
-repeat
-    task.wait()
-until ActualNpcName and ActualParent
-
-local A = nil
-A = game:GetService("UserInputService").InputBegan:Connect(function(input, gameProcessedEvent)
-    if not _G.AutoFarm then
-        A:Disconnect()
-    end
-    if not gameProcessedEvent and (input.KeyCode == Enum.KeyCode.C) then
-        local Enemy = ActualParent:WaitForChild(ActualNpcName)
-        if isnetworkowner and Enemy:FindFirstChild("HumanoidRootPart") and isnetworkowner(Enemy:FindFirstChild("HumanoidRootPart")) then
-            Enemy:WaitForChild("Humanoid").Health = 0
-        elseif not isnetworkowner then
-            Enemy:WaitForChild("Humanoid").Health = 0
-        end
-    end
-end)
 
 local Transformed = false
 while _G.AutoFarm do task.wait()
-    local Enemy = ActualParent:WaitForChild(ActualNpcName)
+    local Enemy = FindEnemy()
     local EHum = Enemy:WaitForChild("Humanoid")
     local EHrp = Enemy:WaitForChild("HumanoidRootPart", 2)
     local Char = Player.Character or Player.CharacterAdded:Wait()
@@ -89,12 +53,16 @@ while _G.AutoFarm do task.wait()
         if not _G.AutoFarm then
             KillConnection:Disconnect()
         end
-        Hrp.CFrame = CFrame.new(EHrp.CFrame.Position + (EHrp.CFrame.LookVector * (math.ceil(EHrp.Size.Z))) * 2, EHrp.CFrame.Position)
+        local Char1 = Player.Character
+        local Hrp1 = Char1:FindFirstChild("HumanoidRootPart")
+        if not (Char1 and Hrp1) then return end
+        Hrp1.CFrame = EHrp.CFrame * CFrame.new(0, 0, 2)
         Pugno()
         if (Transformation.Value == "off") and not Transformed then
             Transformed = true
             game:GetService("ReplicatedStorage").Transform:FireServer(_G.FormName)
         end
+
         if EHum.Health <= 0 then
             task.wait(0.5)
             if EHum.Health <= 0 then
