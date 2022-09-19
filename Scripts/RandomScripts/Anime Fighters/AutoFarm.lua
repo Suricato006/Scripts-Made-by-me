@@ -1,5 +1,5 @@
 _G.AutoFarm = not _G.AutoFarm
-_G.NpcName = "Gamma"
+_G.NpcName = "The Death Bringer"
 
 local Player = game.Players.LocalPlayer
 
