@@ -1,10 +1,26 @@
-_G.AutoFarm = true
+local GuiService = game:GetService("GuiService")
+_G.AutoFarm = not _G.AutoFarm
 
 local function Rebirth()
     game:GetService("ReplicatedStorage").Aero.AeroRemoteServices.StatsService.RebirthUp:FireServer()
 end
 local function Punch()
-    game:GetService("ReplicatedStorage").Remotes.SkillRemote:FireServer({["Type"] = 1, ["Began"] = true, ["CFrame"] = CFrame.new(), ["Aim"] = CFrame.new(), ["Camera"] = CFrame.new(), ["Name"] = "Combat", ["IsHeavy"] = false, ["Target"] = nil, ["Velocity"] = Vector3.new()})
+    local args = {
+        [1] = {
+            ["Type"] = 1,
+            ["Began"] = true,
+            ["CFrame"] = CFrame.new(),
+            ["Aim"] = CFrame.new(),
+            ["Camera"] = CFrame.new(),
+            ["Name"] = "Combat",
+            ["Target"] = workspace,
+            ["IsHeavy"] = false,
+            ["Velocity"] = Vector3.new()
+        }
+    }
+
+    game:GetService("ReplicatedStorage").Remotes.SkillRemote:FireServer(unpack(args))
+
 end
 
 local Player = game.Players.LocalPlayer
