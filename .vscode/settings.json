@@ -22,6 +22,8 @@
         "isfolder",
         "makefolder",
         "listfiles",
-        "identifyexecutor"
+        "identifyexecutor",
+        "getreg",
+        "sethiddenproperty"
     ]
 }
