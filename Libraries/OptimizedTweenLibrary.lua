@@ -23,21 +23,6 @@ Library.Create = function(Table, Part, Time, GoalsTable)
             end
         end
         Tween.PlaybackState = Enum.PlaybackState.Completed
-        --[[ for i, v in pairs(GoalsTable) do
-            local StartPos = Part[i]
-            local AverageFPS = workspace:GetRealPhysicsFPS()
-            local OneFrame = 1/AverageFPS
-            local Divisions = math.ceil(Time/OneFrame)
-            for i1=0, Divisions do
-                if (Tween.PlaybackState == Enum.PlaybackState.Cancelled) then return end
-                if Tween.PlaybackState == Enum.PlaybackState.Paused then
-                    coroutine.yield()
-                end
-                Part[i] = StartPos:Lerp(v, i1/Divisions)
-                game:GetService("RunService").RenderStepped:Wait()
-            end
-        end
-        Tween.PlaybackState = Enum.PlaybackState.Completed ]]
     end)
     setmetatable(Tween, Library)
     return Tween
