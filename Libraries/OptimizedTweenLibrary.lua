@@ -17,7 +17,7 @@ Library.Create = function(Table, Part, Time, GoalsTable)
                     coroutine.yield()
                 end
                 Part[i] = StartPos:Lerp(v, math.min(Divition, 1))
-                if TimePassed >= 1 then
+                if Divition >= 1 then
                     break
                 end
             end
