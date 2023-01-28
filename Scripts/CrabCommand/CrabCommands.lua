@@ -29,8 +29,8 @@ end
 _G.CrabCommand = true
 
 local Version = loadstring(game:HttpGet('https://raw.githubusercontent.com/Suricato006/Scripts-Made-by-me/master/Scripts/CrabCommand/CommandVersion.lua'))()
-local LastVersion = 1.0
-if not (Version == LastVersion) then
+local LatestVersion = 1.0
+if not (Version == LatestVersion) then
     SendNotification("OutDated", "The script is outdated\nplease use the loadstring to get the new version", 30)
 end
 
@@ -42,7 +42,7 @@ local TweenService = loadstring(game:HttpGet("https://raw.githubusercontent.com/
 local Commands = {}
 local CommandStates = {}
 local GamesSupported = {
-    FinalStand = {536102540, 882399924, 478132461, 569994010, 2046990924, 3565304751, 2651456105, 3552157537, 2050207304, 535527772, 3552158750, 3618359401, 489979581, 566006798, 882375367}
+    --FinalStand = {536102540, 882399924, 478132461, 569994010, 2046990924, 3565304751, 2651456105, 3552157537, 2050207304, 535527772, 3552158750, 3618359401, 489979581, 566006798, 882375367}
 }
 SendNotification("CrabCommands", 'Thanks for using the script.\nType "'..Prefix..' cmds" to get a list of all the commands', 10)
 local GameDetected = nil
@@ -52,14 +52,15 @@ for i, v in pairs(GamesSupported) do
     end
 end
 if GameDetected then
-    SendNotification("Gamde Supported", "Detected: "..game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name)
+    SendNotification("Game Supported", "Detected: "..game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name)
 end
 local function FindPlayer(PlayerName)
     for _, v in pairs(game.Players:GetChildren()) do
+        if v == Player then
+            continue
+        end
         if v.Name:lower():find(PlayerName:lower()) == 1 then
-            if not (v == Player) then
-                return v
-            end
+            return v
         end
     end
 end
@@ -81,7 +82,7 @@ AddCommand(
     function()
         CommandStates = {}
         _G.CrabCommand = false
-        SendNotification("Thanks For Using The Script", "It really means a lot to me <3")
+        SendNotification("Thanks For Using The Script", "See you soon!")
         ChattedConnection:Disconnect()
     end,
     {}
@@ -243,17 +244,17 @@ AddCommand(
             local PHrp = OtherPlayer.Character:FindFirstChild("HumanoidRootPart")
             local Hrp = Player.Character:FindFirstChild("HumanoidRootPart")
             if PHrp and Hrp then
-                local Time = tonumber(Args[2]) or 5
+                local Time = tonumber(Args[2]) or 0
                 local tween = TweenService:Create(Hrp, Time, {CFrame = PHrp.CFrame})
                 tween:Play()
                 task.wait(Time)
             end
         end
     end,
-    {"[PlayerName]"}
+    {"[PlayerName], [Time]"}
 )
-AddCommand( --Made by Moon and Courtney
-    "DarkDex",
+AddCommand(
+    "DarkDex", --Made by Moon and Courtney
     {"dex"},
     "Opens Dark Dex",
     function()
@@ -316,6 +317,7 @@ AddCommand( --Made by Upbolt
     end,
     {}
 )
+
 AddCommand(
     "CopyPlaceId",
     {"placeid", "pid", "copyid"},
@@ -334,12 +336,11 @@ AddCommand(
     "Rejoin",
     {"rj"},
     "Rejoins you in the same server",
-    function() --Credits to Infinite Yield (altho there is not another way of writing this)
-        local Players = game:GetService("Players")
-        if #Players:GetPlayers() <= 1 then
+    function()
+        if #game.Players:GetPlayers() <= 1 then
             Player:Kick("\nRejoining...")
         else
-            game:GetService('TeleportService'):TeleportToPlaceInstance(game.PlaceId, game.JobId, Player)
+            game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId, Player)
         end
     end,
     {}
@@ -348,7 +349,7 @@ AddCommand(
     "ServerHop",
     {"shop"},
     "Rejoins the same game in a different server",
-    function() --Credits to Infinite Yield (altho there is not another way of writing this)
+    function() --Credits to Infinite Yield
         local x = {}
         for _, v in ipairs(game:GetService("HttpService"):JSONDecode(game:HttpGetAsync("https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?sortOrder=Asc&limit=100")).data) do
             if type(v) == "table" and v.maxPlayers > v.playing and v.id ~= game.JobId then
@@ -367,8 +368,8 @@ AddCommand(
     "FpsBoost",
     {"fps", "potato", "badpc"},
     "Makes the game look really bad",
-    function() --Straight from Infinite Yield (its the best optimization)
-        SendNotification("Big F", "Potato pc", 5)
+    function() --Straight from Infinite Yield
+        SendNotification(" ", "Potato pc", 3)
         workspace:FindFirstChildOfClass('Terrain').WaterWaveSize = 0
         workspace:FindFirstChildOfClass('Terrain').WaterWaveSpeed = 0
         workspace:FindFirstChildOfClass('Terrain').WaterReflectance = 0
@@ -431,14 +432,15 @@ AddCommand(
             end
         end)
     end,
-    {}
+    {"[PlayerName]"}
 )
 AddCommand(
     "Reset",
     {"rs"},
     "Breaks the joints of your character so you respawn",
     function()
-        local Char = Player.Character or Player.CharacterAdded:Wait()
+        local Char = Player.Character
+        if not Char then return end
         Char:BreakJoints()
     end,
     {}
@@ -449,7 +451,7 @@ AddCommand(
     "Makes you call more than one command at one time",
     function(Args)
         for i, v in pairs(Args) do
-            for i, v1 in pairs(Commands) do
+            for i1, v1 in pairs(Commands) do
                 if (v:lower() == v1.Name:lower()) or table.find(v1.Aliases, v:lower()) then
                     v1.Callback({})
                 end
@@ -484,7 +486,82 @@ AddCommand(
     end,
     {}
 )
-if GameDetected == "FinalStand" then
+AddCommand(
+    "TogglePrompts",
+    {"disableprompts", "noprompts"},
+    "Disables purchase prompts",
+    function()
+        game:GetService("CoreGui").PurchasePrompt.Enabled =  not game:GetService("CoreGui").PurchasePrompt.Enabled
+    end,
+    {}
+)
+local WalkSpeedConnections = {}
+
+local function SetSpeed(Char, Speed)
+    local Hum = Char:WaitForChild("Humanoid")
+    Hum.WalkSpeed = Speed
+    local Index = #WalkSpeedConnections + 1
+    WalkSpeedConnections[Index] = Hum:GetPropertyChangedSignal("WalkSpeed"):Connect(function()
+        if not (Hum and Hum.Parent) then
+            WalkSpeedConnections[Index]:Disconnect()
+        end
+        Hum.WalkSpeed = Speed
+    end)
+end
+
+local OriginalWalkSpeed = 16
+coroutine.wrap(function()
+    local Char = Player.Character or Player.CharacterAdded:Wait()
+    local Hum = Char:WaitForChild("Humanoid")
+    OriginalWalkSpeed = Hum.WalkSpeed
+end)()
+AddCommand(
+    "WalkSpeed",
+    {"ws"},
+    "Sets your walkspeed",
+    function(Args)
+        CommandStates.WalkSpeed = not CommandStates.WalkSpeed
+        local Speed = tonumber(Args[1])
+
+        if not (CommandStates.WalkSpeed and Speed) then
+            CommandStates.WalkSpeed = false
+            for i, v in pairs(WalkSpeedConnections) do
+                v:Disconnect()
+            end
+            coroutine.wrap(function()
+                local Char = Player.Character or Player.CharacterAdded:Wait()
+                local Hum = Char:WaitForChild("Humanoid")
+                Hum.WalkSpeed = OriginalWalkSpeed
+            end)()
+            return
+        end
+
+        SetSpeed(Player.Character, Speed)
+        table.insert(WalkSpeedConnections, Player.CharacterAdded:Connect(function(Char)
+            SetSpeed(Char, Speed)
+        end))
+    end,
+    {"[Speed]"}
+)
+
+AddCommand(
+    "InfiniteJump",
+    {"infjump", "flyjump"},
+    "Makes you jump when you want",
+    function()
+        CommandStates.InfiniteJump = not CommandStates.InfiniteJump
+        local InfJumpConnection = nil
+        InfJumpConnection = game:GetService("UserInputService").JumpRequest:Connect(function()
+            if not CommandStates.InfiniteJump then
+                InfJumpConnection:Disconnect()
+            end
+
+            Player.Character:WaitForChild("Humanoid"):ChangeState(Enum.HumanoidStateType.Jumping)
+        end)
+    end,
+    {}
+)
+--[[ if GameDetected == "FinalStand" then
     local NoSlowTable = {"Action", "Attacking", "Using", "hyper", "Hyper", "heavy", "KiBlasted", "Tele", "tele", "Killed", "Slow", "MoveStart", "Look", "Activity"}
     AddCommand(
         "NoSlow",
@@ -582,7 +659,7 @@ if GameDetected == "FinalStand" then
         end,
         {}
     )
-end
+end ]]
 
 -- Some QOL additions
 
@@ -596,13 +673,14 @@ if hookmetamethod and getnamecallmethod and checkcaller then
         return OldNameCall(Self, ...)
     end)
 end
+
 local VirtualUser = game:GetService("VirtualUser")
 Player.Idled:Connect(function()
     VirtualUser:CaptureController()
     VirtualUser:ClickButton2(Vector2.new())
 end)
 
--- The actual script that checks when the player types
+-- The part that checks when the player types
 ChattedConnection = Player.Chatted:Connect(function(message)
     local StartIndex = message:find(Prefix)
     if StartIndex == 1 then
@@ -623,7 +701,7 @@ ChattedConnection = Player.Chatted:Connect(function(message)
             end
         end
         if CommandToCall then
-            CommandToCall.Callback(Args or {})
+            CommandToCall.Callback(Args or {}) -- There has to be this empty table
         end
     end
 end)
