@@ -11,11 +11,15 @@ Library.Create = function(Table, Part, Time, GoalsTable)
             while true do
                 local Delta = game:GetService("RunService").Heartbeat:Wait()
                 TimePassed = TimePassed + Delta
+                local Divition = TimePassed/Time
                 if (Tween.PlaybackState == Enum.PlaybackState.Cancelled) then return end
                 if Tween.PlaybackState == Enum.PlaybackState.Paused then
                     coroutine.yield()
                 end
-                Part[i] = StartPos:Lerp(v, TimePassed/Time)
+                Part[i] = StartPos:Lerp(v, math.min(Divition, 1))
+                if TimePassed >= 1 then
+                    break
+                end
             end
         end
         Tween.PlaybackState = Enum.PlaybackState.Completed
