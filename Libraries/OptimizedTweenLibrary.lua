@@ -7,6 +7,20 @@ Library.Create = function(Table, Part, Time, GoalsTable)
     Tween.Thread = coroutine.create(function()
         for i, v in pairs(GoalsTable) do
             local StartPos = Part[i]
+            local TimePassed = 0
+            while true do
+                local Delta = game:GetService("RunService").Heartbeat:Wait()
+                TimePassed = TimePassed + Delta
+                if (Tween.PlaybackState == Enum.PlaybackState.Cancelled) then return end
+                if Tween.PlaybackState == Enum.PlaybackState.Paused then
+                    coroutine.yield()
+                end
+                Part[i] = StartPos:Lerp(v, TimePassed/Time)
+            end
+        end
+        Tween.PlaybackState = Enum.PlaybackState.Completed
+        --[[ for i, v in pairs(GoalsTable) do
+            local StartPos = Part[i]
             local AverageFPS = workspace:GetRealPhysicsFPS()
             local OneFrame = 1/AverageFPS
             local Divisions = math.ceil(Time/OneFrame)
@@ -19,7 +33,7 @@ Library.Create = function(Table, Part, Time, GoalsTable)
                 game:GetService("RunService").RenderStepped:Wait()
             end
         end
-        Tween.PlaybackState = Enum.PlaybackState.Completed
+        Tween.PlaybackState = Enum.PlaybackState.Completed ]]
     end)
     setmetatable(Tween, Library)
     return Tween
